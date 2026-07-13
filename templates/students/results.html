@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Results</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+      .logo {
+          font-family: "Montserrat",  sans-serif;
+          font-size: 24px;
+      }
+      .divider:after,
+      .divider:before {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: #eee;
+      }
+          .h-custom {
+          height: calc(100% - 73px);
+      }
+          @media (max-width: 450px) {
+          .h-custom {
+          height: 100%;
+          }
+      }
+      body {
+        background: rgb(44, 46, 49);
+      }
+      .contact {
+        background: black;
+        color: white;
+        border: 2px solid rgb(44, 46, 49);
+      }
+      .page-name {
+        font-family: "Montserrat",  sans-serif;
+        color: white;
+        font-size: xx-large;
+        text-align: center;
+        margin-top: 10px;
+      }
+      select {
+        flex: 1;
+      }
+      .a-contact {
+        margin: 0;
+      }
+      .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'students/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+          <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+              <h3 class="page-name" id="main-title">Results</h3>
+              <div class="btn-group mb-1">
+                <button class="btn btn-primary active" id="grammar_btn" onclick="change_data_type('student')" disabled>My vocabulary</button>
+                <button class="btn btn-primary" id="dictionary_btn" onclick="change_data_type('supervisor')">Dictionary</button>
+              </div>
+              <div class="col-md-9 col-lg-6 col-xl-5" style="width: 100%;height: 100%;">
+                <!-- 1 -->
+
+                <div id="main" class="accordion accordion-flush">
+                  <!-- Don't touch -->
+                </div>
+
+              </div>                
+
+            </div>
+          </div>
+            
+        </section>
+              
+    </div>
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let page_title = document.getElementById('page-title')
+      let main_title = document.getElementById('main-title')
+
+      let topic = document.getElementById('topic')
+      let main = document.getElementById('main')
+
+      let grammar_btn = document.getElementById('grammar_btn')
+      let dictionary_btn = document.getElementById('dictionary_btn')
+      let data_type = 'student'
+
+      const student_id = "{{ user.id }}"
+
+      const LEVEL_TO_COLOR = {
+        "Beginner": "danger",
+        "A1": "warning",
+        "A2": "warning",
+        "B1": "success",
+        "B2": "success",
+        "C1": "primary",
+        "C2": "primary",
+      }
+
+
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+      
+      function formatDate(date) {
+        date = new Date(date)
+        const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+        const month = date.toLocaleString('en-US', { month: 'long' });
+        const day = date.getDate();
+
+        return `${hours}:${minutes} ${ampm}, ${month} ${day}`;
+    }
+
+      function clean_text(text) {
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+      }
+      
+      async function load_user_records(){
+          spinner(true)
+
+          let request = await fetch(`/api/students/${student_id}/records/${data_type}/`)
+          let response = await request.json()
+
+          main.innerHTML = ''
+          
+          for (let i = 0; i < response.length; i++){
+
+              record = response[i]
+
+              let status, color
+              if (record.is_successful){
+                status = "Successful"
+                color = "success"
+              } else if (!record.date_created) {
+                status = "Never attempted"
+                color = "light"
+              } else {
+                status = "Failed"
+                color = "danger"
+              }
+              let level = record.is_successful == true ? record.grammar_level : "Beginner"
+              
+              main.innerHTML += `
+              <div id="student$1" class="accordion-item bg-dark text-light rounded-4 border-dark">
+                  <h2 class="accordion-header" id="i${i}">
+                      <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${i}" aria-expanded="false" aria-controls="body${i}">
+                      <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                      ${clean_text(record.package)}
+                      <span class="time-passed text-${color}">${status}</span>
+                      </button>
+                  </h2>
+                  <div id="body${i}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${i}" data-bs-parent="#main">
+                      <div class="accordion-body pt-1">
+                          
+                        <div class="card-body mt-3">
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Package</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="mb-0 fw-bold">${clean_text(record.package)}</p>
+                              </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Points</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="mb-0 fw-bold text-${color}"> (${record.points}/100)</p>
+                              </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Status</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="text-${color} mb-0 fw-bold">${status}</p>
+                              </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Date</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="mb-0 fw-bold">${record.date_created ? formatDate(record.date_created) : "Never attempted"}</p>
+                              </div>
+                          </div>
+                        
+                        </div>
+
+                      </div>
+                  </div>
+              </div>
+              `
+              
+          }
+
+          spinner(false)
+      }
+      load_user_records()
+
+      function change_data_type(value) {
+        data_type = value
+
+        switch (data_type){
+          case "student":
+            dictionary_btn.classList.remove('active')
+            grammar_btn.classList.add('active')
+            grammar_btn.disabled = true
+            dictionary_btn.disabled = false
+            break
+
+          case "supervisor":
+            grammar_btn.classList.remove('active')
+            dictionary_btn.classList.add('active')
+            grammar_btn.disabled = false
+            dictionary_btn.disabled = true
+            break
+        }
+        load_user_records()
+      }  
+    </script>
+</body>
+</html>

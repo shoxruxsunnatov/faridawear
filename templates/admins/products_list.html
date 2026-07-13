@@ -1,0 +1,1118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahsulotlar</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: Garamond, serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+
+      .fullscreen-image {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw!important;
+        height: 100vh;
+        object-fit: contain;
+        z-index: 9999;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .img-mini {
+        width: 35px;
+      }
+      .stock-table-wrap {
+        overflow: auto;
+        background: #16181d;
+        border: 1px solid #24272e;
+        border-radius: 12px;
+      }
+
+      .stock-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #e6e6e6;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+      }
+
+      .stock-table thead th {
+        text-align: left;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #8a8f98;
+        font-weight: 500;
+        padding: 14px 16px;
+        border-bottom: 1px solid #24272e;
+      }
+
+      .stock-table tbody td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #1e2127;
+        vertical-align: middle;
+      }
+
+      .stock-table tbody tr:last-child td { border-bottom: none; }
+
+      .stock-table tbody tr {
+        transition: background 0.15s ease;
+      }
+
+      .stock-table tbody tr:hover {
+        background: #1c1f26;
+      }
+
+      .stock-table .row-index {
+        color: #6b7078;
+        font-variant-numeric: tabular-nums;
+        width: 36px;
+      }
+
+      .stock-table .product-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid #2a2d34;
+        background: #0e0f12;
+      }
+
+      .stock-table .product-name {
+        font-weight: 500;
+        color: #f2f2f2;
+      }
+
+      .stock-table .price {
+        font-family: "SF Mono", "Cascadia Code", ui-monospace, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stock-table .price-sell { color: #4ade80; }
+      .stock-table .price-cost { color: #8a8f98; }
+
+      /* stock as a visual bar instead of a bare number */
+      .stock-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 120px;
+      }
+
+      .stock-bar {
+        flex: 1;
+        height: 6px;
+        border-radius: 3px;
+        background: #24272e;
+        overflow: hidden;
+        max-width: 70px;
+      }
+
+      .stock-bar-fill {
+        height: 100%;
+        border-radius: 3px;
+      }
+
+      .stock-count {
+        font-family: "SF Mono", ui-monospace, monospace;
+        font-size: 13px;
+        min-width: 28px;
+        text-align: right;
+      }
+
+      .stock-high  .stock-bar-fill { background: #4ade80; }
+      .stock-mid   .stock-bar-fill { background: #facc15; }
+      .stock-low   .stock-bar-fill { background: #f87171; }
+      .stock-high  .stock-count { color: #4ade80; }
+      .stock-mid   .stock-count { color: #facc15; }
+      .stock-low   .stock-count { color: #f87171; }
+      
+    </style>
+</head>
+<body>
+  {% include 'admins/navbar.html' %}
+
+  <section>
+    <div class="container pt-1">
+      <h1 class="text-body-emphasis text-light text-center" id="page_name">Mahsulotlar</h1>
+      
+      <div class="row">
+        <div class="col-lg-12">
+          <!-- 1 -->
+          <a class="btn btn-dark d-none" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2" style="width: 100%;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>
+            Add vocabulary
+          </a>
+          <div class="form-floating bg-dark">
+            <input id="query" type="text" class="form-control text-light" placeholder="0"  style="background: black;border:0">
+            <label for="days-input" class="text-light">Izlash uchun yozing</label>
+          </div>
+          <div class="collapse" id="collapseExample2">
+            <form id="form_register" method="post" onsubmit="return false">
+              <ul class="list-group">
+                
+                <li class="list-group-item justify-content-between align-items-start contact bg-transparent p-0" data-bs-theme="dark">
+                  <div class="row g-2">
+                    <div class="col-md">
+                      <div class="form-floating bg-dark">
+                        <input  type="text" class="form-control text-light  border-0" id="title" name="title" placeholder="0"  style="background: black;" onclick="this.select()" value="Dictionary Exam">
+                        <label for="days-input">Title</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row g-2 mt-1">
+                    <p class="m-0 mt-1">Start time</p>
+                    <div class="col-md">
+                      <div class="form-floating bg-dark">
+                        <select class="form-select text-light border-0" id="start_hour" name="start_hour" style="background: black;">
+                          <option value="">Choose hour</option>
+                          <option value="0">00</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                          <option value="18">18</option>
+                          <option value="19">19</option>
+                          <option value="20">20</option>
+                          <option value="21">21</option>
+                          <option value="22">22</option>
+                          <option value="23">23</option>
+                        </select>
+                        <label for="hours-input">Hour</label>
+                      </div>
+                      <p class="m-0 ms-1 text-primary" onclick="set_current_time()">Set now</p>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-floating bg-dark">
+                        <select class="form-select text-light border-0" id="start_minute" name="start_minute" style="background: black;">
+                          <option value="">Choose minute</option>
+                          <option value="0">00</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                          <option value="18">18</option>
+                          <option value="19">19</option>
+                          <option value="20">20</option>
+                          <option value="21">21</option>
+                          <option value="22">22</option>
+                          <option value="23">23</option>
+                          <option value="24">24</option>
+                          <option value="25">25</option>
+                          <option value="26">26</option>
+                          <option value="27">27</option>
+                          <option value="28">28</option>
+                          <option value="29">29</option>
+                          <option value="30">30</option>
+                          <option value="31">31</option>
+                          <option value="32">32</option>
+                          <option value="33">33</option>
+                          <option value="34">34</option>
+                          <option value="35">35</option>
+                          <option value="36">36</option>
+                          <option value="37">37</option>
+                          <option value="38">38</option>
+                          <option value="39">39</option>
+                          <option value="40">40</option>
+                          <option value="41">41</option>
+                          <option value="42">42</option>
+                          <option value="43">43</option>
+                          <option value="44">44</option>
+                          <option value="45">45</option>
+                          <option value="46">46</option>
+                          <option value="47">47</option>
+                          <option value="48">48</option>
+                          <option value="49">49</option>
+                          <option value="50">50</option>
+                          <option value="51">51</option>
+                          <option value="52">52</option>
+                          <option value="53">53</option>
+                          <option value="54">54</option>
+                          <option value="55">55</option>
+                          <option value="56">56</option>
+                          <option value="57">57</option>
+                          <option value="58">58</option>
+                          <option value="59">59</option>
+                        </select>
+                        <label for="minutes-input">Minute</label>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-floating bg-dark">
+                        <select class="form-select text-light border-0" id="duration" name="duration" style="background: black;">
+                          <option value="">Choose duration</option>
+                          <option value="10">10 minutes</option>
+                          <option value="20">20 minutes</option>
+                          <option value="30">30 minutes</option>
+                          <option value="40">40 minutes</option>
+                          <option value="50">50 minutes</option>
+                          <option value="60" selected>60 minutes</option>
+                          <option value="70">70 minutes</option>
+                          <option value="80">80 minutes</option>
+                          <option value="90">90 minutes</option>
+                          <option value="100">100 minutes</option>
+                          <option value="110">110 minutes</option>
+                          <option value="120">120 minutes</option>
+                        </select>
+                        <label for="hours-input">Duration</label>
+                      </div>
+                    </div>
+                    <div class="col-md">
+                      <div class="form-floating bg-dark">
+                        <input  type="number" class="form-control text-light border-0" id="max_sessions" name="max_sessions" placeholder="0"  style="background: black;" value="1">
+                        <label for="days-input">Max participants</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row g-2 mt-1" id="topic_field">
+                    <div class="form-floating">
+                      <select class="form-select text-light border-0" id="package" name="package" style="background: black;">
+                        <option value="">Choose package</option>
+                        <option value="optional_student">Optional (from students' vocabulary)</option>
+                        <option value="optional_supervisor">Optional (from platform's dictionary)</option>
+                        
+                      </select>
+                      <label for="hours-input">Vocabulary package</label>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item justify-content-between align-items-start contact bg-transparent">
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Save</button>
+                  </div>
+                </li>
+              </ul>
+            </form>
+            <br>
+          </div>
+
+          <div class="stock-table-wrap mt-1">
+            <table class="stock-table">
+              <thead>
+                <tr>
+                  <th class="text-center">#</th>
+                  <th class="text-center">Rasm</th>
+                  <th>Nomi</th>
+                  <th>Sotish narxi</th>
+                  <th>Olish narxi</th>
+                  <th>Zaxira</th>
+                </tr>
+              </thead>
+              <tbody id="main">
+              </tbody>
+              <thead>
+                <tr>
+                  <th class="text-center"></th>
+                  <th class="text-center"></th>
+                  <th></th>
+                  <th class="text-white">Jami (Sotish narxida)</th>
+                  <th class="text-white">Jami (Olish narxida)</th>
+                  <th class="text-white">Jami zaxira</th>
+                </tr>
+              </thead>
+              <tbody id="main_summary">
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="access_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete package</h1>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            
+            <p class="text-warning text-center m-3 fs-4">
+              Are you sure you want to delete this package and all the vocabularies of this package?
+            </p>
+              
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" onclick="delete_package()">Delete</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Vocabulary errors -->
+    <div class="modal fade" id="error_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="error_modal_label" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="error_modal_label">Existing vocabulary</h1>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            
+            <div id="error_main"class="accordion accordion-flush mt-1">
+              <!-- Don't touch -->
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Delete vocabulary -->
+    <div class="modal fade" id="delete_vocabulary_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="delete_vocabulary_modal_label" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="delete_vocabulary_modal">Delete vocabulary</h1>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            <p class="text-warning text-center mt-1 fs-5">
+              Are you sure you want to delete this vocabulary?
+            </p>
+            <div id="delete_vocabulary_main" class="accordion accordion-flush mt-1">
+              <!-- Don't touch -->
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" onclick="delete_vocabulary()">Delete</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Edit vocabulary -->
+    <div class="modal fade" id="edit_vocabulary_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit_vocabulary_modal_label" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="edit_vocabulary_modal_label">Edit vocabulary</h1>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            <div id="edit_vocabulary_main" class="accordion accordion-flush mt-1">
+              <!-- Don't touch -->
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button id="save_button" type="button" class="btn btn-light" onclick="edit_vocabulary()">Save</button>
+            <button id="close_button" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Vocabulary suggestions -->
+    <div class="modal fade" id="vocabulary_suggestion_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="vocabulary_suggestion_modal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="vocabulary_suggestion_modal_label">Recommendations</h1>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-2 pt-0 pe-2">
+            <p class="text-warning text-center mt-1 fs-6">
+              These words should be removed or replaced with suggestions below.
+            </p>
+            <div id="vocabulary_suggestion_main" class="accordion accordion-flush mt-1 p-2">
+              <!-- Don't touch -->
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+    <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+    Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <a href="" id="view_results" style="display: none;">
+        <button class="btn btn-success btn-lg w-100" style="position: fixed;top: 0;">View results</button>
+    </a>
+  </section>
+
+
+  <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <script>
+
+// document.getElementById('main').innerHTML = items.map(renderRow).join('');
+    let page_state = 0
+
+    let main = document.getElementById('main')
+    let main_summary = document.getElementById('main_summary')
+
+    let page_name = document.getElementById('page_name')
+    let package_author = document.getElementById('package_author')
+    let package_date_created = document.getElementById('package_date_created')
+    let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('access_modal'))
+    let exam_details = document.getElementById('exam_details')
+    let view_results_btn = document.getElementById('view_results')
+    let form_register = document.getElementById("form_register")
+
+    let form_add_vocabulary = document.getElementById("form_add_vocabulary")
+    let text = document.getElementById("text")
+    let translation = document.getElementById("translation")
+    let description = document.getElementById("description")
+    let image = document.getElementById("image")
+    let category = document.getElementsByName("category")
+    let add_button = document.getElementById("add_button")
+    let auto_generate_check = document.getElementById("auto_generate_check")
+    let auto_generated_area = document.getElementById("auto_generated_area")
+
+    let error_modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('error_modal'))
+    let delete_vocabulary_modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('delete_vocabulary_modal'))
+    let edit_vocabulary_modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('edit_vocabulary_modal'))
+    let vocabulary_suggestion_modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('vocabulary_suggestion_modal'))
+
+
+    let query_input = document.getElementById('query')
+    let query = ""
+
+
+    function clean_text(text) {
+      return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
+    function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements at indices i and j
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+    }
+
+    function formatDate(date) {
+      date = new Date(date)
+      const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+      const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+      const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+      const month = date.toLocaleString('en-US', { month: 'long' });
+      const day = date.getDate();
+      const year = date.getFullYear();
+
+      return `${hours}:${minutes} ${ampm}, ${month} ${day}, ${year}`;
+    }
+
+    function spinner(display){
+    let spinner_element = document.getElementById('spinner')
+    switch (display){
+    case true:
+        spinner_element.setAttribute('style', 'display: block')
+        break
+    case false:
+        spinner_element.setAttribute('style', 'display: none!important')
+        break
+    }
+    }
+
+    function notification(message, color){
+    let modal_trigger = document.getElementById('modal-trigger')
+    let modal_text = document.getElementById('modal-text')
+
+    modal_text.style.color = color
+    modal_text.innerText = message
+    modal_trigger.click()
+    }
+
+    function formatNumber(input) {
+      const str = String(input).trim();
+      const parts = str.split(".");
+      const intPart = parts[0];
+      const decPart = parts.length > 1 ? parts[1] : null;
+
+      const sign = intPart.startsWith("-") ? "-" : "";
+      const digitsOnly = intPart.replace("-", "");
+
+      const withSpaces = digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+      return decPart !== null ? `${sign}${withSpaces}.${decPart}` : `${sign}${withSpaces}`;
+    }
+
+    async function load_products(){
+        spinner(true)
+
+        let request = await fetch(`/api/products/?search=${query}`)
+        let response = await request.json()
+
+        products = response
+        main.innerHTML = ''
+        main_summary.innerHTML = ''
+
+        let sum_sale_price = 0
+        let sum_base_price = 0
+        let sum_stock = 0
+
+        for (let i = 0; i < response.length; i++){
+
+          product = response[i]
+
+          let image = ""
+          if (product.image){
+            image = `              
+            <img class="img-mini d-inline m-auto rounded" src="${product.image}">
+            `
+          }
+
+          main.innerHTML += `
+          <tr>
+            <th scope="row" class="text-center">${product.serial}</th>
+            <th class="text-center">${image}</th>
+            <td>${clean_text(product.title)}</td>
+            <td class="text-success fw-bold">${formatNumber(product.sale_price)}</td>
+            <td class="text-primary fw-bold">${formatNumber(product.base_price)}</td>
+            <td class="fw-bold">${product.stock}</td>
+          </tr>
+          `
+          sum_sale_price += parseFloat(product.sale_price)
+          sum_base_price += parseFloat(product.base_price)
+          sum_stock += parseFloat(product.stock)
+        }
+
+        let images = document.getElementsByTagName('img')
+        for (let i = 0; i < images.length; i++){
+          let image = images[i]
+          image.addEventListener('click', () => {
+            if (image.classList.contains('img-mini')){
+                image.classList.remove('img-mini')
+                image.classList.add('fullscreen-image')
+            }else{
+                image.classList.add('img-mini')
+                image.classList.remove('fullscreen-image')
+            }
+          })
+        }
+
+        main_summary.innerHTML += `
+        <tr>
+          <th scope="row" class="text-center"></th>
+          <th class="text-center"></th>
+          <td></td>
+          <td class="text-success fw-bold">${formatNumber(sum_sale_price)}</td>
+          <td class="text-primary fw-bold">${formatNumber(sum_base_price)}</td>
+          <td class="fw-bold">${formatNumber(sum_stock)}</td>
+        </tr>
+        `
+
+        spinner(false)
+    }
+    load_products()
+
+    let counter = 0
+    let is_searching = false
+    let already_searched = true
+
+    function track_query_change(){
+      let interval = setInterval(function(){
+        if (!is_searching && query_input.value.trim() != query){
+          query = query_input.value.trim()
+          already_searched = false
+          counter = 0
+        } else if (!is_searching && query_input.value.trim() == query){
+          counter ++
+        }
+
+        if (counter >= 2 && !already_searched){
+          load_products()
+          counter = 0
+          already_searched = true
+        }
+
+        console.log()
+      }, 400)
+    }
+    track_query_change()
+    
+    function show_access_modal(){
+        modal.show()
+    }
+
+    function show_error_modal(vocabulary){
+      document.getElementById("error_main").innerHTML = `
+      <div id="v${vocabulary.id}e" class="accordion-item bg-dark text-light rounded-4 border-dark">
+          <h2 class="accordion-header" id="i${vocabulary.id}e">
+              <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${vocabulary.id}e" aria-expanded="false" aria-controls="body${vocabulary.id}e">
+              <span class="me-2 badge text-bg-secondary">1</span>
+              ${clean_text(vocabulary.text)}
+              </button>
+          </h2>
+          <div id="body${vocabulary.id}e" class="accordion-collapse collapse rounded-4" aria-labelledby="i${vocabulary.id}e" data-bs-parent="#main">
+              <div class="accordion-body pt-1">
+                <div class="card-body mt-3">
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Uzbek</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 fw-bold text-success">${clean_text(vocabulary.translation)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">English</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="text-primary mb-0 fw-bold">${clean_text(vocabulary.text)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Description</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 fw-bold">${clean_text(vocabulary.description)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Package</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 text-info fw-bold">${clean_text(vocabulary.package)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <small class="text-muted mb-0">By <span class="text-light">${vocabulary.author ? clean_text(vocabulary.author) : "platform"}</span></small>
+                        </div>
+                        <div class="col-sm-9">
+                        <small class="text-muted mb-0">At ${formatDate(vocabulary.date_created)}</small>
+                        </div>
+                    </div>
+                  
+                  </div>
+
+              </div>
+          </div>
+      </div>
+      `
+      error_modal.show()
+    }
+
+    function show_delete_vocabulary_modal(vocabulary){
+      document.getElementById("delete_vocabulary_main").innerHTML = `
+      <div id="v${vocabulary.id}e" class="accordion-item bg-dark text-light rounded-4 border-dark">
+          <h2 class="accordion-header" id="i${vocabulary.id}e">
+              <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${vocabulary.id}e" aria-expanded="false" aria-controls="body${vocabulary.id}e">
+              <span class="me-2 badge text-bg-secondary">1</span>
+              ${clean_text(vocabulary.text)}
+              </button>
+          </h2>
+          <div id="body${vocabulary.id}e" class="accordion-collapse collapse rounded-4" aria-labelledby="i${vocabulary.id}e" data-bs-parent="#main">
+              <div class="accordion-body pt-1">
+                <div class="card-body mt-3">
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Uzbek</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 fw-bold text-success">${clean_text(vocabulary.translation)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">English</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="text-primary mb-0 fw-bold">${clean_text(vocabulary.text)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Description</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 fw-bold">${clean_text(vocabulary.description)}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <small class="text-muted mb-0">By <span class="text-light">${vocabulary.author ? clean_text(vocabulary.author) : "platform"}</span></small>
+                        </div>
+                        <div class="col-sm-9">
+                        <small class="text-muted mb-0">At ${formatDate(vocabulary.date_created)}</small>
+                        </div>
+                    </div>
+                  
+                  </div>
+
+              </div>
+          </div>
+      </div>
+      `
+      delete_vocabulary_modal.show()
+    }
+
+    function show_edit_vocabulary_modal(vocabulary){
+      document.getElementById("edit_vocabulary_main").innerHTML = `
+      <form id="form_edit_vocabulary" method="post" onsubmit="return false">
+        <ul class="list-group">
+          
+          <li class="list-group-item justify-content-between align-items-start contact" style="background: inherit;border:0">
+            <div class="row g-2 mb-1">
+              <div class="col-md">
+                <div class="form-floating bg-dark">
+                  <input id="edit_text" type="text" class="form-control text-light" name="text" placeholder="0"  style="background: black;border:0" value="${vocabulary.text}">
+                  <label for="days-input">In English</label>
+                </div>
+              </div>
+            </div>
+            <div class="row g-2 mb-1">
+              <div class="col-md">
+                <div class="form-floating bg-dark">
+                  <input id="edit_translation" type="text" class="form-control text-light" name="translation" placeholder="0"  style="background: black;border:0" value="${vocabulary.translation}">
+                  <label for="days-input">In Uzbek</label>
+                </div>
+              </div>
+            </div>
+            <div class="row g-2 mb-1">
+              <div class="col-md">
+                <div class="form-floating bg-dark">
+                  <textarea id="edit_description" type="text" rows="2" class="form-control text-light" name="description" placeholder="0" style="background: black;height: 100%;border:0">${vocabulary.description}</textarea>
+                  <label for="days-input">Description</label>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </form>
+      `
+      edit_vocabulary_modal.show()
+    }
+
+    function show_vocabulary_suggestion_modal(suggestions){
+      let main = document.getElementById("vocabulary_suggestion_main")
+      main.innerHTML = ''
+
+      let id = 1
+      for (let i in suggestions){
+
+        let replacements = ''
+        for (let j = 0; j < suggestions[i].length; j++){
+          replacements += `
+          <span class="badge text-bg-success fs-6 mb-1">${suggestions[i][j]}</span>
+          `
+        }
+        main.innerHTML += `                 
+        <p class="fw-bold mb-1 fs-5">${id}.
+        <span class=" text-decoration-underline">${i}</span>
+        </p>
+        <div class="ps-4">${replacements}</div>
+        `
+        id++
+      }
+      vocabulary_suggestion_modal.show()
+    }
+
+    function request_vocabulary_deletion(id){
+      let vocabulary = vocabularies[id]
+      focus_vocabulary = vocabulary
+
+      show_delete_vocabulary_modal(vocabulary)
+    }
+
+    function request_vocabulary_edition(id){
+      let vocabulary = vocabularies[id]
+      focus_vocabulary = vocabulary
+
+      show_edit_vocabulary_modal(vocabulary)
+    }
+
+    async function delete_package(){
+      modal.hide()
+      spinner(true)
+
+      let request = await fetch(`/api/dictionary/packages/${package_id}/`, {
+        method: 'DELETE'
+      })
+      let response = await request.json()
+
+      if (response.message == 'success'){
+        location.href = '/dictionary/'
+      } else {
+
+        for (let i = 0; i < response.errors.length; i++){
+          switch (response.errors[i]){
+            case "permission":
+              notification("You are not authorized to delete this package.", "orange")
+              break
+          }
+        }
+      }
+
+      spinner(false)
+    }
+
+    async function delete_vocabulary(){
+      delete_vocabulary_modal.hide()
+      spinner(true)
+
+      let request = await fetch(`/api/dictionary/packages/${package_id}/vocabularies/${focus_vocabulary.id}/`, {
+        method: 'DELETE'
+      })
+      let response = await request.json()
+
+      if (response.message == 'success'){
+        load_vocabularies()
+      } else {
+
+        for (let i = 0; i < response.errors.length; i++){
+          switch (response.errors[i]){
+            case "permission":
+              notification("You are not authorized to change the dictionary.", "orange")
+              break
+          }
+        }
+      }
+
+      spinner(false)
+    }
+
+    async function edit_vocabulary(){
+      let text = document.getElementById("edit_text")
+      let translation = document.getElementById("edit_translation")
+      let description = document.getElementById("edit_description")
+      let save_button = document.getElementById("save_button")
+      let close_button = document.getElementById("close_button")
+
+      let form_edit_vocabulary = document.getElementById("form_edit_vocabulary")
+
+      
+      if (text.value.length < 2){
+        notification('English word must be at least 2 characters long. (Max 100 chars)', "orange")
+      } else if (translation.value.length < 2){
+        notification('Uzbek translation must be at least 2 characters long. (Max 100 chars)', "orange")
+      } else if (description.value.length > 300){
+        notification('Description must be shorter than 300 characters.', "orange")
+      } else {
+        spinner(true)
+        save_button.disabled = true
+        close_button.disabled = true
+
+        let request = await fetch(
+          `/api/dictionary/packages/${package_id}/vocabularies/${focus_vocabulary.id}/`,
+          {
+            method: 'POST',
+            body: new FormData(form_edit_vocabulary)
+          }
+        )
+        let response = await request.json()
+        edit_vocabulary_modal.hide()
+
+        if (response.message == 'success'){
+          load_vocabularies()
+        } else {
+
+          for (let i = 0; i < response.errors.length; i++){
+            switch (response.errors[i]){
+              case 'text-translation':
+                notification("Package name must be at least 2 characters long. (Max 100 chars)", "orange")
+                break
+
+              case 'permission':
+                notification("You are not authorized to change the dictionary", "orange")
+                break
+              
+              case 'capacity':
+                notification("Package is full. Please, add vocabularies to another package. ", "orange")
+                break
+              
+              case 'spelling':
+                show_vocabulary_suggestion_modal(response.suggestions)
+                break
+
+              case 'existing':
+                show_error_modal(response.existing)
+                break
+            }
+          }
+        }
+        
+
+        save_button.disabled = false          
+        close_button.disabled = false          
+        spinner(false)
+      }
+    }
+
+    async function force_redirect() {
+        
+        let request = await fetch('/api/exams/ongoing/')
+        let response = await request.json()
+        if (response.exam){
+            if (response.exam.id == exam_id){
+                exam_topic.innerText = `${response.exam.topic} (${response.exam.level} level)`
+                form_register.remove()
+                load_tests()
+            } else {
+                document.body.innerHTML += `
+                <!-- Force redirect modal -->
+                <div class="modal fade" id="redirect_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 text-warning" id="staticBackdropLabel">Warning</h1>
+                        </div>
+                        <div class="modal-body ps-1 pe-1">
+                        <h6 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-alarm-fill" viewBox="0 0 16 16">
+                                <path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5m2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.04 8.04 0 0 0 .86 5.387M11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.04 8.04 0 0 0-3.527-3.527"/>
+                            </svg>
+                            You're already participating in an exam. Please, finish your ongoing exam before starting another one.
+                        </h6>
+                        
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/exams/${response.exam.id}/">                            
+                                <button class="btn btn-primary">Continue exam <b>(${response.exam.title})</b></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                `
+                let modal_element = document.getElementById('redirect_modal')
+                let modal = bootstrap.Modal.getOrCreateInstance(modal_element)
+
+                modal.show()
+
+                setInterval(function(){
+                    modal.show()
+                }, 5000)
+                
+            }
+        }
+    }
+
+  </script>
+</body>
+</html>

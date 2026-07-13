@@ -1,0 +1,411 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: #eee;
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: "Montserrat",  sans-serif;
+          color: white;
+          font-size: x-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+  <section style="background-color: #eee;">
+    <div class="container">
+      <h3 class="page-name mt-2 text-dark" id="topic_title">Topic</h3>
+  
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush rounded-3">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                  <div class="col-md-9 col-lg-6 col-xl-5" style="width: 100%;height: 100%;">
+                    <a class="btn btn-light mb-1" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
+                      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 24 24">
+                        <path d="M 11.134766 1.0175781 C 10.87173 1.0049844 10.606766 1.0088281 10.337891 1.0332031 C 8.1135321 1.2338971 6.3362243 2.7940749 5.609375 4.8203125 C 3.8970488 5.1768339 2.4372723 6.3048522 1.671875 7.9570312 C 0.73398779 9.9840533 1.1972842 12.30076 2.5878906 13.943359 C 2.0402591 15.605222 2.2856216 17.434472 3.3320312 18.921875 C 4.6182099 20.747762 6.8565685 21.504693 8.9746094 21.121094 C 10.139659 22.427613 11.84756 23.130452 13.662109 22.966797 C 15.886521 22.766098 17.663809 21.205995 18.390625 19.179688 C 20.102972 18.823145 21.563838 17.695991 22.330078 16.042969 C 23.268167 14.016272 22.805368 11.697142 21.414062 10.054688 C 21.960697 8.3934373 21.713894 6.5648387 20.667969 5.078125 C 19.38179 3.2522378 17.143432 2.4953068 15.025391 2.8789062 C 14.032975 1.7660011 12.646869 1.0899755 11.134766 1.0175781 z M 11.025391 2.5136719 C 11.921917 2.5488523 12.754993 2.8745885 13.431641 3.421875 C 13.318579 3.4779175 13.200103 3.5164101 13.089844 3.5800781 L 9.0761719 5.8964844 C 8.7701719 6.0724844 8.5801719 6.3989531 8.5761719 6.7519531 L 8.5175781 12.238281 L 6.75 11.189453 L 6.75 6.7851562 C 6.75 4.6491563 8.3075938 2.74225 10.433594 2.53125 C 10.632969 2.5115 10.83048 2.5060234 11.025391 2.5136719 z M 16.125 4.2558594 C 17.398584 4.263418 18.639844 4.8251563 19.417969 5.9101562 C 20.070858 6.819587 20.310242 7.9019929 20.146484 8.9472656 C 20.041416 8.8773528 19.948163 8.794144 19.837891 8.7304688 L 15.826172 6.4140625 C 15.520172 6.2380625 15.143937 6.2352031 14.835938 6.4082031 L 10.052734 9.1035156 L 10.076172 7.0488281 L 13.890625 4.8476562 C 14.584375 4.4471562 15.36085 4.2513242 16.125 4.2558594 z M 5.2832031 6.4726562 C 5.2752078 6.5985272 5.25 6.7203978 5.25 6.8476562 L 5.25 11.480469 C 5.25 11.833469 5.4362344 12.159844 5.7402344 12.339844 L 10.464844 15.136719 L 8.6738281 16.142578 L 4.859375 13.939453 C 3.009375 12.871453 2.1365781 10.567094 3.0175781 8.6210938 C 3.4795583 7.6006836 4.2963697 6.8535791 5.2832031 6.4726562 z M 15.326172 7.8574219 L 19.140625 10.060547 C 20.990625 11.128547 21.865375 13.432906 20.984375 15.378906 C 20.522287 16.399554 19.703941 17.146507 18.716797 17.527344 C 18.724764 17.401695 18.75 17.279375 18.75 17.152344 L 18.75 12.521484 C 18.75 12.167484 18.563766 11.840156 18.259766 11.660156 L 13.535156 8.8632812 L 15.326172 7.8574219 z M 12.025391 9.7109375 L 13.994141 10.878906 L 13.966797 13.167969 L 11.974609 14.287109 L 10.005859 13.121094 L 10.03125 10.832031 L 12.025391 9.7109375 z M 15.482422 11.761719 L 17.25 12.810547 L 17.25 17.214844 C 17.25 19.350844 15.692406 21.25775 13.566406 21.46875 C 12.449968 21.579344 11.392114 21.244395 10.568359 20.578125 C 10.681421 20.522082 10.799897 20.48359 10.910156 20.419922 L 14.923828 18.103516 C 15.229828 17.927516 15.419828 17.601047 15.423828 17.248047 L 15.482422 11.761719 z M 13.947266 14.896484 L 13.923828 16.951172 L 10.109375 19.152344 C 8.259375 20.220344 5.8270313 19.825844 4.5820312 18.089844 C 3.9291425 17.180413 3.6897576 16.098007 3.8535156 15.052734 C 3.9587303 15.122795 4.0516754 15.205719 4.1621094 15.269531 L 8.1738281 17.585938 C 8.4798281 17.761938 8.8560625 17.764797 9.1640625 17.591797 L 13.947266 14.896484 z"></path>
+                      </svg>
+                      Generate
+                    </a>
+                    <div class="collapse" id="collapseExample">
+                      <form id="form_register" method="post" onsubmit="return false">
+                        <ul class="list-group">
+                          
+                          <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                            <div class="row g-2">
+                              <div class="col-md">
+                                <div class="form-floating bg-dark">
+                                  <select class="form-select text-light" id="level" name="level" style="background: black;">
+                                    <option value="">Choose level</option>
+                                    <option value="1">A1</option>
+                                    <option value="2">A2</option>
+                                    <option value="3">B1</option>
+                                    <option value="4">B2</option>
+                                    <option value="5">C1</option>
+                                    <option value="6">C2</option>
+                                  </select>
+                                  <label for="hours-input">Level</label>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          <li class="list-group-item justify-content-between align-items-start contact">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                              <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Start</button>
+                            </div>
+                          </li>
+                        </ul>
+                      </form>
+                      <br>
+                    </div>
+                    
+                  </div>
+                </li>
+                
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div id="main"class="accordion accordion-flush mt-1">
+            <!-- Don't touch -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit topic</h1>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body ps-1 pe-1">
+                <form method="post" id="modal_topic_form">
+                  <li class="list-group-item justify-content-between align-items-start" data-bs-theme="dark">
+                    <div class="row g-2">
+    
+    
+                      <div class="col-md">
+                        <div class="form-floating bg-dark">
+                          <input type="hidden" id="modal_topic_id">
+                          <input type="text" class="form-control text-light" id="modal_topic_title" name="title" onclick="this.select()" placeholder="0" style="background: black;">
+                          <label for="days-input">Name</label>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-floating bg-dark">
+                          <input type="number" class="form-control text-light" id="modal_topic_index" name="index" onclick="this.select()" placeholder="0" style="background: black;">
+                          <label for="days-input">Index</label>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="modal_topic_savebutton" type="button" class="btn btn-primary">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    
+        <!-- Spinner -->
+        <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+          <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        
+        <!-- Button trigger modal -->
+        <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+          Launch demo modal
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog ">
+            <div class="modal-content">
+              <div class="modal-header" style="border: 0;">
+                <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+  </section>
+ 
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let savebutton = document.getElementById('savebutton')
+      let main = document.getElementById('main')
+      let level = document.getElementById('level')
+      let topic_title = document.getElementById('topic_title')
+
+      let topics = {}
+      let topic_id = location.pathname.split('/')[3]
+      
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function clean_text(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+      
+      async function load_topic(){
+        let request = await fetch(`/api/teacher/topics/${topic_id}/`)
+        let response = await request.json()
+
+        topic_title.innerText = response.title
+
+      }
+      load_topic()
+
+      async function load_tests(response){
+        main.innerHTML = ''
+
+        for (let i = 0; i < response.length; i++){
+
+          let options = ''
+          for (let j = 0; j < response[i].options.length; j++){
+            options += `
+            <div class="col-md">
+              <div class="form-floating bg-dark">
+                <input type="text" class="form-control text-light" value="${response[i].options[j].text}" id="${response[i].options[j].id}" name="title" disabled placeholder="0" style="background: black;">
+                <label for="days-input">Option</label>
+              </div>
+            </div>
+            `
+          }
+          options += `
+          <div class="col-md">
+            <div class="form-floating bg-dark">
+              <input type="text" class="form-control text-light" value="${response[i].answer}" id="${response[i].answer.id}" name="title" disabled placeholder="0" style="background: black;color:green!important">
+              <label for="days-input">Answer</label>
+            </div>
+          </div>
+          `
+
+
+          topics[response[i].id] = response[i]
+          main.innerHTML += `
+            <div id="student${response[i].id}" class="accordion-item bg-dark text-light rounded-4 border-dark">
+              <h2 class="accordion-header" id="i${response[i].id}">
+                <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${response[i].id}" aria-expanded="false" aria-controls="body${response[i].id}">
+                  <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                  ${response[i].text}
+                  <span class="time-passed">${response[i].level}</span>
+                </button>
+              </h2>
+              <div id="body${response[i].id}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${response[i].id}" data-bs-parent="#main">
+                <div class="accordion-body pt-1">
+                  
+                  ${options}
+
+                  <div class="btn-group mt-1 w-100" role="group" aria-label="Basic mixed styles example">
+                    <button type="button" class="btn btn-light btn-sm" onclick="edit_topic(${response[i].id})">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                      </svg>
+                      Edit topic
+                    </button>
+                    <button type="button" class="btn btn-light btn-sm" onclick="">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                      </svg>
+                      View tests
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          `
+        }
+
+      }
+
+      savebutton.addEventListener('click', async function(){
+        if (level.value.length == ''){
+          notification('Choose the level to generate tests.', "orange")
+          level.focus()
+        } else {
+          spinner(true)
+          savebutton.disabled = true
+
+          let request = await fetch(
+            `/api/teacher/topics/${topic_id}/tests/`,
+            {
+              method: 'POST',
+              body: new FormData(form_register)
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+            level.value = ''
+            load_tests(response.tests)
+            
+          } else {
+            console.log(response.errors)
+            for (let i = 0; i < response.errors.length; i++){
+              switch (response.errors[i]){
+                case 'level':
+                  notification("Choose the level to generate tests.", "orange")
+                  break
+                
+              }
+            }
+          }
+          
+
+          savebutton.disabled = false          
+          spinner(false)
+        }
+
+      })
+
+
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'))
+      function edit_topic(id){
+        let modal_topic_id = document.getElementById('modal_topic_id')
+        let title = document.getElementById('modal_topic_title')
+        let index = document.getElementById('modal_topic_index')
+
+        modal_topic_id.value = id
+        title.value = topics[id].title
+        index.value = topics[id].index
+
+        modal.show()
+      }
+
+      document.getElementById('modal_topic_savebutton').addEventListener('click', async function(){
+
+        let id = parseInt(document.getElementById('modal_topic_id').value)
+        let title = document.getElementById('modal_topic_title')
+        let index = document.getElementById('modal_topic_index')
+        let form = document.getElementById('modal_topic_form')
+
+        if (title.value.length < 5){
+          notification('Topic must be at least 5 characters long.', "orange")
+          
+          title.focus()
+        } else {
+          spinner(true)
+
+          let request = await fetch(
+            `/api/teacher/topics/${id}/`,
+            {
+              method: 'POST',
+              body: new FormData(form)
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+            modal.hide()
+            load_topics()
+          } else {
+
+            for (let i = 0; i < response.errors.length; i++){
+              switch (response.errors[i]){
+                case 'title':
+                  notification("Topic must be at least 5 characters long. (Max 200 chars)", "orange")
+                  break
+                
+                case 'index':
+                  notification("Index must be a number.", "orange")
+                  break
+              }
+            }
+          }
+          
+          spinner(false)
+        }
+
+      })
+    </script>
+</body>
+</html>

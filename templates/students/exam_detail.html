@@ -1,0 +1,836 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: Garamond, serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'students/navbar.html' %}
+
+  <section style="background-color: #eee;">
+    <div class="container pt-1">
+      <h1 class="text-body-emphasis text-dark text-center" id="page_name">Exam</h1>
+      
+  
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body" id="exam_details">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Topic</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="mb-0 fw-bold" id="exam_topic"></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Starts</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="mb-0 fw-bold" id="exam_start_date"></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Ends</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class=" mb-0 fw-bold" id="exam_end_date"></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                    <p class="text-muted mb-0">Max</p>
+                </div>
+                <div class="col-sm-9">
+                    <p class=" mb-0 fw-bold" id="exam_max_sessions">participants</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Author</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="mb-0 fw-bold" id="exam_author"></p>
+                </div>
+              </div>
+              <hr>
+                
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          
+
+          <div class="container">
+            <form id="form_register" method="post" onsubmit="return false">
+              <ul class="list-group mb-5">
+                
+                <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                  
+                  <div class="row g-2 mt-1" id="topic_field">
+                    <div class="form-floating bg-dark" id="choose_topic_field">
+                      <select class="form-select text-light" id="topic" name="topic" style="background: black;">
+                        <option value="">Choose topic</option>
+                        
+                      </select>
+                      <label for="hours-input">Topic</label>
+                    </div>
+                  </div>
+                  <div class="row g-2 mt-1">
+                    <div class="form-floating bg-dark">
+                      <select class="form-select text-light" id="level" name="level" style="background: black;">
+                        <option value="">Choose level</option>
+                        <option value="1">A1</option>
+                        <option value="2">A2</option>
+                        <option value="3">B1</option>
+                        <option value="4">B2</option>
+                        <option value="5">C1</option>
+                        <option value="6">C2</option>
+                      </select>
+                      <label for="hours-input">Level</label>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item justify-content-between align-items-start contact">
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Start</button>
+                  </div>
+                </li>
+              </ul>
+            </form>
+
+            <form onsubmit="return false" id="main_form">
+              
+              
+            </form>
+
+          </div>
+
+          <div id="main"class="accordion accordion-flush mt-0">
+            <!-- Don't touch -->
+
+            
+
+        </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="access_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Loading...</h1>
+            </div>
+            <div class="modal-body ps-1 pe-1">
+              <h3 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 16 16">
+                  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
+                </svg>
+                We are preparing the best questions for you. Please, stand by.
+              </h3>
+              
+            </div>
+            <div class="modal-footer">
+              <div class="spinner-grow text-center d-block m-auto" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+    <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+    Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <a href="" id="view_results" style="display: none;">
+        <button class="btn btn-success btn-lg w-100" style="position: fixed;top: 0;">View results</button>
+    </a>
+  </section>
+
+
+  <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <script>
+    let main = document.getElementById('main')
+
+    let exam_topic = document.getElementById('exam_topic')
+    let exam_start_date = document.getElementById('exam_start_date')
+    let exam_end_date = document.getElementById('exam_end_date')
+    let exam_max_sessions = document.getElementById('exam_max_sessions')
+    let exam_author = document.getElementById('exam_author')
+
+    let topic = document.getElementById('topic')
+    let level = document.getElementById('level')
+    let choose_topic_field = document.getElementById('choose_topic_field')
+
+    let form_register = document.getElementById('form_register')
+    let main_form = document.getElementById('main_form')
+    let page_name = document.getElementById('page_name')
+    let savebutton = document.getElementById('savebutton')
+    let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('access_modal'))
+    let exam_details = document.getElementById('exam_details')
+    let view_results_btn = document.getElementById('view_results')
+
+    let exam = {}
+    const exam_id = location.pathname.split('/')[2]
+    let tests
+    let current_test
+
+    function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements at indices i and j
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+    }
+
+    function formatDate(date) {
+    date = new Date(date)
+    const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+    const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    const month = date.toLocaleString('en-US', { month: 'long' });
+    const day = date.getDate();
+
+    return `${hours}:${minutes} ${ampm}, ${month} ${day}`;
+    }
+    main_form.innerHTML = ''
+
+
+
+    function spinner(display){
+    let spinner_element = document.getElementById('spinner')
+    switch (display){
+    case true:
+        spinner_element.setAttribute('style', 'display: block')
+        break
+    case false:
+        spinner_element.setAttribute('style', 'display: none!important')
+        break
+    }
+    }
+
+    function notification(message, color){
+    let modal_trigger = document.getElementById('modal-trigger')
+    let modal_text = document.getElementById('modal-text')
+
+    modal_text.style.color = color
+    modal_text.innerText = message
+    modal_trigger.click()
+    }
+
+    function clean_text(text) {
+      return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
+    async function load_topics(){
+    spinner(true)
+
+
+    let request = await fetch('/api/student/topics/')
+    let response = await request.json()
+
+    for (let i = 0; i < response.length; i++){
+    topic.innerHTML += `
+        <option value="${response[i].id}">${clean_text(response[i].title)}</option>
+    `
+    }
+
+    spinner(false)
+    }
+    
+    async function load_exam_sessions(){
+
+        let request = await fetch(`/api/exams/${exam_id}/exam-sessions/`)
+        let response = await request.json()
+        
+        for (let i = 0; i < response.length; i++){
+
+            exam_session = response[i]
+
+            let status, color
+            if (exam_session.is_finished){
+                status = exam_session.is_successful == true ? "Successful" : "Failed"
+                color = exam_session.is_successful == true ? "success" : "danger"
+            } else {
+                status = "In process"
+                color = "light"
+            }
+
+            main.innerHTML += `
+            <div id="student$1" class="accordion-item bg-dark text-light rounded-4 border-dark">
+                <h2 class="accordion-header" id="i${i}">
+                    <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${i}" aria-expanded="false" aria-controls="body${i}">
+                    <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                    ${clean_text(exam_session.user)}
+                    <span class="time-passed text-${color}">${status}</span>
+                    </button>
+                </h2>
+                <div id="body${i}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${i}" data-bs-parent="#main">
+                    <div class="accordion-body pt-1">
+                    
+                    <div class="card-body mt-3">
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <p class="text-muted mb-0">Topic</p>
+                            </div>
+                            <div class="col-sm-9">
+                            <p class="mb-0 fw-bold">${clean_text(exam_session.topic)} (${exam_session.level} level)</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <p class="text-muted mb-0">Points</p>
+                            </div>
+                            <div class="col-sm-9">
+                            <p class="mb-0 fw-bold text-${color}"> (${exam_session.points}/30)</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <p class="text-muted mb-0">Status</p>
+                            </div>
+                            <div class="col-sm-9">
+                            <p class="text-${color} mb-0 fw-bold">${status}</p>
+                            </div>
+                        </div>
+                        
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            `
+        }
+
+    }
+    
+    async function load_exam(){
+        spinner(true)
+
+        let request, response
+        try {
+            request = await fetch(`/api/exams/${exam_id}/`)
+            response = await request.json()
+        } catch {
+            location.href = '../'
+            return
+        }
+        exam = response
+
+        page_name.innerText = response.title
+        exam_start_date.innerText = formatDate(response.start_date)
+        exam_end_date.innerText = formatDate(response.end_date)
+        exam_max_sessions.innerText = `${response.max_sessions} participants`
+        exam_author.innerText = response.author
+
+
+        if (response.topic){
+        exam_topic.innerText = response.topic
+
+        } else {
+            exam_topic.innerText = 'Optional'
+        }
+
+        if (!response.is_preset){
+        load_topics()
+        } else {
+            choose_topic_field.remove()
+        }
+
+        if (response.participated){
+            form_register.remove()
+
+            if (response.exam_session.is_successful){
+                exam_details.innerHTML += `
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-muted mb-0">Points</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-success mb-0 fw-bold">(${response.exam_session.points}/30)</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-success mb-0 fw-bold">Successful</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="mb-0 fw-bold"">${clean_text(response.exam_session.topic)} (${response.exam_session.level} level)</p>
+                    </div>
+                </div>
+                `
+            } else {
+                let reminders = [
+                    "Make an effort not to be such a disappointment next time.",
+                    "Try harder not to be such a failure next time.",
+                    "Do everyone a favor and avoid being such a complete embarrassment next time.",
+                    "Next time, at least try not to be such a waste of space.",
+                    "Maybe you could aim to be less of a total disaster next time.",
+                    "Why not put in a tiny bit of effort next time, instead of being a complete disappointment?",
+                    "You should really work on not being such a disappointment to everyone around you.",
+                    "Next time, try not to be such a complete waste of everyone's time.",
+                    "Why even bother if you're just going to be such a colossal failure every time?",
+                    "Do us a favor and avoid showing up next time if you're going to be this useless.",
+                    "If you were aiming to be the worst, congratulations—you've succeeded spectacularly.",
+                    "It's astounding how consistently you manage to disappoint everyone around you.",
+                    "Why even bother if you're just going to be such a colossal failure every time?",
+                    "If you die one day because of your idiocy, it will be counted as natural selection."
+                ]
+                let randomReminder = reminders[Math.floor(Math.random() * reminders.length)];
+
+                exam_details.innerHTML += `
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-muted mb-0">Points</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-danger mb-0 fw-bold">(${response.exam_session.points}/30)</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-danger mb-0 fw-bold">Failed</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="mb-0 fw-bold"">${response.exam_session.topic} (${response.exam_session.level} level)</p>
+                    </div>
+                </div>
+                <hr>
+                <p class="text-danger text-center fw-bold">${randomReminder}</p>
+
+                `
+            }
+            load_exam_sessions()
+        }
+
+        spinner(false)
+        force_redirect()
+    }
+    load_exam()
+
+    async function load_tests(){
+        modal.show()
+
+        let request, response
+        try {
+            request = await fetch(
+                `/api/exams/${exam_id}/`,
+                {
+                method: 'POST',
+                body: new FormData(form_register)
+                }
+            )
+            response = await request.json()
+        } catch {
+            notification("Please try again.")
+        }
+
+        tests = response.tests
+
+        if (response.message == 'success'){
+            
+            next_question()
+            form_register.remove()
+
+
+
+        } else {
+            for (let i = 0; i < response.errors.length; i++){
+                switch (response.errors[i]){
+                    case 'topic':
+                    notification("Please choose topic.", "orange")
+                    break
+                    
+                    case 'level':
+                    notification("Please choose level", "orange")
+                    break
+                    
+                    case 'expired':
+                    notification("Exam has ended.", "orange")
+                    break
+                    
+                    case 'not-started':
+                    notification("Exam has not started yet.", "orange")
+                    break
+                    
+                    case 'gpt':
+                    notification("There is a problem with the test generator. Please contact the administration or try again later.", "orange")
+                    break
+                    
+                    case 'participated':
+                        notification("You have already participated in this exam.", "orange")
+                        break
+                    
+                    case 'only-author':
+                        notification("This exam was created by a student and is for training purposes only. You can also create a training exam by going to the 'Training' page.", "orange")
+                        break
+
+                    case 'full':
+                        notification("The exam has reached the maximum number of participants.", "orange")
+                        break
+                }
+            }
+        }
+        modal.hide()
+        setTimeout(function(){
+                modal.hide()
+        }, 500)
+    }
+
+    savebutton.addEventListener('click', async function(){
+
+        if (level.value == ''){
+            notification('Choose level', "orange")
+        } else if (!exam.is_preset && topic.value == '') {
+            notification('Choose topic', "orange")
+        } else {
+            savebutton.disabled = true
+
+            load_tests()
+
+            savebutton.disabled = false          
+        }
+
+    })
+
+
+    function show_access_modal(){
+        if (access_code_input.value == ''){
+            spinner(true)
+            load_access_code()
+            spinner(false)
+        }
+        modal.show()
+    }
+
+
+    async function force_redirect() {
+        
+        let request = await fetch('/api/exams/ongoing/')
+        let response = await request.json()
+        if (response.exam){
+            if (response.exam.id == exam_id){
+                exam_topic.innerText = `${response.exam.topic} (${response.exam.level} level)`
+                form_register.remove()
+                load_tests()
+            } else {
+                document.body.innerHTML += `
+                <!-- Force redirect modal -->
+                <div class="modal fade" id="redirect_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 text-warning" id="staticBackdropLabel">Warning</h1>
+                        </div>
+                        <div class="modal-body ps-1 pe-1">
+                        <h6 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-alarm-fill" viewBox="0 0 16 16">
+                                <path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5m2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.04 8.04 0 0 0 .86 5.387M11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.04 8.04 0 0 0-3.527-3.527"/>
+                            </svg>
+                            You're already participating in an exam. Please, finish your ongoing exam before starting another one.
+                        </h6>
+                        
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/exams/${response.exam.id}/">                            
+                                <button class="btn btn-primary">Continue exam <b>(${clean_text(response.exam.title)})</b></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                `
+                let modal_element = document.getElementById('redirect_modal')
+                let modal = bootstrap.Modal.getOrCreateInstance(modal_element)
+
+                modal.show()
+
+                setInterval(function(){
+                    modal.show()
+                }, 5000)
+                
+            }
+        }
+    }
+
+
+    async function submit_answer(button, test_link_id){
+        spinner(true)
+        let options = document.getElementsByName(`test${test_link_id}`)
+        let option_ids = ''
+        let checked_count = 0
+        let selected_options = []
+
+        for (let i = 0; i < options.length; i++){
+            if (options[i].checked){
+                option_ids += options[i].value + ','
+                checked_count ++
+                selected_options.push(options[i].value)
+            }
+        }
+
+        if (checked_count == 0){
+            notification("Please choose an option before submitting.", "orange")
+            spinner(false)
+            return
+        }
+
+        let form_data = new FormData()
+        form_data.append("test_link_id", test_link_id)
+        form_data.append("option_ids", option_ids)
+
+        try {
+            let request = await fetch('/api/exams/submit/', {
+                method: 'POST',
+                body: form_data
+            })
+
+            let response = await request.json()
+            if (response.message == 'success'){
+                let answer_option = document.getElementById(`label${response.answer_option}`)
+
+                for (let i = 0; i < response.selected_options.length; i++){
+                    let selected_option = document.getElementById(`label${response.selected_options[i]}`)
+                    selected_option.classList.remove('btn-light')
+                    selected_option.classList.add(
+                        response.state == 'true' ? 'btn-success' : 'btn-danger'
+                    )
+                }
+
+                answer_option.classList.remove('btn-light')
+                answer_option.classList.remove('btn-danger')
+                document.getElementById(`label${response.answer_option}`).classList.add(
+                    'btn-success'
+                )
+                button.remove()
+
+                for (let i = 0; i < response.errors.length; i++){
+                    switch(response.errors[i]){
+                        case "expired":
+                            notification("Exam has ended, your answers are recorded.", "green")
+                            view_results_btn.style.display = 'block'
+                            break
+                    }
+                }
+            tests[current_test].selected_options = selected_options
+            document.getElementById(`next_button${test_link_id}`).disabled = false
+
+            } else {
+                for (let i = 0; i < response.errors.length; i++){
+                    switch(response.errors[i]){
+                        case "invalid-ids":
+                            notification("Please, choose an option before submitting.", "orange")
+                            break
+                        
+                        case "already-submitted":
+                            notification("Answer has already been recorded. If it doesn't look like that, try reloading the page.", "green")
+                            tests[current_test].selected_options = selected_options
+                            document.getElementById(`next_button${test_link_id}`).disabled = false
+                            break
+                        
+                        case "expired":
+                            notification("Exam has ended, your answers are recorded.", "green")
+                            view_results_btn.style.display = 'block'
+                            break
+                        
+                        case "gpt":
+                            notification("There was a little problem with submitting your answer. Can you try to submit once again? :)", "orange")
+                            break
+                    }
+                }
+            }
+        } catch {
+            notification("Unable to submit your answer. Please, check your internet connection and try again.", "orange")
+        }
+
+        spinner(false)
+    }
+
+
+    async function next_question(){
+        for (let i = 0; i < tests.length; i++){
+            test = tests[i]
+            current_test = i
+            if (test.selected_options.length > 0){
+                continue
+            }
+            if (test.options.length == 0){
+                spinner(true)
+                if(!(await load_options(i))){
+                    notification("There was a problem with loading the next question. Can you try it again?", "orange")
+                } 
+                next_question()
+                spinner(false)
+                break
+            }
+            test.options = shuffleArray(test.options)
+            main_form.innerHTML = ''
+
+
+            let options = ''
+            let button = test.selected_options.length ? '' : `<button class="btn btn-primary mt-2 float-end" type="button" onclick="submit_answer(this, ${test.id})"">Submit</button>`
+
+            for (let j = 0; j < test.options.length; j++){
+                
+                options += `
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" name="test${test.id}" id="option${test.options[j].id}" value=${test.options[j].id}>
+                    <label class=" btn btn-light w-100" id="label${test.options[j].id}" for="option${test.options[j].id}">
+                        ${clean_text(test.options[j].text)}
+                    </label>
+                </div>
+                `
+                
+            }
+
+            main_form.innerHTML += `
+            <div class="card mb-2">
+                <div class="card-header">
+                    Question ${i + 1} of 30
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title mb-3">${clean_text(test.text)}</h5>
+                    
+                    ${options}
+                    <button id="next_button${test.id}" class="btn btn-secondary mt-2 ms-2 float-end" type="button" onclick="next_question()" disabled>Next</button>
+                    ${button}
+                </div>
+            </div>
+            `
+            
+            for (let j = 0; j < test.selected_options.length; j++){
+                let selected_option = document.getElementById(`label${test.selected_options[j]}`)
+                selected_option.classList.remove('btn-light')
+                selected_option.classList.add(
+                    test.state == 'true' ? 'btn-success' : 'btn-danger'
+                )
+            }
+            break
+        }
+    }
+
+
+    async function load_options(test_id) {
+        
+        try {
+            let request = await fetch(`/api/test-options/${tests[test_id].id}`)
+            let response = await request.json()
+
+            tests[test_id].options = response
+            return true
+        } catch {
+            return false
+        }
+
+    }
+  
+  </script>
+</body>
+</html>

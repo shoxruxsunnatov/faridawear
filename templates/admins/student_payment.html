@@ -1,0 +1,654 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Student not found</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+      .logo {
+          font-family: "Montserrat",  sans-serif;
+          font-size: 24px;
+      }
+      .divider:after,
+      .divider:before {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: #eee;
+      }
+          .h-custom {
+          height: calc(100% - 73px);
+      }
+          @media (max-width: 450px) {
+          .h-custom {
+          height: 100%;
+          }
+      }
+      body {
+        background: rgb(44, 46, 49);
+      }
+      .contact {
+        background: black;
+        color: white;
+        border: 2px solid rgb(44, 46, 49);
+      }
+      .page-name {
+        font-family: "Montserrat",  sans-serif;
+        color: white;
+        font-size: xx-large;
+        text-align: center;
+        margin-top: 10px;
+      }
+      select {
+        flex: 1;
+      }
+      .a-contact {
+        margin: 0;
+      }
+      .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <h3 class="page-name" id="main-title">Student not found</h3>
+
+              <div class="col-lg-8 m-auto" id="info_field">
+                <div class="nav nav-tabs d-flex">
+                  <button class="btn btn-light fw-bold text-dark" id="info_tab_button" onclick="change_tab('info_tab')" style="flex: 1;border-radius: 5px 5px 0 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill me-1" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+                      <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"></path>
+                    </svg>
+                    Information
+                  </button>
+                  <button class="btn text-light fw-bold" id="edit_tab_button" onclick="change_tab('edit_tab')" style="flex: 1;border-radius: 5px 5px 0 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill me-1" viewBox="0 0 16 16">
+                      <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"/>
+                    </svg>
+                    Payment
+                  </button>
+                  <button class="btn text-light fw-bold" id="settings_tab_button" onclick="change_tab('settings_tab')" style="flex: 1;border-radius: 5px 5px 0 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill me-1" viewBox="0 0 16 16">
+                      <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                    </svg>
+                    Settings
+                  </button>
+                </div>
+
+                <div class="card mb-4 bg-dark" id="info_tab">
+                  <ul class="list-group rounded-top" style="border-radius: 0 0 5px 5px!important">
+                      
+                      <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                        <div class="row">
+                          <div class="col-sm-3 col-6">
+                            <p class="text-muted mb-0">Balance</p>
+                          </div>
+                          <div class="col-sm-9 col-6">
+                            <p class="mb-0 fw-bold fs-5" id="balance">0</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-3 col-6">
+                            <p class="text-muted mb-0">Account status</p>
+                          </div>
+                          <div class="col-sm-9 col-6" id="account_status">
+                          </div>
+                        </div>
+                        <hr>
+                        
+                      </li>
+                    </ul>
+                </div>
+
+                <div class="card mb-4 d-none bg-transparent" id="edit_tab">
+                  
+                  <div class="collapse show" id="collapseExample">
+                    <form id="form_add_group" method="post" onsubmit="return false">
+                      <ul class="list-group">
+                        
+                        <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                          <div class="row g-2 mb-1">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="number" class="form-control text-light" id="amount" name="amount"  placeholder="0"  style="background: black;">
+                                <label for="days-input">Amount</label>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Make payment</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+                    <br>
+                  </div>
+                  
+                </div>
+                
+                <div class="card mb-4 d-none bg-transparent" id="settings_tab">
+                    <ul class="list-group d-none" id="payment-due-field">
+                      <li class="list-group-item justify-content-between align-items-start contact d-none" id="manual-charge-field">
+                        <p class="text-light fs-5 mb-1 fw-bold">Failed to charge</p>
+                        <p class="text-light fs-6 mb-1">
+                            Account had <span class="fw-bold text-warning">insufficient funds</span> to pay tuition automatically.
+                            Now, <span class="fw-bold">press the button below</span> to charge the monthly tuition and <span class="fw-bold text-success">activate</span> the account.
+                          </p>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                          <button id="manual_charge_btn" class="btn btn-light mt-1 fw-bold" type="save" style="width: 160px;margin: auto;">Charge and activate</button>
+                        </div>
+                      </li>
+
+                      <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                        <div class="row g-2 mb-1">
+                          <div class="col-md">
+                            <p class="text-light fs-5 mb-1 fw-bold">Payment due</p>
+                            <p class="text-light fs-6 mb-1">
+                              System automatically charges monthly tuition after <span class="fw-bold" id="payment-due"></span>.
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </li>
+                      
+                    </ul>
+
+                    <form method="post" onsubmit="return false" id="free-access-field" class="d-none">
+                      <ul class="list-group">
+                        
+                        <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                          <div class="row g-2 mb-1">
+                            <div class="col-md">
+                              <p class="text-success fs-6 mb-1 fw-bold">Start free access for</p>
+                              <div class="form-floating bg-dark">
+                                <input type="number" class="form-control text-light" id="hours" name="hours" placeholder="0" style="background: black;" value="72">
+                                <label for="days-input">Hours</label>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="free_access_activate_btn" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Activate account</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+
+                    <form id="form_add_group" method="post" class="mt-2" onsubmit="return false">
+                      <ul class="list-group">
+                        
+                        <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                          <p class="text-light fs-5 mb-1 fw-bold">Tuition cost</p>
+                          <div class="row g-2 mb-1">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="number" class="form-control text-light" id="tuition-cost" name="amount"  placeholder="0"  style="background: black;">
+                                <label for="days-input">Amount</label>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="tuition-cost-save-btn" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Save</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+
+                </div>
+
+              </div>
+
+
+              <div class="col-lg-8 m-auto">
+
+                <p class="fs-4 text-light mb-1 fw-bold">Payment history</p>
+                <div class="list-group mt-0" id="main">
+                  <!-- Don't touch -->
+                </div>
+
+              </div>
+
+            </div>
+            
+          </section>
+              
+    </div>
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let savebutton = document.getElementById('savebutton')
+      let start_free_access_btn = document.getElementById('free_access_activate_btn')
+      let manual_charge_btn = document.getElementById('manual_charge_btn')
+      let tuition_cost_save_btn = document.getElementById('tuition-cost-save-btn')
+      let page_title = document.getElementById('page-title')
+      let main_title = document.getElementById('main-title')
+
+      let amount = document.getElementById('amount')
+      let tuition_cost = document.getElementById('tuition-cost')
+      let free_access_field = document.getElementById('free-access-field')
+      let payment_due_field = document.getElementById('payment-due-field')
+      let manual_charge_field = document.getElementById('manual-charge-field')
+      let balance = document.getElementById('balance')
+      let account_status = document.getElementById('account_status')
+      let payment_due = document.getElementById('payment-due')
+      let form_add_group = document.getElementById('form_add_group')
+
+      let topic = document.getElementById('topic')
+      let main = document.getElementById('main')
+      const user_id = location.pathname.split('/')[2]
+
+      function clean_text(text) {
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+      }
+
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+      
+      function formatDate(date) {
+        date = new Date(date)
+        const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+        const month = date.toLocaleString('en-US', { month: 'long' });
+        const day = date.getDate();
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes} ${ampm}, ${month} ${day}, ${year}`;
+      }
+      
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+      }
+
+      let transaction_categories = {
+        "deposit": "Deposit",
+        "charge-tuition": "Monthly tuition charge",
+        "bonus-dictionary": "Dictionary bonus"
+      }
+
+      load_user()
+
+      async function load_user(){
+        spinner(true)
+
+        let request = await fetch(`/api/students/${user_id}/payment/`)
+        let response = await request.json()
+
+        page_title.innerText = response.full_name + ' - Payment'
+        main_title.innerText = response.full_name
+        balance.innerText = formatNumber(response.balance) 
+        account_status.innerHTML = response.is_paid ? `<p class="mb-0 fw-bold text-success">Active</p>` : `<p class="mb-0 fw-bold text-danger">Inactive</p>`
+        tuition_cost.value = response.tuition_cost
+
+        let transactions = response.transactions
+        main.innerHTML = ''
+
+        let up_sign = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-up-right-circle-fill" viewBox="0 0 16 16">
+          <path d="M0 8a8 8 0 1 0 16 0A8 8 0 0 0 0 8m5.904 2.803a.5.5 0 1 1-.707-.707L9.293 6H6.525a.5.5 0 1 1 0-1H10.5a.5.5 0 0 1 .5.5v3.975a.5.5 0 0 1-1 0V6.707z"/>
+        </svg> `
+        let down_sign = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-down-left-circle-fill" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-5.904-2.803a.5.5 0 1 1 .707.707L6.707 10h2.768a.5.5 0 0 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.525a.5.5 0 0 1 1 0v2.768z"/>
+        </svg> +`
+
+        for (let i = 0; i < transactions.length; i++){
+          let transaction = transactions[i]
+          main.innerHTML += `
+          <a class="list-group-item list-group-item-action mb-1">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1 fw-bold">
+                
+                ${transaction.amount > 0 ? down_sign : up_sign}${formatNumber(transaction.amount)}
+              </h5>
+              <small class="text-body-secondary fw-bold">${transaction_categories[transaction.category]}</small>
+            </div>
+            <p class="mb-1">${formatDate(transaction.date_created)}</p>
+            <small class="text-body-secondary">Issued by ${clean_text(transaction.created_by)}</small>
+          </a>
+          `
+
+        }
+        
+        free_access_field.classList.add('d-none')
+        payment_due_field.classList.add('d-none')
+        manual_charge_field.classList.add('d-none')
+        
+        if (response.payment_due == null){
+          free_access_field.classList.remove('d-none')
+          free_access_field.classList.add('d-block')
+        } else {
+          payment_due_field.classList.remove('d-none')
+          payment_due_field.classList.add('d-block')
+
+          payment_due.innerText = formatDate(response.payment_due)
+
+          if (!response.is_paid){
+            manual_charge_field.classList.remove('d-none')
+            manual_charge_field.classList.add('d-block')
+          }
+        }
+
+        spinner(false)
+      }
+      
+      savebutton.addEventListener('click', async function(){
+        spinner(true)
+        if (amount.value.length < 3 || amount.value.length > 10){
+          notification("Make sure you have entered the correct amount of funds.", "orange")
+          amount.focus()
+        } else {
+          savebutton.disabled = true
+
+          try {
+            let request = await fetch(
+              `/api/students/${user_id}/payment/`,
+              {
+                method: 'POST',
+                body: new FormData(form_add_group)
+              }
+            )
+            let data = await request.json()
+
+            if (data.message == 'success'){
+              notification("Payment successful.", "green")
+              load_user()
+              amount.value = 0
+            } else {
+              if (data.error == 'amount'){
+                notification("Make sure you have entered the correct amount of funds (max 999 000). ", "orange")
+              }
+            }
+          } catch {
+            notification("No internet connection. Please refresh the page before making payment again to avoid accidental double payment. ")
+          }
+
+          savebutton.disabled = false
+          
+        }
+        spinner(false)
+
+
+      })
+
+
+      tuition_cost_save_btn.addEventListener('click', async function(){
+
+        spinner(true)
+        if (tuition_cost.value.length < 3 || hours.value.length > 6){
+          notification("Invalid tuition cost (min 100, max 999 999).", "orange")
+        } else {
+          tuition_cost_save_btn.disabled = true
+
+          try {
+            let form_data = new FormData()
+            form_data.append('setting', 'tuition-cost-set')
+            form_data.append('tuition-cost', tuition_cost.value)
+
+            let request = await fetch(
+              `/api/students/${user_id}/payment/settings/`,
+              {
+                method: 'POST',
+                body: form_data
+              }
+            )
+            let data = await request.json()
+
+            if (data.message == 'success'){
+              notification("Tuition cost is set.", "green")
+              load_user()
+            } else {
+              for (let i = 0; i < data.errors.length; i++){
+                switch (data.errors[i]){
+                  case "tuition-cost":
+                    notification("Invalid tuition cost (min 100, max 999 999).", "orange")
+                    break
+                
+                }
+              }
+            }
+          } catch {
+            notification("No internet connection.")
+          }
+
+          tuition_cost_save_btn.disabled = false
+          
+        }
+        spinner(false)
+
+
+      })
+
+
+      start_free_access_btn.addEventListener('click', async function(){
+        let hours = document.getElementById('hours')
+
+        spinner(true)
+        if (hours.value.length < 1 || hours.value.length > 3){
+          notification("Invalid duration of free access hours (max 168).", "orange")
+          amount.focus()
+        } else {
+          start_free_access_btn.disabled = true
+
+          try {
+            let form_data = new FormData()
+            form_data.append('setting', 'free-access')
+            form_data.append('hours', hours.value)
+
+            let request = await fetch(
+              `/api/students/${user_id}/payment/settings/`,
+              {
+                method: 'POST',
+                body: form_data
+              }
+            )
+            let data = await request.json()
+
+            if (data.message == 'success'){
+              notification("Account has been successfully activated.", "green")
+              load_user()
+            } else {
+              for (let i = 0; i < data.errors.length; i++){
+                switch (data.errors[i]){
+                  case "hours":
+                    notification("Invalid duration of free access hours (max 168).", "orange")
+                    break
+                  
+                  case "payment-due":
+                    notification("Free access is already activated.", "orange")
+                    break
+
+                }
+              }
+            }
+          } catch {
+            notification("No internet connection.")
+          }
+
+          start_free_access_btn.disabled = false
+          
+        }
+        spinner(false)
+
+
+      })
+
+
+      manual_charge_btn.addEventListener('click', async function(){
+
+        spinner(true)
+        
+        try {
+          let form_data = new FormData()
+          form_data.append('setting', 'manual-charge')
+
+          let request = await fetch(
+            `/api/students/${user_id}/payment/settings/`,
+            {
+              method: 'POST',
+              body: form_data
+            }
+          )
+          let data = await request.json()
+
+          if (data.message == 'success'){
+            notification("Account has been successfully activated.", "green")
+            load_user()
+          } else {
+            for (let i = 0; i < data.errors.length; i++){
+              switch (data.errors[i]){
+                case "already-activate":
+                  notification("Account is already active. No need to charge the monthly tuition yet.", "orange")
+                  break
+
+                case "funds":
+                  notification("Insufficient funds to charge the monthly tuition.", "orange")
+                  break
+                
+                case "tuition-cost":
+                  notification("Tuition cost for this student is not set.", "orange")
+                  break
+
+              }
+            }
+          }
+        } catch {
+          notification("No internet connection.")
+        }
+
+        spinner(false)
+
+
+      })
+
+
+      let current_tab = 'groups'
+      
+      let info_tab_button = document.getElementById('info_tab_button')
+      let edit_tab_button = document.getElementById('edit_tab_button')
+      let settings_tab_button = document.getElementById('settings_tab_button')
+      let info_tab = document.getElementById('info_tab')
+      let edit_tab = document.getElementById('edit_tab')
+      let settings_tab = document.getElementById('settings_tab')
+
+      const tabs = [info_tab, edit_tab, settings_tab]
+      const tab_buttons = [info_tab_button, edit_tab_button, settings_tab_button]
+
+      function change_tab(chosen_tab){
+
+        for (let i = 0; i < tabs.length; i++){
+          let tab = tabs[i]
+          let tab_button = tab_buttons[i]
+
+          tab_button.classList.remove('btn-light')
+
+          tab_button.classList.remove('text-dark')
+          tab_button.classList.add('text-light')
+
+          tab.classList.remove('d-block')
+          tab.classList.add('d-none')
+        }
+
+        let tab = document.getElementById(chosen_tab)
+        let tab_button = document.getElementById(`${chosen_tab}_button`)
+
+        tab_button.classList.add('btn-light')
+
+        tab_button.classList.add('text-dark')
+        tab_button.classList.remove('text-light')
+
+        tab.classList.add('d-block')
+        tab.classList.remove('d-none')
+      
+      }
+    
+    </script>
+</body>
+</html>

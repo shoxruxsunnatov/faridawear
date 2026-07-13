@@ -1,0 +1,426 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topics</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: "Montserrat",  sans-serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <h3 class="page-name">Topics</h3>
+                <div class="col-md-9 col-lg-6 col-xl-5" style="width: 100%;height: 100%;">
+                  <!-- 1 -->
+                  <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                    Add topic
+                  </a>
+                  <div class="collapse" id="collapseExample">
+                    <form id="form_register" method="post" onsubmit="return false">
+                      <ul class="list-group">
+                        
+                        <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                          <div class="row g-2">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="text" class="form-control text-light" id="topic_title" name="title" placeholder="0"  style="background: black;">
+                                <label for="days-input">Name</label>
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <div class="form-floating bg-dark">
+                                <input type="number" class="form-control text-light" id="topic_index" name="index" placeholder="0"  style="background: black;">
+                                <label for="days-input">Index</label>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row g-2 mt-1">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="text" class="form-control text-light" id="topic_prompt" name="prompt" placeholder="0"  style="background: black;">
+                                <label for="days-input">Prompt</label>
+                              </div>
+                            </div>
+                          </div>
+
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Save</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+                    <br>
+                  </div>
+
+                  <div id="main"class="accordion accordion-flush mt-1">
+                    <!-- Don't touch -->
+                  </div>
+                </div>
+
+                
+
+              </div>
+            </div>
+            
+          </section>
+              
+    </div>
+
+    <!-- Modal -->
+    <button id="trigger_modal_topic" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit topic</h1>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            <form method="post" id="modal_topic_form">
+              <li class="list-group-item justify-content-between align-items-start" data-bs-theme="dark">
+                <div class="row g-2">
+                  <div class="col-md">
+                    <div class="form-floating bg-dark">
+                      <input type="hidden" id="modal_topic_id">
+                      <input type="text" class="form-control text-light" id="modal_topic_title" name="title" placeholder="0" style="background: black;border: 0;">
+                      <label for="days-input">Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-floating bg-dark">
+                      <input type="number" class="form-control text-light" id="modal_topic_index" name="index" placeholder="0" style="background: black;border: 0;">
+                      <label for="days-input">Index</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-2 mt-1">
+                  <div class="col-md">
+                    <div class="form-floating bg-dark">
+                      <input type="text" class="form-control text-light" id="modal_topic_prompt" name="prompt" placeholder="0" style="background: black;border: 0;">
+                      <label for="days-input">Prompt</label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="modal_topic_savebutton" type="button" class="btn btn-light">Save</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let savebutton = document.getElementById('savebutton')
+      let topic_title = document.getElementById('topic_title')
+      let topic_index = document.getElementById('topic_index')
+      let topic_prompt = document.getElementById('topic_prompt')
+      let main = document.getElementById('main')
+
+      let topics = {}
+      
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function clean_text(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      async function load_topics(){
+        spinner(true)
+
+        main.innerHTML = ''
+
+        let request = await fetch('/api/teacher/topics/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+          topics[response[i].id] = response[i]
+          main.innerHTML += `
+            <div id="student${response[i].id}" class="accordion-item bg-dark text-light rounded-4 border-dark">
+              <h2 class="accordion-header" id="i${response[i].id}">
+                <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${response[i].id}" aria-expanded="false" aria-controls="body${response[i].id}">
+                  <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                  ${clean_text(response[i].title)}
+                  <span class="time-passed">${response[i].index}</span>
+                </button>
+              </h2>
+              <div id="body${response[i].id}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${response[i].id}" data-bs-parent="#main">
+                <div class="accordion-body pt-1">
+
+                  <div class="btn-group mt-1 w-100" role="group" aria-label="Basic mixed styles example">
+                    <button type="button" class="btn btn-light btn-sm" onclick="edit_topic(${response[i].id})">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                      </svg>
+                      Edit topic
+                    </button>
+                    <button type="button" class="btn btn-light btn-sm" onclick="location.href = '${response[i].id}/'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                      <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                      <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                    </svg>
+                    View tests
+                  </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          `
+        }
+
+        spinner(false)
+      }
+      load_topics()
+
+      savebutton.addEventListener('click', async function(){
+        if (topic_title.value.length < 5){
+          notification('Topic must be at least 5 characters long.', "orange")
+          topic_title.focus()
+        } else if (topic_title.value.length > topic_prompt.value.length){
+          notification('Prompt is short or invalid.', "orange")
+        } else {
+          spinner(true)
+          savebutton.disabled = true
+
+          let request = await fetch(
+            '/api/teacher/topics/',
+            {
+              method: 'POST',
+              body: new FormData(form_register)
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+            topic_title.value = ''
+            topic_index.value = ''
+            topic_prompt.value = ''
+            load_topics()
+          } else {
+
+            for (let i = 0; i < response.errors.length; i++){
+              switch (response.errors[i]){
+                case 'title':
+                  notification("Topic must be at least 5 characters long. (Max 200 chars)", "orange")
+                  break
+                
+                case 'index':
+                  notification("Index must be a number.", "orange")
+                  break
+
+                case 'prompt':
+                  notification("Prompt is short or invalid.", "orange")
+                  break
+                
+                case 'permission':
+                  notification("You are not authorized to change topics", "orange")
+                  break
+              }
+            }
+          }
+          
+
+          savebutton.disabled = false          
+          spinner(false)
+        }
+
+      })
+
+
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'))
+      function edit_topic(id){
+        let modal_topic_id = document.getElementById('modal_topic_id')
+        let title = document.getElementById('modal_topic_title')
+        let index = document.getElementById('modal_topic_index')
+        let prompt = document.getElementById('modal_topic_prompt')
+
+        modal_topic_id.value = id
+        title.value = topics[id].title
+        index.value = topics[id].index
+        prompt.value = topics[id].prompt
+
+        modal.show()
+      }
+
+      document.getElementById('modal_topic_savebutton').addEventListener('click', async function(){
+
+        let id = parseInt(document.getElementById('modal_topic_id').value)
+        let title = document.getElementById('modal_topic_title')
+        let index = document.getElementById('modal_topic_index')
+        let prompt = document.getElementById('modal_topic_prompt')
+        let form = document.getElementById('modal_topic_form')
+
+        if (title.value.length < 5){
+          notification('Topic must be at least 5 characters long.', "orange")
+          
+          title.focus()
+        } else if (prompt.value.length < title.value.length) {
+          notification('Prompt is short or invalid.', "orange")
+
+        } else {
+          spinner(true)
+
+          let request = await fetch(
+            `/api/teacher/topics/${id}/`,
+            {
+              method: 'POST',
+              body: new FormData(form)
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+            modal.hide()
+            load_topics()
+          } else {
+
+            for (let i = 0; i < response.errors.length; i++){
+              switch (response.errors[i]){
+                case 'title':
+                  notification("Topic must be at least 5 characters long. (Max 200 chars)", "orange")
+                  break
+                
+                case 'index':
+                  notification("Index must be a number.", "orange")
+                  break
+                
+                case 'prompt':
+                  notification("Prompt is short or invalid.", "orange")
+                  break
+
+                case 'permission':
+                  notification("You are not authorized to change topics", "orange")
+                  break
+              }
+            }
+          }
+          
+          spinner(false)
+        }
+
+      })
+    </script>
+</body>
+</html>

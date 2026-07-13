@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRINT / PDF</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 230mm;
+        }
+        
+        #answers {
+            display: grid;
+            width: 100%;
+            grid-template-columns: 20% 20% 20% 20% 20%;
+            margin-top: 30px;
+        }
+        
+        .parent {
+            display: grid;
+            width: 100%;
+            grid-template-columns: 50% 50%;
+            margin-top: 0;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            max-height: 116px;
+            display: inline;
+            margin-left: 30px;
+        }
+        
+        .i {
+            margin: 0 10px;
+        }
+        
+        .n {
+            font-family: sans-serif;
+            color: black;
+            font-size: 18px;
+            display: block;
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            line-height: 20px;
+            -moz-border-radius: 30px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid black;
+            padding: 4px;
+        }
+        
+        #logo {
+            font-family: sans-serif;
+            font-size: 20px;
+            text-align: center;
+            display: block;
+            text-align: right;
+        }
+        
+        button {
+            margin: auto;
+            display: block;
+            width: 100px;
+            height: 50px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .name {
+            text-align: center;
+            font-family: sans-serif;
+        }
+        
+        .answer {
+            font-size: 20px;
+            font-family: sans-serif;
+        }
+        
+        .mar {
+            margin: 50px;
+        }
+        
+        .code {
+            float: right;
+        }
+        
+        @media print {
+            button {
+                display: none;
+            }
+            #answers {
+                margin-top: 500px;
+            }
+        }
+
+        .vocabulary {
+            font-size: larger;
+            margin: 2px;
+        }
+        .vocabulary-text {
+            font-weight: bold;
+        }
+        .vocabulary-description {
+            font-weight: bold;
+            font-style: italic;
+            font-size: large;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="window.print()">PRINT / PDF</button>
+    <h3 class="name">
+        <span id="page_title"></span><span class="name code" id="t1"></span>
+    </h3>
+    <img id="spinner" src="https://www.usj.edu.lb/16images/spinner.gif" style="position: absolute;left: 50%;top: 50%;margin: 0;transform: translate(-50%, -50%);width: 100px;">
+
+    <div id="body" class="parent">
+    </div>
+    
+    <span id="logo">eliteschool.me</span>
+    <span id="logo">english.eliteschool.me</span>
+    <span id="logo">@eliteschool_lc</span>
+    <span id="logo">@eliteschool_ntm</span>
+
+
+    <div class="mar">ㅤ</div>
+    <div class="mar">ㅤ</div>
+    <div class="mar">ㅤ</div>
+    <div class="mar">ㅤ</div>
+    <div class="mar">ㅤ</div>
+    <div class="mar">ㅤ</div>
+
+    <div id="answers">
+    </div>
+    <h3 class="name code" id="t2">Te</h3>
+
+</body>
+<script>
+    let answers = document.getElementById('answers')
+    let body = document.getElementById('body')
+    let spinner = document.getElementById('spinner')
+
+    const package_id = location.pathname.split('/')[3]
+
+    function formatDate(date) {
+        date = new Date(date)
+        const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+        const month = date.toLocaleString('en-US', { month: 'long' });
+        const day = date.getDate();
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes} ${ampm}, ${month} ${day}, ${year}`;
+    }
+
+    let date = formatDate(new Date())
+
+    document.getElementById('t1').innerHTML = date
+    document.getElementById('t2').innerHTML = date
+
+    async function load_vocabularies(){
+        let request = await fetch(`/api/dictionary/packages/${package_id}/print/`)
+        let data = await request.json()
+
+        let vocabularies = data.vocabularies
+        let index = 1
+        document.getElementById('page_title').innerText = data.title
+
+        for (let i = 0; i < vocabularies.length; i++){
+            let vocabulary = vocabularies[i]
+            body.innerHTML += `
+            <div class="i">
+                <p class="vocabulary">${index}. <span class="vocabulary-text">${vocabulary.text}</span> - ${vocabulary.translation}
+                <p class="vocabulary-description">${vocabulary.description}</p>
+                </p>
+
+            </div>
+            `
+            
+            index ++
+
+        }
+    spinner.style.display = 'none'
+    }
+
+    load_vocabularies()
+
+</script>
+
+</html>

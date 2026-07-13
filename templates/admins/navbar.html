@@ -1,0 +1,71 @@
+<nav class="navbar navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="logo navbar-brand" style="font-weight: 900;" href="/">faridawear</a>
+      <div class="d-flex align-items-center gap-2">
+        <div class="dropdown">
+          <button class="btn btn-dark rounded-circle p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width:40px;height:40px;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle w-100 h-100" viewBox="0 0 16 16">
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"></path>
+            </svg>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end border-0" data-bs-popper="static" style="background: transparent;backdrop-filter: blur(5px);box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;">
+            <li>
+              <a class="dropdown-item text-info fw-bold" aria-current="page" href="/profile/">
+                {{ user.first_name }} {{ user.last_name }}
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <form method="post" action="/log-out/" id="logout">
+                {% csrf_token %}
+                <a class="dropdown-item link-danger fw-bold" onclick="document.getElementById('logout').submit()">Chiqish</a>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel" style="background: transparent!important;backdrop-filter: blur(5px);">
+        <div class="offcanvas-header">
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h5 class="logo offcanvas-title" style="font-weight: 900;" id="offcanvasDarkNavbarLabel">faridawear</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1">
+            
+            <li class="nav-item">
+              <a class="nav-link text-light" aria-current="page" href="{% url 'products:products_list' %}">
+                <button type="button" class="btn btn-dark btn-lg" style="width: 100%;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-boxes me-1" viewBox="0 0 16 16">
+                    <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"></path>
+                  </svg>
+                  Mahsulotlar
+                </button>
+              </a>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+</nav>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const offcanvasEl = document.getElementById("offcanvasDarkNavbar");
+    const offcanvas = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
+
+    offcanvasEl.addEventListener("click", function (e) {
+        if (!e.target.closest("button") && !e.target.closest("a")) {
+            offcanvas.hide();
+        }
+    });
+});
+</script>

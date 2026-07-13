@@ -1,0 +1,524 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Groups</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+      .logo {
+          font-family: "Montserrat",  sans-serif;
+          font-size: 24px;
+      }
+      .divider:after,
+      .divider:before {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: #eee;
+      }
+          .h-custom {
+          height: calc(100% - 73px);
+      }
+          @media (max-width: 450px) {
+          .h-custom {
+          height: 100%;
+          }
+      }
+      body {
+        background: rgb(44, 46, 49);
+      }
+      .contact {
+        background: black;
+        color: white;
+        border: 2px solid rgb(44, 46, 49);
+      }
+      .page-name {
+        font-family: "Montserrat",  sans-serif;
+        color: white;
+        font-size: xx-large;
+        text-align: center;
+        margin-top: 10px;
+      }
+      select {
+        flex: 1;
+      }
+      .a-contact {
+        margin: 0;
+      }
+      .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <h3 class="page-name" id="main-title">Groups</h3>
+                <div class="col-md-9 col-lg-6 col-xl-5" style="width: 100%;height: 100%;">
+                  <!-- 1 -->
+                  <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;margin-bottom: 5px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                    Add student
+                  </a>
+
+                  <!-- <div class="form-floating bg-dark mt-0 mb-2" id="choose_topic_field">
+                    <select class="form-select text-light" id="topic" name="topic" style="background: black;" onchange="change_main_view()">
+                      <option value="general">General</option>
+                      
+                    </select>
+                    <label class="text-light" for="hours-input">Showing results for</label>
+                  </div> -->
+
+                  <div class="collapse" id="collapseExample">
+                    <form id="form_add_group" method="post" onsubmit="return false">
+                      <ul class="list-group">
+                        
+                        <li class="list-group-item justify-content-between align-items-start contact bg-transparent p-0" data-bs-theme="dark">
+                          <div class="row g-2 mb-1">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="text" class="form-control text-light border-0" id="last_name" name="last_name" onclick="this.select()" placeholder="0"  style="background: black;">
+                                <label for="days-input">Last name</label>
+                              </div>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="text" class="form-control text-light border-0" id="first_name" name="first_name" onclick="this.select()" placeholder="0"  style="background: black;">
+                                <label for="days-input">First name</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row g-2 mb-1">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input maxlength="40" type="text" class="form-control text-light border-0" id="phone1" name="phone1" onclick="this.select()" placeholder="0"  style="background: black;">
+                                <label for="days-input">Phone 1</label>
+                              </div>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input maxlength="40" type="text" class="form-control text-light border-0" id="phone2" name="phone2" onclick="this.select()" placeholder="0"  style="background: black;">
+                                <label for="days-input">Phone 2</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row g-2 mb-1">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <textarea maxlength="300" rows="4" type="text" class="form-control text-light border-0" id="details" name="details" onclick="this.select()" placeholder="0"  style="background: black;"></textarea>
+                                <label for="days-input">Details</label>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact bg-transparent">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Add</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+                    <br>
+                  </div>
+
+                  <div id="main" class="accordion accordion-flush">
+                    <!-- Don't touch -->
+                  </div>
+
+                </div>
+
+                
+
+              </div>
+            </div>
+            
+          </section>
+              
+    </div>
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let trigger = document.getElementById('modal-trigger')
+      let savebutton = document.getElementById('savebutton')
+      let first_name = document.getElementById('first_name')
+      let last_name = document.getElementById('last_name')
+      let phone1 = document.getElementById('phone1')
+      let phone2 = document.getElementById('phone2')
+      let details = document.getElementById('details')
+      let form_add_group = document.getElementById('form_add_group')
+      let page_title = document.getElementById('page-title')
+      let main_title = document.getElementById('main-title')
+
+      let topic = document.getElementById('topic')
+      let main = document.getElementById('main')
+      const group_id = location.pathname.split('/')[3]
+
+      const LEVEL_TO_COLOR = {
+        "Beginner": "danger",
+        "A1": "warning",
+        "A1": "warning",
+        "B1": "success",
+        "B2": "success",
+        "C1": "primary",
+        "C2": "primary",
+      }
+
+      function clean_text(text) {
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+      }
+
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+      
+      function formatDate(date) {
+        date = new Date(date)
+        const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+        const month = date.toLocaleString('en-US', { month: 'long' });
+        const day = date.getDate();
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes} ${ampm}, ${month} ${day}, ${year}`;
+      }
+      
+      async function load_students(){
+        spinner(true)
+        main.innerHTML = ''
+
+        let request = await fetch(`/api/teacher/groups/${group_id}/`)
+        let response = await request.json()
+
+        let group_title = response.group.title
+        page_title.innerText = group_title
+        main_title.innerText = group_title
+        let students = response.students
+        
+        let average_rating = 0
+        let length = 0
+        for (let i = 0; i < students.length; i++){
+          if (students[i].rating > 0){
+            average_rating += students[i].rating
+            length ++
+          }
+        }
+        if (length == 0){
+          length ++
+        }
+        average_rating = average_rating / length
+
+        for (let i = 0; i < students.length; i++){
+          let color = LEVEL_TO_COLOR[students[i].grammar_level]
+          main.innerHTML += `
+            <div id="student${students[i].id}" class="accordion-item bg-dark text-light rounded-4 border-dark">
+              <h2 class="accordion-header" id="i${students[i].id}">
+                <button class="accordion-button collapsed text-light rounded-4" style="background-color: ${students[i].is_paid ? 'black' : '#400808'}" type="button" data-bs-toggle="collapse" data-bs-target="#body${students[i].id}" aria-expanded="false" aria-controls="body${students[i].id}">
+                  <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                  ${clean_text(students[i].full_name)}
+                  <span class="time-passed text-${students[i].rating >= average_rating ? 'success' : 'warning'}">${students[i].rating}</span>
+                </button>
+              </h2>
+              <div id="body${students[i].id}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${students[i].id}" data-bs-parent="#main">
+                
+                <div class="accordion-body pt-1">
+                  <div class="btn-group w-100" role="group">
+                    <button type="button" class="btn btn-light btn-sm w-100" onclick="location.href = '/students/${students[i].id}/'">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                      </svg>
+                      View
+                    </button>
+                    <button type="button" class="btn btn-light btn-sm w-100" onclick="location.href = '/students/${students[i].id}/results/'">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16" style="vertical-align: middle;">
+                        <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"></path>
+                      </svg>
+                      Results
+                    </button>
+                    <button type="button" class="btn btn-light btn-sm w-100" onclick="location.href = '/students/${students[i].id}/payment/'">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill me-1" viewBox="0 0 16 16">
+                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"></path>
+                      </svg>
+                      Payment
+                    </button>
+                  </div>
+                  <div class="card-body mt-3">
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Level</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 fw-bold text-${color}">${students[i].grammar_level}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Rating</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 fw-bold">${students[i].rating} (${students[i].rating >= average_rating ? 'above' : 'below'} average)</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <p class="text-muted mb-0">Date joined</p>
+                        </div>
+                        <div class="col-sm-9">
+                        <p class="mb-0 fw-bold">${formatDate(students[i].date_joined)}</p>
+                        </div>
+                    </div>
+                  
+                  </div>
+
+              </div>
+
+              </div>
+            </div>
+          `
+        }
+
+        spinner(false)
+      }
+      load_students()
+      // load_topics()
+
+      async function load_topics(){
+        spinner(true)
+
+        let request = await fetch('/api/student/topics/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+        topic.innerHTML += `
+            <option value="${response[i].id}">${response[i].title}</option>
+        `
+        }
+
+        spinner(false)
+      }
+      
+      savebutton.addEventListener('click', async function(){
+        spinner(true)
+        if ((first_name.value + last_name.value).length < 5){
+          notification("Student's name must have at least 5 characters.", "orange")
+          first_name.focus()
+        } else {
+          savebutton.disabled = true
+
+          let request = await fetch(
+            `/api/teacher/groups/${group_id}/`,
+            {
+              method: 'POST',
+              body: new FormData(form_add_group)
+            }
+          )
+          let data = await request.json()
+
+          if (data.message == 'success'){
+            first_name.value = ''
+            last_name.value = ''
+            load_students()
+            first_name.focus()
+          } else {
+            if (data.error == 'invalid-name'){
+              notification("Student's name must have at least 5 characters.", "orange")
+            } else {
+              notification("Failed.", "orange")
+            }
+          }
+
+          savebutton.disabled = false
+          
+        }
+        spinner(false)
+
+
+      })
+
+      async function load_records(){
+        spinner(true)
+
+        let request = await fetch(`/api/groups/${group_id}/records/?topic=${topic.value}`)
+        let response = await request.json()
+
+        main.innerHTML = ''
+        
+        for (let i = 0; i < response.length; i++){
+
+            record = response[i]
+
+            let status, color
+            if (record.is_successful){
+              status = "Successful"
+              color = "success"
+            } else if (!record.date_created) {
+              status = "Never attempted"
+              color = "light"
+            } else {
+              status = "Failed"
+              color = "danger"
+            }
+            let level = record.is_successful == true ? record.grammar_level : "Beginner"
+
+            main.innerHTML += `
+            <div id="student$1" class="accordion-item bg-dark text-light rounded-4 border-dark">
+                <h2 class="accordion-header" id="i${i}">
+                    <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${i}" aria-expanded="false" aria-controls="body${i}">
+                    <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                    ${clean_text(record.user)}
+                    <span class="time-passed text-${LEVEL_TO_COLOR[record.grammar_level]}">${record.grammar_level}</span>
+                    </button>
+                </h2>
+                <div id="body${i}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${i}" data-bs-parent="#main">
+                    <div class="accordion-body pt-1">
+                        <button type="button" class="btn btn-light btn-sm w-100" onclick="location.href = '/students/${record.user_id}/'">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                          </svg>
+                          View student
+                        </button>
+                      <div class="card-body mt-3">
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Topic</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="mb-0 fw-bold">${clean_text(record.topic)} (${record.grammar_level} level)</p>
+                              </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Points</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="mb-0 fw-bold text-${color}"> (${record.points}/30)</p>
+                              </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Status</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="text-${color} mb-0 fw-bold">${status}</p>
+                              </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                              <div class="col-sm-3">
+                              <p class="text-muted mb-0">Date</p>
+                              </div>
+                              <div class="col-sm-9">
+                              <p class="mb-0 fw-bold">${record.date_created ? formatDate(record.date_created) : "Never attempted"}</p>
+                              </div>
+                          </div>
+                        
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            `
+        }
+
+        spinner(false)
+    }
+
+      function change_main_view(){
+        if (topic.value == "general"){
+          load_students()
+        } else {
+          load_records()
+        }
+      }
+    </script>
+</body>
+</html>

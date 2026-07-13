@@ -1,0 +1,434 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groups</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: "Montserrat",  sans-serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <!-- <h3 class="page-name">Groups</h3> -->
+
+                <div class="col-md-9 col-lg-6 col-xl-8 mt-3">
+                  <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                      <button class="nav-link fw-bold active" id="groups_tab_button" onclick="change_tab('groups')" disabled>My groups</button>
+                    </li>
+                    <li class="nav-item">
+                      <button class="nav-link text-light fw-bold" id="search_tab_button" onclick="change_tab('search')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1" viewBox="0 0 16 16">
+                          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                        Search students
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-md-9 col-lg-6 col-xl-8 d-block" style="height: 100%;" id="groups_tab">
+                  <!-- 1 -->
+                  <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                    Add group
+                  </a>
+                  <div class="collapse" id="collapseExample">
+                    <form id="form_add_group" method="post" onsubmit="return false">
+                      <ul class="list-group">
+                        
+                        <li class="list-group-item justify-content-between align-items-start contact p-0" data-bs-theme="dark">
+                          <div class="row g-2">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="text" class="form-control text-light border-0" id="title" name="title" onclick="this.select()" placeholder="0"  style="background: black;">
+                                <label for="days-input">Name</label>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start bg-transparent">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Add</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+                    <br>
+                    <div id="alert-area">
+                      <!-- Don't touch -->
+                    </div>
+                  </div>
+
+                  <ul id="main" class="list-group user-select-none">
+                    <!-- Don't touch -->
+                  </ul>
+                </div>
+
+                <div class="col-md-9 col-lg-6 col-xl-8 d-none" style="height: 100%;" id="search_tab">
+                  <div class="form-floating bg-dark mt-2">
+                    <input id="query" type="text" class="form-control text-light" placeholder="0"  style="background: black;border:0">
+                    <label for="days-input" class="text-light">Start typing to search</label>
+                  </div>
+                  <div id="search_results" class="accordion accordion-flush mt-2">
+                    <!-- Don't touch -->
+                  </div>
+                </div>
+                
+
+              </div>
+            </div>
+            
+          </section>
+              
+    </div>
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let trigger = document.getElementById('modal-trigger')
+      let savebutton = document.getElementById('savebutton')
+      let title = document.getElementById('title')
+      let form_add_group = document.getElementById('form_add_group')
+
+      let main = document.getElementById('main')
+      let current_tab = 'groups'
+      let groups_tab_button = document.getElementById('groups_tab_button')
+      let search_tab_button = document.getElementById('search_tab_button')
+      let groups_tab = document.getElementById('groups_tab')
+      let search_tab = document.getElementById('search_tab')
+      let search_results = document.getElementById('search_results')
+      let query_input = document.getElementById('query')
+      let query
+
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function clean_text(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      async function load_groups(){
+        spinner(true)
+        main.innerHTML = ''
+
+        let request = await fetch('/api/teacher/groups/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+          main.innerHTML += `
+          <li class="list-group-item d-flex justify-content-between align-items-start contact" onclick="location.href='${response[i].id}/'">
+              <div class="ms-2 me-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 10px">
+                  <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"></path>
+                </svg>
+                <span class="fw-bold">${clean_text(response[i].title)}</span></div>
+          </li>
+          `
+        }
+
+        spinner(false)
+      }
+      load_groups()
+
+      savebutton.addEventListener('click', async function(){
+        spinner(true)
+        if (title.value.length == 0){
+          notification("Group's name must have at least 1 character.")
+          title.focus()
+        } else {
+          savebutton.disabled = true
+
+          let request = await fetch(
+            '/api/teacher/groups/',
+            {
+              method: 'POST',
+              body: new FormData(form_add_group)
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+            title.value = ''
+            load_groups()
+          } else {
+            notification('Failed.', 'orange')
+          }
+
+          savebutton.disabled = false
+          
+        }
+        spinner(false)
+
+
+      })
+
+      function change_tab(tab){
+        switch (tab){
+          case "search":
+            groups_tab_button.classList.remove('active')
+            groups_tab_button.classList.remove('text-dark')
+            groups_tab_button.classList.add('text-light')
+            groups_tab_button.disabled = false
+
+            search_tab_button.classList.add('active')
+            search_tab_button.classList.add('text-dark')
+            search_tab_button.disabled = true
+
+            search_tab.classList.remove('d-none')
+            search_tab.classList.add('d-block')
+            groups_tab.classList.remove('d-block')
+            groups_tab.classList.add('d-none')
+
+            current_tab = 'search'
+            break
+
+          case "groups":
+            search_tab_button.classList.remove('active')
+            search_tab_button.classList.remove('text-dark')
+            search_tab_button.classList.add('text-light')
+            search_tab_button.disabled = false
+
+            groups_tab_button.classList.add('active')
+            groups_tab_button.classList.remove('text-light')
+            groups_tab_button.classList.add('text-dark')
+            groups_tab_button.disabled = true
+
+            groups_tab.classList.remove('d-none')
+            groups_tab.classList.add('d-block')
+            search_tab.classList.remove('d-block')
+            search_tab.classList.add('d-none')
+
+            current_tab = 'search'
+            break
+        }
+      }
+      
+
+
+      let counter = 0
+      let is_searching = false
+      let already_searched = false
+
+      async function search_users() {
+        spinner(true)
+        is_searching = true
+        search_results.innerHTML = ''
+
+        let request, response
+        let form_data = new FormData()
+        form_data.append('query', query)
+
+        try {
+
+          request = await fetch('/api/students/search/', {
+            method: "POST",
+            body: form_data
+          })
+          response = await request.json()
+        } catch {
+          notification("Check your internet connection and try again.")
+
+          is_searching = false
+          spinner(false)
+          return
+        }
+
+        if (response.message == 'success'){
+          let users = response.users
+          if (users.length > 0){
+            
+            for (let i = 0; i < users.length; i++){
+              search_results.innerHTML += `
+              <div id="student${users[i].id}" class="accordion-item bg-dark text-light rounded-4 border-dark mb-1">
+                <h2 class="accordion-header" id="i${users[i].id}">
+                  <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${users[i].id}" aria-expanded="false" aria-controls="body${users[i].id}">
+                    <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                    ${clean_text(users[i].full_name)}
+                    <span class="time-passed text-light"></span>
+                  </button>
+                </h2>
+                <div id="body${users[i].id}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${users[i].id}" data-bs-parent="#main">
+                  
+                  <div class="accordion-body pt-1">
+                    <div class="btn-group w-100" role="group">
+                      <button type="button" class="btn btn-light btn-sm w-100" onclick="location.href = '/students/${users[i].id}/'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                          <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                          <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                        </svg>
+                        View
+                      </button>
+                      <button type="button" class="btn btn-light btn-sm w-100" onclick="location.href = '/students/${users[i].id}/results/'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16" style="vertical-align: middle;">
+                          <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"></path>
+                        </svg>
+                        Results
+                      </button>
+                      <button type="button" class="btn btn-light btn-sm w-100" onclick="location.href = '/students/${users[i].id}/payment/'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill me-1" viewBox="0 0 16 16">
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"></path>
+                        </svg>
+                        Payment
+                      </button>
+                    </div>
+                    <div class="card-body mt-3">
+                      <div class="row">
+                          <div class="col-sm-3">
+                          <p class="text-muted mb-0">Login</p>
+                          </div>
+                          <div class="col-sm-9">
+                          <p class="mb-0 fw-bold text-light">${users[i].username}</p>
+                          </div>
+                      </div>
+                      <hr>
+                      <div class="row">
+                          <div class="col-sm-3">
+                          <p class="text-muted mb-0">Group</p>
+                          </div>
+                          <div class="col-sm-9">
+                          <p class="mb-0 fw-bold">
+                            <h5>
+                              <a href="${users[i].group.id}/" class="badge text-bg-primary text-decoration-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" wdith="20" height="20" fill="currentColor" class="bi bi-people-fill me-1" viewBox="0 0 16 16">
+                                  <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"></path>
+                                </svg>
+                                ${users[i].group.title}
+                              </a>
+                            </h5>
+                          </p>
+                          </div>
+                      </div>
+                    
+                    </div>
+
+                </div>
+
+                </div>
+              </div>
+              `
+            }
+          }
+
+        }
+
+        is_searching = false
+        spinner(false)
+      }
+
+      function track_query_change(){
+        let interval = setInterval(function(){
+          if (!is_searching && query_input.value.trim() != query && query_input.value.trim().length > 2){
+            query = query_input.value.trim()
+            already_searched = false
+            counter = 0
+          } else if (!is_searching && query_input.value.trim() == query){
+            counter ++
+          }
+
+          if (counter >= 2 && !already_searched){
+            search_users()
+            counter = 0
+            already_searched = true
+          }
+
+          console.log()
+        }, 400)
+      }
+      track_query_change()
+    </script>
+</body>
+</html>

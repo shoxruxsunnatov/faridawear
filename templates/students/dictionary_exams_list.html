@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary exams</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: "Montserrat",  sans-serif;
+          color: white;
+          font-size: x-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'students/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <h3 class="page-name">
+                  Dictionary exams
+                </h3>
+                <div class="col-md-9 col-lg-6 col-xl-6" style="height: 100%;">
+                  
+                  <div id="main"class="accordion accordion-flush mt-1">
+                    <!-- Don't touch -->
+                  </div>
+                </div>
+
+                
+
+              </div>
+            </div>
+            
+          </section>
+              
+    </div>
+
+   
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      
+      let main = document.getElementById('main')
+
+      let exams = {}
+      
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+      
+      function clean_text(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      async function load_packages(){
+        spinner(true)
+
+
+        let request = await fetch('/api/dictionary/exams/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+          main.innerHTML += `
+            <div id="student${response[i].id}" class="accordion-item bg-dark text-light rounded-4 border-dark">
+              <h2 class="accordion-header" id="i${response[i].id}">
+                <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" onclick="location.href = '${response[i].id}/'">
+                  <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                  ${clean_text(response[i].title)}
+                  <span class="time-passed">${calculateTimePassed(response[i].date_created)} ago</span>
+                </button>
+              </h2>
+            </div>
+          `
+        }
+
+        spinner(false)
+      }
+      load_packages()
+
+    </script>
+</body>
+</html>

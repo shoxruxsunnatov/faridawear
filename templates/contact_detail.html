@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ contact.fullname }} - People</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: Garamond, serif;
+            font-size: xx-large;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: Garamond, serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+          color: lightgray;
+          font-size: smaller;
+          position: absolute;
+          right: 45px;
+        }
+        .accordion-item {
+          margin-bottom: 2px;
+        }
+        .accordion-collapse {
+          color: lightgray;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="logo navbar-brand" href="/">People</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="logo offcanvas-title" id="offcanvasDarkNavbarLabel">People</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url 'contacts:contacts' %}">Contacts</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Profile
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-dark">
+                    <li><p class="dropdown-item">{{ user.first_name }} {{ user.last_name }}</p></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item link-danger" href="{% url 'main:log-out' %}">Log out</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{% url 'main:about' %}">About</a>
+                </li>
+              </ul>
+              
+              
+            </div>
+          </div>
+        </div>
+    </nav>
+
+
+    <div class="container-sm">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <h3 id="big-fullname" class="page-name">{{ contact.fullname }}</h3>
+                <div class="col-md-9 col-lg-6 col-xl-5" style="width: 100%;height: 100%;">
+                  <!-- 1 -->
+                  
+                    <form id="form_register" method="post">
+                      <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-start contact">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 16 16" style="background: #252525;border-radius: 5px;">
+                            <g color="#000000" font-weight="400" font-family="Ubuntu" letter-spacing="0" word-spacing="0" white-space="normal" fill="gray">
+                                <path d="M8 2a2.84 2.84 0 0 0-1.12.221c-.345.141-.651.348-.906.615v.003l-.001.002c-.248.269-.44.592-.574.96-.137.367-.203.769-.203 1.2 0 .435.065.841.203 1.209.135.361.327.68.574.95l.001.002c.254.267.558.477.901.624v.003c.346.141.723.21 1.12.21.395 0 .77-.069 1.117-.21v-.002c.343-.147.644-.357.892-.625.255-.268.45-.59.586-.952.138-.368.204-.774.204-1.21h.01c0-.43-.065-.831-.203-1.198a2.771 2.771 0 0 0-.585-.963 2.5 2.5 0 0 0-.897-.618A2.835 2.835 0 0 0 7.999 2zM8.024 10.002c-2.317 0-3.561.213-4.486.91-.462.35-.767.825-.939 1.378-.172.553-.226.975-.228 1.71L8 14.002h5.629c-.001-.736-.052-1.159-.225-1.712-.172-.553-.477-1.027-.94-1.376-.923-.697-2.124-.912-4.44-.912z" style="line-height:125%;-inkscape-font-specification:'Ubuntu, Normal';font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal" overflow="visible"></path>
+                            </g>
+                          </svg>
+                          <div class="ms-2 me-auto" style="width: 100%;padding: 0;">
+                              <input id="fullname" name="fullname" style="background: black;color: white;border: 0;outline: none;border-bottom: 1px solid gray;width: 100%;" value="{{ contact.fullname }}" placeholder="Full name">
+                              <textarea id="info" name="info" style="background: black; color: white; border: 0px; outline: none; height: 30%;width: 100%;;border-bottom: 1px solid gray;" cols="2" rows="1" placeholder="Info">{{ contact.info }}</textarea>
+                              <input id="birthday" name="birthday" type="date" hidden>
+                              <input id="frequency" type="text" name="frequency" hidden>
+                              <p id="birthday-text" onclick="birthday.showPicker()" style="border: 0 0 1px 0 solid;border: 0;border-bottom: 1px solid gray;color: gray;">Birthday</p>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                          <div class="row g-2">
+                            <p class="text-light" style="margin-bottom: 0;">Reminder frequency</p>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input type="number" class="form-control text-light" id="days-input" onclick="this.select()" value="0" placeholder="0"  style="background: black;">
+                                <label for="days-input">Days</label>
+                              </div>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <select class="form-select text-light" id="hours-input" style="background: black;">
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                                  <option value="14">14</option>
+                                  <option value="15">15</option>
+                                  <option value="16">16</option>
+                                  <option value="17">17</option>
+                                  <option value="18">18</option>
+                                  <option value="19">19</option>
+                                  <option value="20">20</option>
+                                  <option value="21">21</option>
+                                  <option value="22">22</option>
+                                  <option value="23">23</option>
+                                </select>
+                                <label for="hours-input">Hours</label>
+                              </div>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <select class="form-select text-light" id="minutes-input"  style="background: black;">
+                                  <option value="0">0</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                                  <option value="14">14</option>
+                                  <option value="15">15</option>
+                                  <option value="16">16</option>
+                                  <option value="17">17</option>
+                                  <option value="18">18</option>
+                                  <option value="19">19</option>
+                                  <option value="20">20</option>
+                                  <option value="21">21</option>
+                                  <option value="22">22</option>
+                                  <option value="23">23</option>
+                                  <option value="24">24</option>
+                                  <option value="25">25</option>
+                                  <option value="26">26</option>
+                                  <option value="27">27</option>
+                                  <option value="28">28</option>
+                                  <option value="29">29</option>
+                                  <option value="30">30</option>
+                                  <option value="31">31</option>
+                                  <option value="32">32</option>
+                                  <option value="33">33</option>
+                                  <option value="34">34</option>
+                                  <option value="35">35</option>
+                                  <option value="36">36</option>
+                                  <option value="37">37</option>
+                                  <option value="38">38</option>
+                                  <option value="39">39</option>
+                                  <option value="40">40</option>
+                                  <option value="41">41</option>
+                                  <option value="42">42</option>
+                                  <option value="43">43</option>
+                                  <option value="44">44</option>
+                                  <option value="45">45</option>
+                                  <option value="46">46</option>
+                                  <option value="47">47</option>
+                                  <option value="48">48</option>
+                                  <option value="49">49</option>
+                                  <option value="50">50</option>
+                                  <option value="51">51</option>
+                                  <option value="52">52</option>
+                                  <option value="53">53</option>
+                                  <option value="54">54</option>
+                                  <option value="55">55</option>
+                                  <option value="56">56</option>
+                                  <option value="57">57</option>
+                                  <option value="58">58</option>
+                                  <option value="59">59</option>
+                                </select>
+                                <label for="minutes-input">Minutes</label>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="savebutton" class="btn btn-light" type="button" style="width: 160px;margin: auto;">Save</button>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact">
+                          <p class="card-text" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="margin-bottom: 0;">
+                            Delete contact
+                          </p>
+                          
+                          <div class="collapse" id="collapseExample">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="margin-top: 10px;">
+                              <button id="deletebutton" class="btn btn-danger" type="button" style="width: 160px;margin: auto;">Delete</button>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+                    <br>
+                    <div id="alert-area">
+                      <!-- Don't touch -->
+                    </div>
+                  
+                  <div id="spinner" class="spinner-grow text-light" role="status" style="display: none;margin: 10px auto 10px auto;">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+
+                  <h3 id="big-fullname" class="page-name">Notifications</h3>
+                  <div class="accordion accordion-flush" id="main">
+                    <!-- Don't touch below and inside. -->
+
+                  </div>
+                </div>
+
+                
+
+              </div>
+            </div>
+            
+          </section>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+    <script>
+      let savebutton = document.getElementById('savebutton')
+      let deletebutton = document.getElementById('deletebutton')
+      let fullname = document.getElementById('fullname')
+      let big_fullname = document.getElementById('big-fullname')
+      let info = document.getElementById('info')
+      let alert_area = document.getElementById('alert-area')
+      let form_register = document.getElementById('form_register')
+      let birthday = document.getElementById('birthday')
+      let birthday_text = document.getElementById('birthday-text')
+      let frequency = document.getElementById('frequency')
+
+      let days_input = document.getElementById('days-input')
+      let hours_input = document.getElementById('hours-input')
+      let minutes_input = document.getElementById('minutes-input')
+
+      let main = document.getElementById('main')
+      let spinner = document.getElementById('spinner')
+      
+
+      async function load_details() {
+        spinner.style.display = 'block'
+
+        let request = await fetch('/api/contacts/{{ contact.id }}/')
+        let response = await request.json()
+
+        big_fullname.innerText = response.fullname
+        fullname.value = response.fullname
+        info = response.info
+        birthday.value = response.birthday
+
+        if (response.birthday != undefined){
+          birthday_text.innerText = response.birthday
+          birthday_text.style.color = 'white'
+        }
+        try {
+          days_input.value = response.frequency[0]
+          hours_input.value = response.frequency[1]
+          minutes_input.value = response.frequency[2]
+        } catch {}
+        spinner.style.display = 'none'
+        
+      }
+      load_details()
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+
+      async function load_notifications(){
+        spinner.style.display = 'block'
+
+        let request = await fetch('/api/contacts/{{ contact.id }}/notifications/')
+        let response = await request.json()
+
+        if (response.length > 0){
+          for (let i = 0; i < response.length; i++){
+            main.innerHTML += `
+            <div id="notification${response[i].id}" class="accordion-item bg-dark text-light rounded-4 border-dark">
+              <h2 class="accordion-header" id="i${response[i].id}">
+                <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${response[i].id}" aria-expanded="false" aria-controls="body${response[i].id}">
+                  ${response[i].contact.fullname}
+                  <span class="time-passed">${calculateTimePassed(response[i].date_created)} ago</span>
+                </button>
+              </h2>
+              <div id="body${response[i].id}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${response[i].id}" data-bs-parent="#main">
+                <div class="accordion-body">
+                  Reminder on <span style='color:white' onclick="location.href = '/contacts/${response[i].contact.id}/'">${response[i].contact.fullname}</span>
+                  <br><br>
+                  <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <button type="button" class="btn btn-light btn-sm" onclick="del(${response[i].id})">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            `
+          }
+
+
+        }
+        
+        spinner.style.display = 'none'
+
+      }
+
+      load_notifications()
+
+      savebutton.addEventListener('click', async function(){
+        if (fullname.value.length == 0){
+          alert_area.innerHTML = `
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            A full name should consist of at least one character!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          `
+          fullname.focus()
+        } else {
+          savebutton.disabled = true
+
+          let request = await fetch(
+            '/api/contacts/{{ contact.id }}/',
+            {
+              method: 'POST',
+              body: new FormData(form_register)
+            }
+          )
+        
+          savebutton.disabled = false
+          
+          load_details()
+        }
+
+      })
+    
+      birthday.addEventListener('change', function(){
+        birthday_text.innerText = birthday.value
+        birthday_text.style.color = 'white'
+
+        if (birthday.value == ''){
+          birthday_text.innerText = 'Birthday'
+          birthday_text.style.color = 'gray'
+        }
+      })
+
+      function set_frequncy(){
+        frequency.value = `${days_input.value}_${hours_input.value}_${minutes_input.value}`
+      }
+      days_input.addEventListener('change', set_frequncy)
+      hours_input.addEventListener('change', set_frequncy)
+      minutes_input.addEventListener('change', set_frequncy)
+
+      deletebutton.addEventListener('click', async function(){
+        spinner.style.display = 'block'
+
+        let request = await fetch(
+          '/api/contacts/{{ contact.id }}/',
+          {
+            method: 'DELETE'
+          }
+        )
+        let response = await request.json()
+        
+        if (response.message == 'success'){
+          location.href = '/contacts/'
+        } else {
+          spinner.style.display = 'none'
+        }
+      })
+      async function seen(id){
+
+        let request = await fetch(
+          `/api/notifications/${id}/`,
+          {
+            method: 'POST'
+          }
+        )
+
+        document.getElementById(`notification${id}`).remove()
+
+      }
+
+        async function del(id){
+
+        let request = await fetch(
+          `/api/notifications/${id}/`,
+          {
+            method: 'DELETE'
+          }
+        )
+
+        document.getElementById(`notification${id}`).remove()
+
+      }
+    </script>
+</body>
+</html>

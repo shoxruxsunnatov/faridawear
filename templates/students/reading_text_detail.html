@@ -1,0 +1,789 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading text</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+            background: rgb(44, 46, 49);
+        }
+        .contact {
+            background: black;
+            color: white;
+            border: 2px solid black;
+            margin-bottom: 1px;
+        }
+        .page-name {
+            font-family: Garamond, serif;
+            color: white;
+            font-size: xx-large;
+            text-align: center;
+            margin-top: 10px;
+        }
+        select {
+            flex: 1;
+        }
+        .a-contact {
+            margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+        }
+        .accordion-item {
+        margin-bottom: 2px;
+        }
+        .accordion-collapse {
+        color: lightgray;
+        }
+
+        .keyboard {
+            width: 100%;
+            display: none;
+            padding: 10px 0 10px 0;
+            border-radius: 10px;
+            background-color: lightgray;
+            text-align: center;
+            box-shadow: 2px 2px 2px #999;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .keyboard div {
+            display: flex;
+        }
+        .keyboard input{
+            box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+            color: black;
+            border: 0;
+            border-radius: 5px;
+            flex: 1;
+            margin: 5px 1px;
+
+            box-shadow: 1px 1px 1px #999;
+        }
+        .keyboard input:active{
+            background-color: gray;
+        }
+        .keyboard-button {
+            font-weight: bold;
+            box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+            color: black;
+            border: 0;
+            border-radius: 5px;
+            flex: 1;
+            margin: 5px 1px;
+        }
+        .keyboard button:active{
+            background-color: gray;
+            box-shadow: 1px 1px 1px #999;
+
+        }
+        .keyboard-row {
+            height: 50px;
+        }
+        .hide-scrollbar {
+        overflow-y: auto;
+        scrollbar-width: none;       /* Firefox */
+        -ms-overflow-style: none;    /* IE/Edge */
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+        display: none;               /* Chrome, Safari */
+        }
+        .old-tr {
+            color: gray;
+            text-decoration: line-through;
+        }
+        .new-tr {
+            color: green;
+        }
+
+        .light {
+            color: #212529!important;
+            background: #FAF9F6!important;
+        }
+
+        .dark {
+            color: #DADCE0!important;
+            background: #202124!important;
+        }
+
+        .green {
+            color: lightgray!important;
+            background: #19582e!important;
+        }
+        .yellow {
+            background-color: rgba(187, 201, 131, 0.4);
+            /* -webkit-backdrop-filter: sepia(100%); */
+            /* backdrop-filter: sepia(100%); */
+        }
+        #settings_offcanvas {
+            height: min-content!important;
+        }
+        #reading_text {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body class="dark">
+  {% include 'students/navbar.html' %}
+
+  <section>
+    <div class="container pt-1">
+        <h4 class="text-body-emphasis text-center mt-2">
+            <span id="page_name"></span>
+            <a class="btn btn-secondary btn-sm d-inline rounded ms-0 p-0 bg-transparent border-0" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" id="collapseExampleBtn" aria-controls="collapseExample">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16" style="vertical-align: text-bottom;color:black">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"></path>
+                </svg>
+            </a>
+        </h4>
+      
+  
+      <div class="row">
+        <div class="col-lg-8 p-0 w-100">
+            <div class="collapse col-11 col-md-6 m-auto" id="collapseExample">
+                <ul class="list-group rounded-top">
+                    
+                    <li class="list-group-item justify-content-between align-items-start contact rounded-bottom rounded-3" data-bs-theme="dark" id="exam_details">
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <p class="text-muted mb-0">Level</p>
+                            </div>
+                            <div class="col-sm-9">
+                            <p class="mb-0 fw-bold" id="exam_topic"></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item justify-content-between align-items-start contact  rounded-3 rounded-top">
+                        <p class="text-secondary">By <span class="text-light" id="exam_author">Administrator</span> at <small id="exam_date_created"></small></p>
+                    </li>
+                </ul>
+                <br>
+            </div>
+
+            <div class="container">
+                <p class="text-body-emphasis fs-5 mt-0" id="reading_text">
+                    
+                </p>
+
+            </div>
+
+            <div class="keyboard" id="keyboard">
+                <div class="keyboard-row">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="q">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="w">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="e">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="r">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="t">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="y">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="u">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="i">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="o">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="p">
+                </div>
+                <div class="keyboard-row">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="a">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="s">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="d">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="f">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="g">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="h">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="j">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="k">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="l">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="'">
+                </div>
+                <div class="keyboard-row">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value=",">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="z">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="x">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="c">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="v">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="b">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="n">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="m">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value=".">
+                    <button id="backspace" class="keyboard-button" type="button" onclick="keyboard_click(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                            <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="keyboard-row">
+                    <input id="back" class="keyboard-button" onclick="keyboard_click(this)" type="button" value=" ">
+                </div>
+            </div>
+
+            <div id="warning-banner" style="display: none;">
+                <h4 class="text-warning text-center mb-3">
+                    Warning
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+                      </svg>
+                </h4>
+                <p class="text-light text-center">
+                    A <b class="text-danger">highly sensitive</b> security system is installed on the platform to ensure that the testing process proceeds fairly.<br>
+                    Once you click the button below, the tests will be displayed in <b>full-screen mode</b>. Exiting full-screen mode will result in a <b>penalty</b>.<br>
+                    Furthermore, <b>leaving the browser, switching to other apps or pages, or allowing your device screen to turn off automatically will also incur penalties.</b><br>
+                    At the end of the test, your final score will be adjusted by <b class="text-warning">deducting any penalties</b>. <br>
+                    You will be <b class="text-danger">eliminated</b> from the exam once you get 20 or more penalties.
+                </p>
+                <button class="" id="show_tests" style="margin: auto;margin-bottom: 80%;background: none;display: block;border-radius: 5px;color: white;border: 2px dashed white;" onclick="openFullscreen();warning_banner.style.display='none'">Show tests
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+                        <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0M7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
+                      </svg>
+                </button>
+            </div>
+
+            <p class="text-info fw-bold" style="text-align: center;font-size: large;position: fixed;left: 5px;bottom: 0;" id="full_name"></p>
+            
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="access_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Loading...</h1>
+            </div>
+            <div class="modal-body ps-1 pe-1">
+              <h3 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 16 16">
+                  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
+                </svg>
+                We are preparing the best questions for you. Please, stand by.
+              </h3>
+              
+            </div>
+            <div class="modal-footer">
+              <div class="spinner-grow text-center d-block m-auto" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+    <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+    Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <a href="" id="view_results" style="display: none;">
+        <button class="btn btn-success btn-lg w-100" style="position: fixed;top: 0;">View results</button>
+    </a>
+
+    <button id="translator_trigger" class="btn btn-primary bg-transparent border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" style="position: fixed;left: 0;bottom: 2%;color: #0d6efd;">
+        <svg xmlns="http://www.w3.org/2000/svg" wdith="35" height="35" fill="currentColor" class="bi bi-journal-bookmark-fill me-2" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M6 1h6v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8z"></path>
+            <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"></path>
+            <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"></path>
+        </svg>
+    </button>
+
+    <div class="offcanvas offcanvas-bottom bg-dark text-light" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-body hide-scrollbar user-select-none" style="overflow-y: auto;">
+            <h5 class="offcanvas-title text-center m-auto">
+                <span class="text-primary" id="text">I go to school</span><p class="fw-bold m-0 p-0">=</p>
+                <span class="text-success" id="translation">Men maktabga boraman</span>
+            </h5>
+            <button id="add_vocabulary_btn" class="btn btn-primary d-none m-auto mt-3" type="save" onclick="add_vocabulary()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16" style="vertical-align: sub;">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>
+                </svg>
+                Add to vocabulary
+            </button>
+        </div>
+    </div>
+
+    <button id="settings_trigger" class="btn bg-transparent border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#settings_offcanvas" aria-controls="settings_offcanvas" style="position: fixed;right: 0;bottom: 2%;">
+        <span id="settings_tooltip" class="badge text-bg-light me-1 d-none">You can change the colors and font size here </span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-gear-fill text-primary" viewBox="0 0 16 16">
+            <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+        </svg>
+    </button>
+
+    <div class="offcanvas offcanvas-bottom bg-dark text-light" tabindex="-1" id="settings_offcanvas" aria-labelledby="offcanvasBottomLabel">
+        <div class="offcanvas-body hide-scrollbar user-select-none" style="overflow-y: auto;">
+        
+                <div class="row g-3 justify-content-between align-items-center p-3 mb-4 bg-body-tertiary rounded">
+        
+                    <div class="col-12 col-md-auto">
+                        <p class="mb-0 fw-bold">Color theme</p>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check bg-dark" name="theme" id="theme_dark_radio" autocomplete="off" value="dark" checked>
+                            <label class="btn btn-outline-secondary" for="theme_dark_radio">Dark</label>
+                            <input type="radio" class="btn-check btn-light" name="theme" id="theme_light_radio" autocomplete="off" value="light">
+                            <label class="btn btn-outline-light" for="theme_light_radio">Light</label>
+                            <input type="radio" class="btn-check btn-warning" name="theme" id="theme_green_radio" autocomplete="off" value="green">
+                            <label class="btn btn-outline-success" for="theme_green_radio">Green</label>
+                            <input type="radio" class="btn-check btn-warning" name="theme" id="theme_yellow_radio" autocomplete="off" value="yellow">
+                            <label class="btn btn-outline-warning" for="theme_yellow_radio">Paper</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-auto">
+                        <p class="mb-0 fw-bold">Font size</p>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check bg-dark" name="font_size" id="font_size_1" autocomplete="off" value="6" >
+                            <label class="btn btn-outline-light" for="font_size_1">1</label>
+
+                            <input type="radio" class="btn-check bg-dark" name="font_size" id="font_size_2" autocomplete="off" value="5" checked>
+                            <label class="btn btn-outline-light" for="font_size_2">2</label>
+
+                            <input type="radio" class="btn-check bg-dark" name="font_size" id="font_size_3" autocomplete="off" value="4" >
+                            <label class="btn btn-outline-light" for="font_size_3">3</label>
+
+                            <input type="radio" class="btn-check bg-dark" name="font_size" id="font_size_4" autocomplete="off" value="3" >
+                            <label class="btn btn-outline-light" for="font_size_4">4</label>
+
+                            <input type="radio" class="btn-check bg-dark" name="font_size" id="font_size_5" autocomplete="off" value="2" >
+                            <label class="btn btn-outline-light" for="font_size_5">5</label>
+
+                            <input type="radio" class="btn-check bg-dark" name="font_size" id="font_size_6" autocomplete="off" value="1" >
+                            <label class="btn btn-outline-light" for="font_size_6">6</label>
+                        </div>
+                    </div>
+      
+                </div>
+
+                
+        </div>
+    </div>
+
+  </section>
+
+  <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <script>
+    let main = document.getElementById('main')
+
+    let exam_topic = document.getElementById('exam_topic')
+    let exam_date_created = document.getElementById('exam_date_created')
+    let exam_author = document.getElementById('exam_author')
+
+    let package = document.getElementById('package')
+
+    let page_name = document.getElementById('page_name')
+    let reading_text = document.getElementById('reading_text')
+    let view_results_btn = document.getElementById('view_results')
+    let full_name = document.getElementById('full_name')
+
+    const reading_text_id = location.pathname.split('/')[3]
+    
+    let warning_banner = document.getElementById('warning-banner')
+
+    let translator_trigger = document.getElementById("translator_trigger")
+    let text = document.getElementById("text")
+    let translation = document.getElementById("translation")
+    let add_vocabulary_btn = document.getElementById("add_vocabulary_btn")
+    
+
+    function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements at indices i and j
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+    }
+
+    function formatDate(date) {
+    date = new Date(date)
+    const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+    const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    const month = date.toLocaleString('en-US', { month: 'long' });
+    const day = date.getDate();
+
+    return `${hours}:${minutes} ${ampm}, ${month} ${day}`;
+    }
+
+    function spinner(display){
+    let spinner_element = document.getElementById('spinner')
+    switch (display){
+    case true:
+        spinner_element.setAttribute('style', 'display: block')
+        break
+    case false:
+        spinner_element.setAttribute('style', 'display: none!important')
+        break
+    }
+    }
+
+    function notification(message, color){
+    let modal_trigger = document.getElementById('modal-trigger')
+    let modal_text = document.getElementById('modal-text')
+
+    modal_text.style.color = color
+    modal_text.innerText = message
+    modal_trigger.click()
+    }
+
+    function clean_text(text) {
+      return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
+
+    async function load_reading_text(){
+        
+        spinner(true)
+
+        let request = await fetch(
+          `/api/reading/texts/${reading_text_id}/`,
+          {
+            method: 'GET',
+          }
+        )
+        let response = await request.json()
+
+        if (response.message == 'success'){
+            page_name.innerText = response.title
+            document.getElementsByTagName('title')[0].innerText = response.title
+            exam_topic.innerText = response.level + ` (${response.text.split(' ').length} words)`
+
+            let paragraphs = response.text.split('\n')
+            let l = response.text.split(' ')
+            for (let i = 0; i < paragraphs.length; i++){
+                let sentences = paragraphs[i].split('.')
+                for (let j = 0; j < sentences.length; j++){
+
+                    if (sentences[j].length == 0){
+                        continue
+                    }
+
+                    let sentence = ""
+                    let words = sentences[j].split(' ')
+                    for (let k = 0; k < words.length - 1; k++){
+                        sentence += `<span class="child-span">${clean_text(words[k])} </span>`
+                    }
+                    sentence += `<span class="child-span">${clean_text(words.at(-1))}.</span>`
+
+                    reading_text.innerHTML += `<span>${sentence}</span>`
+
+                }
+                reading_text.innerHTML += '<br>'
+            }
+
+            exam_author.innerText = response.author
+            exam_date_created.innerText = formatDate(response.date_created)
+
+            reading_text.addEventListener('click', function(event){
+                const target = event.target.closest('.child-span')
+                if (target && !target.classList.contains("used")){
+                    query = target.innerText
+                    target.classList.add('old-tr')
+                    text.innerText = query
+                    translation.innerText = "Translating ..."
+                    get_translation(target)
+                    // translator_trigger.click()
+
+                    counter = 0
+                    already_searched = true
+                }
+            })
+        } else {
+            for (let i = 0; i < response.errors.length; i++){
+              switch (response.errors[i]){
+                              
+                case 'invalid-id':
+                  location.href = "/my-dictionary/"
+                  break
+                
+                case 'level':
+                  notification("Choose level", "orange")
+                  break
+                
+                case 'system':
+                  notification("Too many attempts. Please try again later.", "orange")
+                  break
+              }
+            }
+        }
+        is_recent_rts = true
+
+        spinner(false)
+
+        setTimeout(function(){
+            document.getElementById("collapseExampleBtn").click()
+        }, 500)
+        setTimeout(function(){
+            document.getElementById("collapseExampleBtn").click()
+        }, 3000)
+
+      }
+    load_reading_text()
+    
+    let query = ""
+    let query_input = ""
+
+    async function get_translation(target){
+
+        let form_data = new FormData()
+        form_data.append("text", query)
+
+        if (target){
+            if (target.classList.contains('used') || target.innerText.trim().length < 3){
+                return
+            }
+            form_data.append("sentence", target.parentElement.innerText)
+
+        } else {
+            add_vocabulary_btn.classList.add('d-none')
+            add_vocabulary_btn.classList.remove('d-block')
+            translator_trigger.click()
+        }
+
+        spinner(true)
+
+        try {
+            let request = await fetch(
+                '/api/reading/translation/',
+                {
+                    method: 'POST',
+                    body: form_data
+                }
+            )
+            let response = await request.json()
+
+            if (response.message == 'success'){
+
+                translation.innerText = response.translation
+                if (target){
+                    target.innerHTML = `${clean_text(response.translation)} <span class="old-tr used">${clean_text(query)} </span>`
+                    target.classList.add('new-tr')
+                    target.classList.add('used')
+                    target.classList.remove('old-tr')
+
+                    translator_trigger.click()
+
+                    add_vocabulary_btn.classList.add('d-block')
+                    add_vocabulary_btn.classList.remove('d-none')
+                }
+            } else {
+
+                for (let i = 0; i < response.errors.length; i++){
+                    switch (response.errors[i]){
+                    case 'text':
+                        notification("Text is invalid to add to the vocabulary.", "orange")
+                        break
+
+                    case 'system':
+                        notification("Too many attempts. Please try again later.", "orange")
+                        break
+                    }
+                }
+            }
+        } catch {
+            notification("Check your internet connection and try again.")
+        }
+        
+        spinner(false)
+        
+    }
+
+
+    async function add_vocabulary(){
+        let text = query
+        query = ""
+        query_input = ""
+
+        translator_trigger.click()
+        add_vocabulary_btn.classList.remove('d-block')
+        add_vocabulary_btn.classList.add('d-none')
+
+        try {
+
+            let form_data = new FormData()
+            form_data.append("text", text)
+
+            request = await fetch('/api/reading/add-vocabulary/', {
+                method: "POST",
+                body: form_data
+            })
+            response = await request.json()
+
+            if (response.message == 'failed'){
+                for (let i = 0; i < response.errors.length; i++){
+                    switch (response.errors[i]){
+                                    
+                        case 'existing':
+                            notification(`The word "${response.existing.text}" already exists in your package "${response.existing.package}"`, "orange")
+                            break
+                        
+                    }
+                }
+            }
+
+        } catch {
+            notification("Check your internet connection and try again.")
+
+            is_searching = false
+            spinner(false)
+            return
+        }
+
+    }
+
+
+    document.addEventListener("selectionchange", () => {
+        const selection = window.getSelection();
+        query_input = selection.toString().trim();
+    });
+
+    let counter = 0
+    let is_searching = false
+    let already_searched = true
+
+    function track_query_change(){
+        let interval = setInterval(function(){
+          if (!is_searching && query_input.trim() != query && query_input.trim().length > 2 && query_input.trim().length < 101){
+            query = query_input.trim()
+            already_searched = false
+            counter = 0
+          } else if (!is_searching && query_input.trim() == query){
+            counter ++
+          }
+
+          if (counter >= 2 && !already_searched){
+            text.innerText = query
+            translation.innerText = "Translating ..."
+            get_translation()
+
+            counter = 0
+            already_searched = true
+          }
+
+        }, 400)
+    }
+    track_query_change()
+
+
+    const DEFAULTS = {
+        theme: 'dark',
+        fontSize: 5,
+        tooltipServed: "false"
+    };
+
+    let settings_tooltip = document.getElementById("settings_tooltip")
+    let settings_trigger = document.getElementById("settings_trigger")
+    let theme_dark_radio = document.getElementById("theme_dark_radio")
+    let theme_light_radio = document.getElementById("theme_light_radio")
+    let theme_green_radio = document.getElementById("theme_light_green")
+    let size_indicator = document.getElementById("size-indicator")
+
+
+    function loadUserSettings() {
+        const savedTheme = localStorage.getItem('theme') || DEFAULTS.theme;
+        const savedFontSize = localStorage.getItem('font-size') || DEFAULTS.fontSize;
+        const tooltipServed = localStorage.getItem('tooltip-served') || DEFAULTS.tooltipServed
+
+        document.getElementsByTagName("body")[0].classList.value = savedTheme
+        
+        if (tooltipServed == "false"){
+            settings_tooltip.classList.remove("d-none")
+            settings_tooltip.classList.add("d-inline")
+        }
+
+        reading_text.classList.remove("fs-1")
+        reading_text.classList.remove("fs-2")
+        reading_text.classList.remove("fs-3")
+        reading_text.classList.remove("fs-4")
+        reading_text.classList.remove("fs-5")
+        reading_text.classList.remove("fs-6")
+        reading_text.classList.add(`fs-${savedFontSize}`)
+
+        document.getElementById(`theme_${savedTheme}_radio`).checked = true
+        document.getElementById(`font_size_${7 - parseInt(savedFontSize)}`).checked = true
+
+
+    }
+    
+    try {
+        loadUserSettings()
+    } catch {
+        localStorage.clear()
+        location.href = ""
+    }
+    
+
+    settings_trigger.addEventListener("click", function(){
+        settings_tooltip.classList.remove("d-inline")
+        settings_tooltip.classList.add("d-none")
+        localStorage.setItem("tooltip-served", true)
+    })
+
+    document.querySelectorAll('input[name="theme"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            localStorage.setItem("theme", this.value)
+            loadUserSettings()
+        });
+    });
+
+    document.querySelectorAll('input[name="font_size"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            localStorage.setItem("font-size", this.value)
+            loadUserSettings()
+        });
+    });
+
+  </script>
+</body>
+</html>

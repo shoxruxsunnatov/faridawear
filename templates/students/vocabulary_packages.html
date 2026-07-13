@@ -1,0 +1,268 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: "Montserrat",  sans-serif;
+          color: white;
+          font-size: x-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'students/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+          <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+              <h3 class="page-name">Vocabulary packages</h3>
+              <div class="col-md-9 col-lg-6 col-xl-5" style="width: 100%;height: 100%;">
+                
+                <div id="main" class="row row-cols-1 row-cols-md-4 mt-1">
+                  <!-- Don't touch -->
+                </div>
+              </div>
+
+              
+
+            </div>
+          </div>
+
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <button id="trigger_modal_topic" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit topic</h1>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            <form method="post" id="modal_topic_form">
+              <li class="list-group-item justify-content-between align-items-start" data-bs-theme="dark">
+                <div class="row g-2">
+                  <div class="col-md">
+                    <div class="form-floating bg-dark">
+                      <input type="hidden" id="modal_topic_id">
+                      <input type="text" class="form-control text-light" id="modal_topic_title" name="title" placeholder="0" style="background: black;">
+                      <label for="days-input">Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-floating bg-dark">
+                      <input type="number" class="form-control text-light" id="modal_topic_index" name="index" placeholder="0" style="background: black;">
+                      <label for="days-input">Index</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row g-2 mt-1">
+                  <div class="col-md">
+                    <div class="form-floating bg-dark">
+                      <input type="text" class="form-control text-light" id="modal_topic_prompt" name="prompt" placeholder="0" style="background: black;">
+                      <label for="days-input">Prompt</label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button id="modal_topic_savebutton" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let package_title = document.getElementById('package_title')
+      let main = document.getElementById('main')
+
+      
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+
+      function formatDate(date) {
+        date = new Date(date)
+        const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+        const month = date.toLocaleString('en-US', { month: 'long' });
+        const day = date.getDate();
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes} ${ampm}, ${month} ${day}, ${year}`;
+      }
+
+      function clean_text(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      async function load_vocabulary_packages(){
+        spinner(true)
+
+        main.innerHTML = ''
+
+        let request = await fetch('/api/dictionary/packages/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+          main.innerHTML += `
+            <div class="mb-2">
+              <div class="card bg-dark text-light">
+                <div class="card-body pb-0">
+                  <hp class="card-title fs-5 pb-0">${clean_text(response[i].title)}</p>
+                </div>
+                <div class="card-footer text-secondary">
+                  <span class="badge rounded-pill text-bg-light">${response[i].count} vocabularies</span>
+                </div>
+                <div class="card-footer text-secondary">
+                  <small>By <span class="text-light">${response[i].author ? clean_text(response[i].author) : "platform"}</span></small>
+                </div>
+                <div class="card-footer text-secondary">
+                  <small>${formatDate(response[i].date_created)}</small>
+                </div>
+                <div class="card-footer text-secondary">
+                  <a href="packages/${response[i].id}/" class="btn btn-primary w-100">View</a>
+                </div>
+              </div>
+            </div>
+          `
+        }
+
+        spinner(false)
+      }
+      load_vocabulary_packages()
+
+    </script>
+</body>
+</html>

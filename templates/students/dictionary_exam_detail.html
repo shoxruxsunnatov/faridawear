@@ -1,0 +1,1434 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary exam</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: Garamond, serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+
+    .keyboard {
+        width: 100%;
+        display: none;
+        padding: 10px 0 10px 0;
+        border-radius: 10px;
+        background-color: lightgray;
+        text-align: center;
+        box-shadow: 2px 2px 2px #999;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .keyboard div {
+        display: flex;
+    }
+    .keyboard input{
+        box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+        color: black;
+        border: 0;
+        border-radius: 5px;
+        flex: 1;
+        margin: 5px 1px;
+
+        box-shadow: 1px 1px 1px #999;
+    }
+    .keyboard input:active{
+        background-color: gray;
+    }
+    .keyboard-button {
+        font-weight: bold;
+        box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+        color: black;
+        border: 0;
+        border-radius: 5px;
+        flex: 1;
+        margin: 5px 1px;
+    }
+    .keyboard button:active{
+        background-color: gray;
+        box-shadow: 1px 1px 1px #999;
+
+    }
+    .keyboard-row {
+        height: 50px;
+    }
+    </style>
+</head>
+<body>
+  {% include 'students/navbar.html' %}
+
+  <section>
+    <div class="container pt-1">
+      <h1 class="text-body-emphasis text-light text-center" id="page_name">Dictionary exam</h1>
+      
+  
+      <div class="row">
+        <div class="col-lg-4 mb-2">
+            <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" id="collapseExampleBtn" aria-controls="collapseExample" style="width: 100%;border-radius: 5px 5px 0 0!important;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"></path>
+              </svg>
+              Details
+            </a>
+            <div class="collapse" id="collapseExample">
+                <ul class="list-group rounded-top" style="border-radius: 0 0 5px 5px!important">
+                  
+                  <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark" id="exam_details">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="text-muted mb-0">Package</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="mb-0 fw-bold" id="exam_topic"></p>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="text-muted mb-0">Starts</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class="mb-0 fw-bold" id="exam_start_date"></p>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="text-muted mb-0">Ends</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class=" mb-0 fw-bold" id="exam_end_date"></p>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <p class="text-muted mb-0">Max</p>
+                      </div>
+                      <div class="col-sm-9">
+                        <p class=" mb-0 fw-bold" id="exam_max_sessions">participants</p>
+                      </div>
+                    </div>
+                    <div class="row" id="end_exam_row"></div>
+                  </li>
+                  <li class="list-group-item justify-content-between align-items-start contact">
+                    <p class="text-secondary">By <span class="text-light" id="exam_author">Administrator</span> at <small id="exam_date_created"></small></p>
+                  </li>
+                </ul>
+              <br>
+            </div>
+          </div>
+        <div class="col-lg-8">
+          
+
+          <div class="container">
+            <form id="form_register" method="post" onsubmit="return false">
+              <ul class="list-group mb-5">
+                
+                <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark" id="choose_topic_field">
+                  
+                  <div class="row g-2 mt-1">
+                    <div class="form-floating bg-dark" id="choose_topic_field">
+                      <select class="form-select text-light" id="package" name="package" style="background: black;">
+                        <option value="">Choose package</option>
+                        
+                      </select>
+                      <label for="hours-input">Vocabulary package</label>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item justify-content-between align-items-start contact">
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Start</button>
+                  </div>
+                </li>
+              </ul>
+            </form>
+
+            <form onsubmit="return false" id="main_form">
+              
+              
+            </form>
+
+          </div>
+
+            <div id="main" class="accordion accordion-flush mt-0">
+                <!-- Don't touch -->
+            </div>
+            <div class="keyboard" id="keyboard">
+                <div class="keyboard-row">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="q">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="w">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="e">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="r">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="t">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="y">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="u">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="i">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="o">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="p">
+                </div>
+                <div class="keyboard-row">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="a">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="s">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="d">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="f">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="g">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="h">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="j">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="k">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="l">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="'">
+                </div>
+                <div class="keyboard-row">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value=",">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="z">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="x">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="c">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="v">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="b">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="n">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value="m">
+                    <input type="button" class="keyboard-button" onclick="keyboard_click(this)" value=".">
+                    <button id="backspace" class="keyboard-button" type="button" onclick="keyboard_click(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
+                            <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8z"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="keyboard-row">
+                    <input id="back" class="keyboard-button" onclick="keyboard_click(this)" type="button" value=" ">
+                </div>
+            </div>
+
+            <div id="warning-banner" style="display: none;">
+                <h4 class="text-warning text-center mb-3">
+                    Warning
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+                      </svg>
+                </h4>
+                <p class="text-light text-center">
+                    A <b class="text-danger">highly sensitive</b> security system is installed on the platform to ensure that the testing process proceeds fairly.<br>
+                    Once you click the button below, the tests will be displayed in <b>full-screen mode</b>. Exiting full-screen mode will result in a <b>penalty</b>.<br>
+                    Furthermore, <b>leaving the browser, switching to other apps or pages, or allowing your device screen to turn off automatically will also incur penalties.</b><br>
+                    At the end of the test, your final score will be adjusted by <b class="text-warning">deducting any penalties</b>. <br>
+                    You will be <b class="text-danger">eliminated</b> from the exam once you get 20 or more penalties.
+                </p>
+                <button class="" id="show_tests" style="margin: auto;margin-bottom: 80%;background: none;display: block;border-radius: 5px;color: white;border: 2px dashed white;" onclick="openFullscreen();warning_banner.style.display='none'">Show tests
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+                        <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0M7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
+                      </svg>
+                </button>
+            </div>
+
+            <p style="text-align: center;font-size: large;position: fixed;right: 5px;bottom: 0;color: red;">Penalty: <span id="penalty_p">0</span></p>
+            <p class="text-info fw-bold" style="text-align: center;font-size: large;position: fixed;left: 5px;bottom: 0;" id="full_name"></p>
+            
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="access_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Loading...</h1>
+            </div>
+            <div class="modal-body ps-1 pe-1">
+              <h3 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 16 16">
+                  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
+                </svg>
+                We are preparing the best questions for you. Please, stand by.
+              </h3>
+              
+            </div>
+            <div class="modal-footer">
+              <div class="spinner-grow text-center d-block m-auto" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+    <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+    Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <a href="" id="view_results" style="display: none;">
+        <button class="btn btn-success btn-lg w-100" style="position: fixed;top: 0;">View results</button>
+    </a>
+  </section>
+
+
+  <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <script>
+    let main = document.getElementById('main')
+
+    let exam_topic = document.getElementById('exam_topic')
+    let exam_start_date = document.getElementById('exam_start_date')
+    let exam_end_date = document.getElementById('exam_end_date')
+    let exam_max_sessions = document.getElementById('exam_max_sessions')
+    let exam_author = document.getElementById('exam_author')
+    let exam_date_created = document.getElementById('exam_date_created')
+    let end_exam_row = document.getElementById('end_exam_row')
+    let active_counting = false
+    let lock_status_updating = false
+
+
+    let package = document.getElementById('package')
+    let choose_topic_field = document.getElementById('choose_topic_field')
+
+    let form_register = document.getElementById('form_register')
+    let main_form = document.getElementById('main_form')
+    let page_name = document.getElementById('page_name')
+    let savebutton = document.getElementById('savebutton')
+    let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('access_modal'))
+    let exam_details = document.getElementById('exam_details')
+    let view_results_btn = document.getElementById('view_results')
+    let full_name = document.getElementById('full_name')
+
+    let exam = {}
+    const exam_id = location.pathname.split('/')[3]
+    let tests = []
+    let current_test
+    let part
+
+    let keyboard = document.getElementById('keyboard')
+    let warning_banner = document.getElementById('warning-banner')
+
+    function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements at indices i and j
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+    }
+
+    function formatDate(date) {
+    date = new Date(date)
+    const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+    const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+    const month = date.toLocaleString('en-US', { month: 'long' });
+    const day = date.getDate();
+
+    return `${hours}:${minutes} ${ampm}, ${month} ${day}`;
+    }
+    main_form.innerHTML = ''
+
+
+    function spinner(display){
+    let spinner_element = document.getElementById('spinner')
+    switch (display){
+    case true:
+        spinner_element.setAttribute('style', 'display: block')
+        break
+    case false:
+        spinner_element.setAttribute('style', 'display: none!important')
+        break
+    }
+    }
+
+    function notification(message, color){
+    let modal_trigger = document.getElementById('modal-trigger')
+    let modal_text = document.getElementById('modal-text')
+
+    modal_text.style.color = color
+    modal_text.innerText = message
+    modal_trigger.click()
+    }
+
+    function clean_text(text) {
+      return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
+
+    async function load_packages(){
+        spinner(true)
+
+
+        let request = await fetch(`/api/dictionary/packages/?package_source=${exam.package_source}`)
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+        package.innerHTML += `
+            <option value="${response[i].id}">${clean_text(response[i].title)}</option>
+        `
+    }
+
+    spinner(false)
+    }
+    
+
+    async function load_exam_sessions(){
+
+        let request = await fetch(`/api/dictionary/exams/${exam_id}/exam-sessions/`)
+        let response = await request.json()
+        
+        for (let i = 0; i < response.length; i++){
+
+            exam_session = response[i]
+
+            let status, color
+            if (exam_session.is_finished){
+                status = exam_session.is_successful == true ? "Successful" : "Failed"
+                color = exam_session.is_successful == true ? "success" : "danger"
+            } else {
+                status = "In process"
+                color = "light"
+            }
+
+            main.innerHTML += `
+            <div id="student$1" class="accordion-item bg-dark text-light rounded-4 border-dark">
+                <h2 class="accordion-header" id="i${i}">
+                    <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${i}" aria-expanded="false" aria-controls="body${i}">
+                    <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                    ${clean_text(exam_session.user)}
+                    <span class="time-passed text-${color}">${status}</span>
+                    </button>
+                </h2>
+                <div id="body${i}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${i}" data-bs-parent="#main">
+                    <div class="accordion-body pt-1">
+                    
+                    <div class="card-body mt-3">
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <p class="text-muted mb-0">Package</p>
+                            </div>
+                            <div class="col-sm-9">
+                            <p class="mb-0 fw-bold">${clean_text(exam_session.package)}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <p class="text-muted mb-0">Points</p>
+                            </div>
+                            <div class="col-sm-9">
+                            <p class="mb-0 fw-bold text-${color}"> (${exam_session.points}/100)</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <p class="text-muted mb-0">Status</p>
+                            </div>
+                            <div class="col-sm-9">
+                            <p class="text-${color} mb-0 fw-bold">${status}</p>
+                            </div>
+                        </div>
+                        
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            `
+        }
+
+    }
+    
+
+    async function load_exam(){
+        spinner(true)
+        
+        let request, response
+        try {
+            request = await fetch(`/api/dictionary/exams/${exam_id}/`)
+            response = await request.json()
+        } catch {
+            location.href = '/my-dictionary/'
+            return
+        }
+
+        exam = response
+        Object.freeze(exam)
+
+        page_name.innerText = response.title
+        exam_start_date.innerText = formatDate(response.start_date)
+        exam_end_date.innerText = formatDate(response.end_date)
+        exam_author.innerText = response.author
+        exam_date_created.innerText = formatDate(response.date_created)
+        exam_max_sessions.innerText = `${response.max_sessions} participants`
+
+
+
+        if (response.package){
+        exam_topic.innerText = response.package
+
+        } else {
+            exam_topic.innerText = 'Optional'
+        }
+
+        if (!response.is_preset){
+        load_packages()
+        } else {
+            choose_topic_field.remove()
+        }
+
+        if (response.participated){
+            form_register.remove()
+
+            if (response.exam_session.is_successful){
+                exam_details.innerHTML += `
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-muted mb-0">Points</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-success mb-0 fw-bold">(${response.exam_session.points}/100)</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-success mb-0 fw-bold">Successful</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="mb-0 fw-bold"">${clean_text(response.exam_session.package)}</p>
+                    </div>
+                </div>
+                `
+            } else {
+                let reminders = [
+                    "Make an effort not to be such a disappointment next time.",
+                    "Try harder not to be such a failure next time.",
+                    "Do everyone a favor and avoid being such a complete embarrassment next time.",
+                    "Next time, at least try not to be such a waste of space.",
+                    "Maybe you could aim to be less of a total disaster next time.",
+                    "Why not put in a tiny bit of effort next time, instead of being a complete disappointment?",
+                    "You should really work on not being such a disappointment to everyone around you.",
+                    "Next time, try not to be such a complete waste of everyone's time.",
+                    "Why even bother if you're just going to be such a colossal failure every time?",
+                    "Do us a favor and avoid showing up next time if you're going to be this useless.",
+                    "If you were aiming to be the worst, congratulations—you've succeeded spectacularly.",
+                    "It's astounding how consistently you manage to disappoint everyone around you.",
+                    "Why even bother if you're just going to be such a colossal failure every time?",
+                    "If you die one day because of your idiocy, it will be counted as natural selection."
+                ]
+                let randomReminder = reminders[Math.floor(Math.random() * reminders.length)];
+
+                exam_details.innerHTML += `
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-muted mb-0">Points</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-danger mb-0 fw-bold">(${response.exam_session.points}/100)</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-danger mb-0 fw-bold">Failed</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="mb-0 fw-bold"">${clean_text(response.exam_session.package)}</p>
+                    </div>
+                </div>
+                <hr>
+                <p class="text-danger text-center fw-bold">${randomReminder}</p>
+
+                `
+            }
+            document.getElementById('collapseExample').classList.add('show')
+            load_exam_sessions()
+        }
+
+        spinner(false)
+        force_redirect()
+    }
+    load_exam()
+
+    async function load_tests(){
+        modal.show()
+
+        let request, response
+        try {
+            request = await fetch(
+                `/api/dictionary/exams/${exam_id}/`,
+                {
+                method: 'POST',
+                body: new FormData(form_register)
+                }
+            )
+            response = await request.json()
+        } catch {
+            notification("Please try again.")
+        }
+        
+
+        if (response.message == 'success'){
+            
+            tests = response.tests
+            warning_banner.style.display = 'block'
+            form_register.remove()
+
+            full_name.innerText = clean_text(response.full_name)
+            end_exam_row.innerHTML = '<button class="btn btn-sm btn-danger w-100" onclick="end_exam_session()">End exam</button>'
+            end_exam_row.classList.add('p-3')
+
+            if (document.getElementById('collapseExample').classList.contains('show')){
+                document.getElementById('collapseExampleBtn').click()
+            }
+
+
+        } else {
+            for (let i = 0; i < response.errors.length; i++){
+                switch (response.errors[i]){
+                    case 'topic':
+                    notification("Please choose topic.", "orange")
+                    break
+                    
+                    case 'level':
+                    notification("Please choose level", "orange")
+                    break
+                    
+                    case 'expired':
+                    notification("Exam has ended.", "orange")
+                    break
+                    
+                    case 'not-started':
+                    notification("Exam has not started yet.", "orange")
+                    break
+                    
+                    case 'generator':
+                    notification("There is a problem with the test generator. Please contact the administration or try again later.", "orange")
+                    break
+                    
+                    case 'participated':
+                        notification("You have already participated in this exam.", "orange")
+                        break
+                    
+                    case 'only-author':
+                        notification("This exam was created by a student and is for training purposes only. You can also create a training exam by going to the 'Training' page.", "orange")
+                        break
+                    
+                    case 'packages':
+                        notification("Selected package and all the packages which were created before this package should contain 50 vocabularies each. Please check the packages and try again.", "orange")
+                        break
+                    
+                    case 'full':
+                        notification("The exam has reached the maximum number of participants.", "orange")
+                        break
+
+                    case 'key':
+                        notification("Participating in an exam using two devices is not allowed. Please, finish the exam on the same device that you have used to start.", "red")
+                        break
+
+                    case 'is_locked':
+                        notification("Unable to load the questions. Your exam session is locked.", "red")
+                        break
+                }
+            }
+        }
+        modal.hide()
+        setTimeout(function(){
+                modal.hide()
+        }, 500)
+    }
+
+
+    savebutton.addEventListener('click', async function(){
+
+        if (!exam.is_preset && package.value == '') {
+            notification('Choose package', "orange")
+        } else {
+            savebutton.disabled = true
+
+            load_tests()
+
+            savebutton.disabled = false          
+        }
+
+    })
+
+
+    function show_access_modal(){
+        if (access_code_input.value == ''){
+            spinner(true)
+            load_access_code()
+            spinner(false)
+        }
+        modal.show()
+    }
+
+
+    async function force_redirect() {
+        
+        let request = await fetch('/api/dictionary/exams/ongoing/')
+        let response = await request.json()
+        if (response.exam){
+            if (response.exam.id == exam_id){
+                exam_topic.innerText = `${response.exam.package}`
+                form_register.remove()
+                load_tests()
+                        
+                if(!active_counting){
+                    start_active_counting()
+                    active_counting = true
+                }
+                if (!lock_status_updating){
+                    check_lock_status()
+                    lock_status_updating = true
+                }
+
+            } else {
+                document.body.innerHTML += `
+                <!-- Force redirect modal -->
+                <div class="modal fade" id="redirect_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 text-warning" id="staticBackdropLabel">Warning</h1>
+                        </div>
+                        <div class="modal-body ps-1 pe-1">
+                        <h6 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-alarm-fill" viewBox="0 0 16 16">
+                                <path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5m2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.04 8.04 0 0 0 .86 5.387M11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.04 8.04 0 0 0-3.527-3.527"/>
+                            </svg>
+                            You're already participating in an exam. Please, finish your ongoing exam before starting another one.
+                        </h6>
+                        
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/dictionary/exams/${response.exam.id}/">                            
+                                <button class="btn btn-primary">Continue exam <b>(${clean_text(response.exam.title)})</b></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                `
+                let modal_element = document.getElementById('redirect_modal')
+                let modal = bootstrap.Modal.getOrCreateInstance(modal_element)
+
+                modal.show()
+
+                setInterval(function(){
+                    modal.show()
+                }, 5000)
+                
+            }
+        } else {
+            if (!exam.participated){
+                document.getElementById('collapseExampleBtn').click()
+            }
+        }
+    }
+
+
+    async function submit_answer_choice(button, test_id){
+        spinner(true)
+        let options = document.getElementsByName(`test${test_id}`)
+        let selected_option_id
+
+        for (let i = 0; i < options.length; i++){
+            if (options[i].checked){
+                selected_option_id = options[i].value
+            }
+        }
+
+        if (!selected_option_id){
+            notification("Please choose an option before submitting.", "orange")
+            spinner(false)
+            return
+        }
+
+        let form_data = new FormData()
+        form_data.append("test_id", test_id)
+        form_data.append("option_id", selected_option_id)
+        form_data.append("show_type", tests[current_test].show_type)
+
+        try {
+            let request = await fetch('/api/dictionary/exams/submit/', {
+                method: 'POST',
+                body: form_data
+            })
+
+            let response = await request.json()
+            if (response.message == 'success'){
+                let answer_option = document.getElementById(`label${response.answer_option}`)
+
+                let selected_option = document.getElementById(`label${selected_option_id}`)
+                selected_option.classList.remove('btn-light')
+                selected_option.classList.add(
+                    response.state == 'true' ? 'btn-success' : 'btn-danger'
+                )
+
+                answer_option.classList.remove('btn-light')
+                answer_option.classList.remove('btn-danger')
+                answer_option.classList.add('btn-success')
+                button.remove()
+
+                for (let i = 0; i < response.errors.length; i++){
+                    switch(response.errors[i]){
+                        case "expired":
+                            notification("Exam has ended, your answers are recorded.", "green")
+                            view_results_btn.style.display = 'block'
+                            break
+                    }
+                }
+            tests[current_test].selected_option = selected_option_id
+            document.getElementById(`next_button${test_id}`).disabled = false
+
+            } else {
+                for (let i = 0; i < response.errors.length; i++){
+                    switch(response.errors[i]){
+                        case "invalid-ids":
+                            notification("Please, choose an option before submitting.", "orange")
+                            break
+                        
+                        case "already-submitted":
+                            notification("Answer has already been recorded. If it doesn't look like that, try reloading the page.", "green")
+                            document.getElementById(`next_button${test_id}`).disabled = false
+                            tests[current_test].selected_option = selected_option_id
+                            break
+                        
+                        case "expired":
+                            notification("Exam has ended, your answers are recorded.", "green")
+                            view_results_btn.style.display = 'block'
+                            setTimeout(function(){
+                                location.href = ""
+                            }, 2000)
+                            break
+                        
+                        case "gpt":
+                            notification("There was a little problem with submitting your answer. Can you try to submit once again? :)", "orange")
+                            break
+                    }
+                }
+            }
+        } catch {
+            notification("Unable to submit your answer. Please, check your internet connection and try again.", "orange")
+        }
+
+        spinner(false)
+    }
+
+
+    async function submit_answer_hidden(button, test_id){
+        spinner(true)
+        let input_option = document.getElementById(`input${test_id}`)
+
+        if (input_option.value.trim().length < 2){
+            notification("Please write your answer before submitting.", "orange")
+            spinner(false)
+            return
+        }
+
+        let form_data = new FormData()
+        form_data.append("test_id", test_id)
+        form_data.append("input_option", input_option.value)
+        form_data.append("show_type", tests[current_test].show_type)
+
+        try {
+            let request = await fetch('/api/dictionary/exams/submit/', {
+                method: 'POST',
+                body: form_data
+            })
+
+            let response = await request.json()
+            if (response.message == 'success'){
+
+                input_option.classList.remove('bg-dark')
+                input_option.classList.add(
+                    response.state == 'true' ? 'bg-success' : 'bg-danger'
+                )
+
+                if (response.state == 'false'){
+                    document.getElementById('answer').innerHTML = `
+                    <div class="alert alert-success d-flex align-items-center p-2" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill me-2" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        <div class="fw-bold">
+                            ${clean_text(response.answer)}
+                        </div>
+                    </div>
+                    `
+                }
+                button.remove()
+                input_option.disabled = true
+
+                for (let i = 0; i < response.errors.length; i++){
+                    switch(response.errors[i]){
+                        case "expired":
+                            notification("Exam has ended, your answers are recorded.", "green")
+                            view_results_btn.style.display = 'block'
+                            setTimeout(function(){
+                                location.href = ""
+                            }, 2000)
+                            break
+                    }
+                }
+            tests[current_test].selected = input_option.value
+            document.getElementById(`next_button${test_id}`).disabled = false
+            keyboard.style.display = 'none'
+
+            } else {
+                for (let i = 0; i < response.errors.length; i++){
+                    switch(response.errors[i]){
+                        case "invalid-ids":
+                            notification("Please, choose an option before submitting.", "orange")
+                            break
+                        
+                        case "already-submitted":
+                            notification("Answer has already been recorded. If it doesn't look like that, try reloading the page.", "green")
+                            document.getElementById(`next_button${test_id}`).disabled = false
+                            tests[current_test].selected = input_option.value
+                            break
+                        
+                        case "expired":
+                            notification("Exam has ended, your answers are recorded.", "green")
+                            view_results_btn.style.display = 'block'
+                            break
+                        
+                        case "generator":
+                            notification("There was a little problem with submitting your answer. Can you try to submit once again? :)", "orange")
+                            break
+                    }
+                }
+            }
+        } catch {
+            notification("Unable to submit your answer. Please, check your internet connection and try again.", "orange")
+        }
+
+        spinner(false)
+    }
+
+
+    async function next_question(){
+        for (let i = 0; i < tests.length; i++){
+            test = tests[i]
+            current_test = i
+            if (test.selected_option || test.selected){
+                continue
+            }
+
+            if (part != test.part){
+                if (test.part == '1'){
+                    notification(`Part ${test.part}. All questions will be based on the package you have selected.`, "#084298")
+                } else if (test.part == '2') {
+                    notification(`Part ${test.part}. Next questions will be based on the packages that come before the one you have selected.`, "#084298")
+                }
+                part = test.part
+            }
+            
+            if (test.show_type < 2){
+                keyboard.style.display = 'none'
+                test.options = shuffleArray(test.options)
+                main_form.innerHTML = ''
+
+
+                let options = ''
+                let button = test.selected_option ? '' : `<button class="btn btn-primary mt-2 float-end" type="submit" onclick="submit_answer_choice(this, ${test.id})">Submit</button>`
+
+                for (let j = 0; j < test.options.length; j++){
+                    
+                    options += `
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="radio" name="test${test.id}" id="option${test.options[j].id}" value=${test.options[j].id}>
+                        <label class=" btn btn-light w-100 user-select-none" id="label${test.options[j].id}" for="option${test.options[j].id}">
+                            ${clean_text(test.options[j].text)}
+                        </label>
+                    </div>
+                    `
+                    
+                }
+
+                main_form.innerHTML += `
+                <div class="card mb-2">
+                    <div class="card-header">
+                        Question ${i + 1} of 100
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-3 user-select-none">${clean_text(test.text)}</h5>
+                        <form onsubmit="return false;">
+                            ${options}
+                            <button id="next_button${test.id}" class="btn btn-secondary mt-2 ms-2 float-end" type="button" onclick="next_question()" disabled>Next</button>
+                            ${button}
+                        </form>
+                    </div>
+                </div>
+                `
+                
+                if (test.selected_option){
+                    let selected_option = document.getElementById(`label${test.selected_options[j]}`)
+                    selected_option.classList.remove('btn-light')
+                    selected_option.classList.add(
+                        test.state == 'true' ? 'btn-success' : 'btn-danger'
+                    )
+                }
+
+                break
+
+            } else { // show type 2
+                main_form.innerHTML = ''
+
+                let button = test.selected ? '' : `<button class="btn btn-primary mt-2 float-end" type="submit" onclick="submit_answer_hidden(this, ${test.id})">Submit</button>`
+
+                main_form.innerHTML += `
+                <div class="card mb-2">
+                    <div class="card-header">
+                        Question ${i + 1} of 100
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-3 user-select-none">${clean_text(test.text)}</h5>
+                        <div class="alert alert-primary d-flex align-items-center p-2" role="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill me-2" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4m.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2"></path>
+                            </svg>
+                            <div>
+                                <span style="white-space:pre-wrap" class="fw-bold">${test.hint}</span>
+                            </div>
+                        </div>
+                        <div id="answer"></div>
+                        <form onsubmit="return false;">
+                            <div class="form-floating bg-dark rounded">
+                                <input type="text" class="form-control text-light border-0 bg-dark" id="input${test.id}" placeholder="0" disabled>
+                                <label for="days-input" class="text-light">Answer</label>
+                            </div>
+                            <button id="next_button${test.id}" class="btn btn-secondary mt-2 ms-2 float-end" type="button" onclick="next_question()" disabled>Next</button>
+                            ${button}
+                        </form>
+                    </div>
+                </div>
+                `
+                keyboard.style.display = 'block'
+                break
+            }
+
+        }
+        
+        if (tests.length == 0){
+            main_form.innerHTML = `
+            <div class="card text-center bg-dark">
+                <div class="card-header text-light">
+                    Info
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-warning">Your exam session is locked.</h5>
+                    <p class="card-text text-light">It can be unlocked by your teacher or administrator.</p>
+                </div>
+                <div class="card-footer text-body-secondary text-secondary">
+                    You can also end the exam by pressing the button below.
+                    <button class="btn btn-danger btn-sm d-block m-auto mt-2" onclick="end_exam_session()">End exam</button>
+
+                </div>
+            </div>
+            `
+        }
+    }
+
+
+    function keyboard_click(button){
+        let input = document.getElementById(`input${tests[current_test].id}`)
+        if (button.id == 'backspace'){
+            input.value = input.value.slice(0, -1)
+        } else {
+            input.value += button.value
+        }
+    }
+
+
+    var elem = document.documentElement;
+
+    let penalty_p = document.getElementById('penalty_p')
+    let in_test
+    let penalty = 0
+    let new_penalty = 0
+    let is_locked = false
+
+
+    const check_cookie = function(){
+        let cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++){
+            let cookie = cookies[i].replaceAll(' ', '').split('=')
+            if (cookie[0] == 'exam'){
+                
+                if (cookie[1].split(':')[0] == exam_id){
+                    penalty = parseInt(cookie[1].split(':')[1])
+                    
+                } else {
+                    save('exam', `${exam_id}:${penalty}`)
+                }
+            }
+        }
+    }
+    check_cookie()
+
+    const get_cookie = function(name){
+        let cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++){
+            let cookie = cookies[i].replaceAll(' ', '').split('=')
+            if (cookie[0] == name){
+                return cookie[1]
+            }
+        }
+    }
+
+    const set_variable_from_cookie = function(name){
+        let cookies = document.cookie.split(';')
+        for (let i = 0; i < cookies.length; i++){
+            let cookie = cookies[i].replaceAll(' ', '').split('=')
+            if (cookie[0] == name){
+                return cookie[1]
+            }
+        }
+
+        return false
+    }
+    
+    const onVisibilityChange = function() {
+        if (document.visibilityState === 'visible') {
+
+        } else {
+            in_test = false
+        }
+    }
+
+    const save = function(name, value) {
+        date = new Date()
+        date.setHours(date.getHours() + 5)
+        document.cookie = name + '=' + value + '; expires=' + date;
+    }
+
+    if (set_variable_from_cookie(`width${exam_id}`)){
+        var width = set_variable_from_cookie(`width${exam_id}`)
+    } else {
+        var width = window.innerWidth * 0.8
+        save(`width${exam_id}`, width)
+    }
+    if (set_variable_from_cookie(`height${exam_id}`)){
+        var height = set_variable_from_cookie(`height${exam_id}`)
+    } else {
+        var height = window.innerHeight * 0.8
+        save(`height${exam_id}`, height)
+    }
+
+    function openFullscreen() {
+        if (window.performance && window.performance.navigation.type == window.performance.navigation.TYPE_BACK_FORWARD) {
+            in_test = false
+        }
+        document.addEventListener('visibilitychange', onVisibilityChange);
+
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+
+        next_question()
+                
+        if(!active_counting){
+            start_active_counting()
+            active_counting = true
+        }
+        if (!lock_status_updating){
+            check_lock_status()
+            lock_status_updating = true
+        }
+
+        let check_interval = setInterval(function(){
+            if (document.fullscreenElement == null) {
+                in_test = false
+                clearInterval(check_interval)
+            } else {
+                // main_body.style.display = 'block'
+            }
+
+        }, 500)
+
+        setTimeout(function(){
+            
+            setInterval(function(){
+                if (width > window.innerWidth || height > window.innerHeight){
+                    in_test = false
+                }
+
+                if (width < window.innerWidth * 0.8){
+                    width = window.innerWidth * 0.8
+                }
+
+                if (height < window.innerHeight * 0.8){
+                    height = window.innerHeight * 0.8
+                }
+
+            }, 500)
+        }, 3000)
+
+    }
+
+
+    const start_active_counting  = function(){
+        setInterval(function(){
+            if (penalty >= 20){
+                end_exam_session()
+            }
+            if (document.visibilityState === 'visible' && document.fullscreenElement && (width < window.innerWidth && height < window.innerHeight)) {
+                in_test = true
+            } else {
+                warning_banner.style.display = 'block'
+                main_form.innerHTML = ''
+                keyboard.style.display = 'none'
+            }
+
+            if (!in_test){
+                let online = new Date(get_cookie(`online${exam.id}`))
+                let now = new Date()
+
+                if (isNaN(online.valueOf())){
+                    save(`online${exam.id}`, (new Date()).toISOString())
+                    online = new Date(get_cookie(`online${exam.id}`))
+                }
+
+                new_penalty += Math.floor((now - online) / 1000)
+                if (new_penalty >= 1){
+                    // penalty += new_penalty
+
+                    new_penalty = 0
+                    save(`online${exam.id}`, (new Date()).toISOString())
+                    
+                    lock_exam_session()
+                }
+                save('exam', `${exam_id}:${penalty}`)
+            } else {
+                save(`online${exam.id}`, (new Date()).toISOString())
+            }
+
+
+            penalty_p.innerText = penalty
+
+        }, 1000)
+
+        record_penalty()
+        setInterval(async function() {
+            record_penalty()
+        }, 15000)
+    }
+    
+
+    const lock_exam_session = async function(){
+        spinner(true)
+
+        if (tests.length > 0 && exam.is_recorded){
+            tests = []
+            next_question()
+
+            let success = false
+            try {
+                let request = await fetch("/api/dictionary/exams/lock-status/", {
+                    method: "POST"
+                })
+                success = true
+            } catch {}
+
+            if (!success){
+                let lock_interval = setInterval(async function() {
+                    try {
+                        let request = await fetch("/api/dictionary/exams/lock-status/", {
+                            method: "POST"
+                        })
+                        console.log(await request.json())
+                        clearInterval(lock_interval)
+                    } catch {}
+                }, 1000)
+            }
+            
+        }
+
+        spinner(false)
+    }
+
+
+    const record_penalty = async function(){
+
+        let form_data = new FormData()
+        form_data.append("penalty", penalty)
+
+        try {
+            let request = await fetch('/api/dictionary/exams/penalty/', {
+                method: 'POST',
+                body: form_data
+            })
+            let response = await request.json()
+
+            if (response.message == 'success'){
+                if (response.penalty < penalty){
+                    notification(`Penalty -${penalty - parseInt(response.penalty)}`, "green")
+                    penalty = parseInt(response.penalty)
+                } else if (response.penalty > penalty){
+                    notification(`Penalty +${parseInt(response.penalty) - penalty}`, "red")
+                    penalty = parseInt(response.penalty)
+                }
+            }
+
+        } catch {
+            console.log('error')
+        }
+
+    }
+
+
+    const end_exam_session =  async function(){
+        spinner(true)
+
+        keyboard.style.display = 'none'
+        await record_penalty()
+
+        try {
+            let request = await fetch('/api/dictionary/exams/end/', {
+                method: 'POST',
+            })
+
+            let response = await request.json()
+            if (response.message == 'success'){
+                notification("You have been eliminated from the exam for disobeying the rules.", "red")
+                view_results_btn.style.display = 'block'
+                main_form.innerHTML = ''
+                penalty = 0
+                tests = []
+                setTimeout(function(){
+                    location.href = ""
+                }, 2000)
+            } else {
+                
+            }
+        } catch {
+            console.log('error')
+        }
+
+        spinner(false)
+    }
+
+
+    const check_lock_status =  async function(){
+
+        setInterval(async function(){
+            try {
+                let request = await fetch(`/api/dictionary/exams/lock-status/`, {
+                    method: 'GET',
+                })
+
+                let response = await request.json()
+                if (response.message == 'success'){
+                    
+                    if (response.is_locked){
+                        lock_exam_session()
+                    } else if (response.is_locked == false && response.is_lock_reset && tests.length == 0){
+                        main_form.innerHTML = ''
+                        load_tests()
+                    }
+
+                } else {
+                    
+                }
+            } catch {
+                console.log('error')
+            }
+        }, 5000)
+
+    }
+
+
+  </script>
+</body>
+</html>

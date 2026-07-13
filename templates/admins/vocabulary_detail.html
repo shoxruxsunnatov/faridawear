@@ -1,0 +1,465 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: "Montserrat",  sans-serif;
+          color: white;
+          font-size: x-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+      .placeholder {
+        border-radius: 5px;
+      }
+
+      
+      
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+          <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+              <div class="col-md-9 col-lg-6 col-xl-5" style="width: 100%;height: 100%;">
+                <!-- 1 -->
+                <p class="fw-bold mb-1 fs-3 text-light text-center" id="text-translation">
+                  <span class="text-primary placeholder-glow" id="text">
+                    <span class="placeholder col-3"></span>
+                  </span>
+                  <span class="align-text-top text-light fs-5" id="category"></span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" onclick="speak()" class="bi bi-volume-up-fill" viewBox="0 0 16 16">
+                    <path d="M11.536 14.01A8.47 8.47 0 0 0 14.026 8a8.47 8.47 0 0 0-2.49-6.01l-.708.707A7.48 7.48 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303z"></path>
+                    <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z"></path>
+                    <path d="M8.707 11.182A4.5 4.5 0 0 0 10.025 8a4.5 4.5 0 0 0-1.318-3.182L8 5.525A3.5 3.5 0 0 1 9.025 8 3.5 3.5 0 0 1 8 10.475zM6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06"></path>
+                  </svg>
+                   - <span class="text-success placeholder-glow" id="translation">
+                    <span class="placeholder col-3"></span>
+                  </span>
+                </p>
+
+                <div class="ps-4 p-2" style="background: #212529;border-radius: 20px;box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;">
+                  <p class="fw-bold mb-1 mt-2 fs-5 text-light">
+                    <span class=" text-decoration-underline">Definition:</span>
+                  </p>
+                  <div class="ps-4">
+                    <p class="fw-bold mb-1 fs-5 text-light placeholder-glow" id="definition">
+                      <span class="placeholder col-2"></span>
+                      <span class="placeholder col-1"></span>
+                      <span class="placeholder col-3"></span>
+                      <span class="placeholder col-2"></span>
+                      <span class="placeholder col-3"></span>
+                      
+                      <span class="placeholder col-1"></span>
+                      <span class="placeholder col-2"></span>
+                      <span class="placeholder col-1"></span>
+                      <span class="placeholder col-2"></span>
+                      <span class="placeholder col-3"></span>
+                      <span class="placeholder col-1"></span>
+                    </p>
+                  </div>
+
+                  <p class="fw-bold mb-1 mt-2 fs-5 text-light">
+                    <span class=" text-decoration-underline">Image:</span>
+                  </p>
+                  <img id="image" class="w-25 rounded d-block m-auto">
+
+                  <p class="fw-bold mb-1 mt-2 fs-5 text-light">
+                    <span class=" text-decoration-underline">Example sentences:</span>
+                  </p>
+                  <div>
+                    <p class="fw-bold mb-1 fs-5 text-light placeholder-glow">
+                      <ul id="sentences">
+                        <li class="mb-2 fs-5 text-info placeholder-glow">
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-3"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-3"></span>
+                          
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-3"></span>
+                          <span class="placeholder col-1"></span>
+                        </li>
+                        <li class="mb-2 fs-5 text-info placeholder-glow">
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-3"></span>
+                          
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-3"></span>
+                          <span class="placeholder col-1"></span>
+                        </li>
+                        <li class="mb-2 fs-5 text-info placeholder-glow">
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-3"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-4"></span>
+                          
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-1"></span>
+                          <span class="placeholder col-2"></span>
+                          <span class="placeholder col-3"></span>
+                          <span class="placeholder col-1"></span>
+                        </li>
+                      </ul>
+                    </p>
+                  </div>
+                </div>
+                
+
+                <p class="fw-bold mb-1 mt-4 fs-6 text-light">
+                  <span>Reading passage including this vocabulary:</span>
+                </p>
+                <div class="ps-4 p-2" style="background: #212529;border-radius: 20px;box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;">
+                  <p class="fw-bold mb-1 fs-5 placeholder-glow" style="font-style: italic;color: darkgray;" id="passage">
+                    <span class="text-center fs-5 text-primary placeholder-glow w-100 d-block mb-2">
+                      <span class="placeholder col-1"></span>
+                      <span class="placeholder col-3"></span>
+                      <span class="placeholder col-2"></span>
+                      <br>
+                    </span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-3"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-3"></span>
+                    
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-3"></span>
+                    <span class="placeholder col-1"></span>
+
+                    <span class="placeholder col-3"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-3"></span>
+                    
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-3"></span>
+                    <span class="placeholder col-1"></span>
+
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-3"></span>
+                    
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-4"></span>
+
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-3"></span>
+                    
+                    <span class="placeholder col-1"></span>
+                    <span class="placeholder col-2"></span>
+                    <span class="placeholder col-4"></span>
+                    <span class="placeholder col-2"></span>
+                  </p>
+
+
+                  <p class="fw-bold mb-1 mt-4 fs-6 text-light text-center" id="vocabularies_count">
+                    Vocabularies in this reading passage
+                  </p>
+                  <table class="table table-dark table-striped text-light">
+                    <thead>
+                      <tr>
+                        <th scope="col">English</th>
+                        <th scope="col">Uzbek</th>
+                      </tr>
+                    </thead>
+                    <tbody id="vocabulary_table">
+
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          
+        </section>
+              
+    </div>
+
+    <!-- Modal -->
+    <button id="trigger_modal_topic" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit topic</h1>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            <form method="post" id="modal_topic_form">
+              <li class="list-group-item justify-content-between align-items-start" data-bs-theme="dark">
+                <div class="row g-2">
+
+
+                  <div class="col-md">
+                    <div class="form-floating bg-dark">
+                      <input type="hidden" id="modal_topic_id">
+                      <input type="text" class="form-control text-light" id="modal_topic_title" name="title" onclick="this.select()" placeholder="0" style="background: black;">
+                      <label for="days-input">Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-floating bg-dark">
+                      <input type="number" class="form-control text-light" id="modal_topic_index" name="index" onclick="this.select()" placeholder="0" style="background: black;">
+                      <label for="days-input">Index</label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button id="modal_topic_savebutton" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let text = document.getElementById("text")
+      let translation = document.getElementById("translation")
+      let definition = document.getElementById("definition")
+      let image = document.getElementById("image")
+      let category = document.getElementById("category")
+      let sentences = document.getElementById("sentences")
+      let passage = document.getElementById("passage")
+      let vocabulary_table = document.getElementById("vocabulary_table")
+      let vocabularies_count = document.getElementById("vocabularies_count")
+
+      let current_vocabulary
+      let main = document.getElementById('main')
+      const API_URL = `/api${location.pathname}`
+
+      let packages = {}
+      function clean_text(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+      
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+      
+
+      function speak() {
+        const utterance = new SpeechSynthesisUtterance(text.innerText);
+
+        const voices = speechSynthesis.getVoices();
+        utterance.voice = voices[0];
+
+        speechSynthesis.speak(utterance);
+      }
+
+
+      async function load_vocabulary(){
+        spinner(true)
+
+
+        let request = await fetch(API_URL)
+        let response = await request.json()
+
+        text.innerText = response.text
+        translation.innerText = response.translation
+        definition.innerText = response.description
+        
+        sentences.innerHTML = ''
+        for (let i = 0; i < response.sentences.length; i++){
+          sentences.innerHTML += `
+          <li class="mb-2 fs-5 fw-bold text-info placeholder-glow">
+            ${response.sentences[i]}
+          </li>
+          `
+        }
+
+        passage.innerHTML = `
+        <span class="text-center fs-5 text-primary placeholder-glow w-100 d-block mb-2">
+          ${response.passage_title}
+          <br>
+        </span>
+        ${response.passage}
+        <br>
+        `
+
+        let vocabularies = response.passage_vocabularies.sort((a, b) => a[0].localeCompare(b[0]));
+        for (let i = 0; i < vocabularies.length; i++){
+          let vocabulary = vocabularies[i]
+          vocabulary_table.innerHTML += `
+          <tr>
+            <th class="text-primary">${vocabulary[0]}</th>
+            <th class="text-success">${vocabulary[1]}</th>
+          </tr>
+          `
+        }
+
+        vocabularies_count.innerText += ` (total ${vocabularies.length})`
+        category.innerText = `(${response.category})`
+        image.src = response.image
+
+        spinner(false)
+      }
+
+      load_vocabulary()
+
+
+      image.addEventListener('click', () => {
+        if (image.classList.contains('w-25')){
+            image.classList.remove('w-25')
+            image.classList.add('fullscreen-image')
+        }else{
+            image.classList.add('w-25')
+            image.classList.remove('fullscreen-image')
+        }
+      })
+
+
+    </script>
+</body>
+</html>

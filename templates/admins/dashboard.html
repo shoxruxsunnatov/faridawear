@@ -1,0 +1,735 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Bosh sahifa</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+      .logo {
+          font-family: "Montserrat",  sans-serif;
+          font-size: 24px;
+      }
+      .divider:after,
+      .divider:before {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: #eee;
+      }
+          .h-custom {
+          height: calc(100% - 73px);
+      }
+          @media (max-width: 450px) {
+          .h-custom {
+          height: 100%;
+          }
+      }
+      body {
+        background: rgb(44, 46, 49);
+      }
+      .contact {
+        background: black;
+        color: white;
+        border: 2px solid rgb(44, 46, 49);
+      }
+      .page-name {
+        font-family: "Montserrat",  sans-serif;
+        color: white;
+        font-size: xx-large;
+        text-align: center;
+        margin-top: 10px;
+      }
+      select {
+        flex: 1;
+      }
+      .a-contact {
+        margin: 0;
+      }
+      .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'admins/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="">
+            <div class="container-fluid h-custom p-0">
+              <br>
+              <div class="col-lg-12 m-auto" id="info_field">
+                <div class="nav nav-tabs d-flex">
+                  <button class="btn btn-light fw-bold text-dark" id="info_tab_button" onclick="change_tab('info_tab')" style="flex: 1;border-radius: 5px 5px 0 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" wdith="20" height="20" fill="currentColor" class="bi bi-journal-bookmark-fill me-0" viewBox="0 0 16 16" style="vertical-align: middle;">
+                      <path fill-rule="evenodd" d="M6 1h6v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8z"></path>
+                      <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"></path>
+                      <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"></path>
+                    </svg>
+                    My vocabulary
+                  </button>
+                  <button class="btn text-light fw-bold" id="edit_tab_button" onclick="change_tab('edit_tab')" style="flex: 1;border-radius: 5px 5px 0 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book-fill me-1" viewBox="0 0 16 16">
+                      <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                    </svg>
+                    Reading
+                  </button>
+                  <button class="btn text-light fw-bold" id="settings_tab_button" onclick="change_tab('settings_tab')" style="flex: 1;border-radius: 5px 5px 0 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history me-1" viewBox="0 0 16 16">
+                      <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
+                      <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
+                      <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
+                    </svg>
+                    Recent
+                  </button>
+                </div>
+
+                <div class="card mb-4 bg-transparent border-0" id="info_tab" title="Create a new vocabulary package">
+                  <a class="btn btn-secondary bg-transparent border-0 m-auto mb-1" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample" style="border-radius: 50%;width: fit-content;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>
+                    </svg>
+                  </a>
+                  <div id="main" class="row row-cols-1 row-cols-md-4 mt-1">
+                    <!-- Don't touch -->
+                     <div class="mb-2 collapse" id="collapseExample">
+                      <div class="form-floating">
+                        <div class="card bg-dark text-light">
+                          <form onsubmit="return false" method="post" id="add_package_form">
+                            {% csrf_token %}
+                            <div class="card-body pb-0">
+                              <div class="form-floating bg-dark">
+                                <input type="hidden" id="modal_topic_id" value="6">
+                                <input type="text" class="form-control text-light" id="package_title" name="title" placeholder="0" style="background: black;border: 0;">
+                                <label for="days-input">Package name</label>
+                              </div>
+                            </div>
+                            <div class="card-footer text-secondary">
+                              <small>Type a name for your new vocabulary package.</small>
+                            </div>
+                            <div class="card-footer text-secondary">
+                              <button id="add_package_button" class="btn btn-primary w-100" type="save" onclick="add_vocabulary_package()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16" style="vertical-align: sub;">
+                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>
+                                </svg>
+                                Add
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+
+                <div class="card mb-4 d-none bg-transparent" id="edit_tab">
+                  
+                  <div class="collapse show mt-2" id="collapseExample2">
+                    <form id="form_start_reading" method="post" onsubmit="return false" enctype="multipart/form-data">
+                        
+                          <div class="row g-2 mb-1">
+                            <div class="col-md">
+
+                              <div class="list-group mb-3 d-none" id="last_read_div">
+                                <a class="list-group-item list-group-item-action active" aria-current="true">
+                                  <div class="d-flex w-100 justify-content-between">
+                                    <small>You were reading</small>
+                                    <small id="last_read_date"></small>
+                                  </div>
+                                  <h5 class="mb-1" id="last_read_title">
+                                    
+                                  </h5>
+                                  <p class="mb-1 btn btn-sm fw-bold btn-light mt-2"  id="last_read_btn">
+                                    Continue reading
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16" style="vertical-align: text-bottom;">
+                                      <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+                                      <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                  </p>
+                                </a>
+                              </div>
+
+                              <h5 class="text-light ps-1 mb-1 fw-bold">Write a topic for a reading text</h5>
+
+                              <div class="form-floating bg-dark">
+                                <input type="text" class="form-control text-light" id="reading_title" name="title" placeholder="0" style="background: black;border: 0;">
+                                <label for="days-input" class="text-light">Topic</label>
+                              </div>
+
+                              <div class="mt-1 d-flex align-items-center gap-2 border-0">
+  
+                                <div class="form-floating" style="flex: 3;">
+                                  <select class="form-select text-light h-100" id="reading_level" name="level" style="background:black; border:0;">
+                                    <option value="">Choose level</option>
+                                    <option value="A1"> A1 - very simple words and short sentences</option>
+                                    <option value="A2"> A2 - simple words with a bit more detail</option>
+                                    <option value="B1"> B1 - more vocabulary and mixed sentence types</option>
+                                    <option value="B2"> B2 - wider vocabulary and more complex sentences</option>
+                                    <option value="C1"> C1 - advanced vocabulary and varied sentence structures</option>
+                                    <option value="C2"> C2 - very advanced language, near-native level</option>
+                                  </select>
+                                  <label for="package" class="text-light">Level</label>
+                                </div>
+
+                                <button id="start_reading_button" class="btn btn-light h-100" type="button" style="height: calc(3.5rem)!important; flex: 1;font-weight: bold;">
+                                  Start
+                                </button>
+
+                              </div>
+
+                            </div>
+                          </div>
+                    </form>
+                  </div>
+                  
+                </div>
+                
+                <div class="card mb-4 d-none bg-transparent" id="settings_tab">
+                    <div class="row g-2 mb-1">
+                      <div class="col-md" id="recent_rts_main">
+                      </div>
+                    </div>
+                </div>
+
+              </div>
+
+
+            </div>
+            
+          </section>
+              
+    </div>
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Force redirect modal -->
+      <div class="modal fade" id="redirect_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-warning" id="staticBackdropLabel">Warning</h1>
+                </div>
+                <div class="modal-body ps-1 pe-1">
+                <h6 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-alarm-fill" viewBox="0 0 16 16">
+                        <path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5m2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.04 8.04 0 0 0 .86 5.387M11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.04 8.04 0 0 0-3.527-3.527"/>
+                    </svg>
+                    You're already participating in an exam. Please, finish your ongoing exam before starting another one.
+                </h6>
+                
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <a id="force_redirect_a" href="">                            
+                      <button  class="btn btn-primary">Continue exam <b id="force_redirect_btn"></b></button>
+                  </a>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let add_package_button = document.getElementById('add_package_button')
+      let page_title = document.getElementById('page-title')
+      let main_title = document.getElementById('main-title')
+
+      let main = document.getElementById('main')
+      const user_id = location.pathname.split('/')[2]
+
+      const add_package_div = `
+      <div class="mb-2 collapse" id="collapseExample">
+        <div class="form-floating">
+          <div class="card bg-dark text-light">
+            <form onsubmit="return false" method="post" id="add_package_form">
+              {% csrf_token %}
+              <div class="card-body pb-0">
+                <div class="form-floating bg-dark">
+                  <input type="hidden" id="modal_topic_id" value="6">
+                  <input type="text" class="form-control text-light" id="package_title" name="title" placeholder="0" style="background: black;border: 0;">
+                  <label for="days-input">Package name</label>
+                </div>
+              </div>
+              <div class="card-footer text-secondary">
+                <small>Type a name for your new vocabulary package.</small>
+              </div>
+              <div class="card-footer text-secondary">
+                <button id="add_package_button" class="btn btn-primary w-100" type="save" onclick="add_vocabulary_package()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16" style="vertical-align: sub;">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"></path>
+                  </svg>
+                  Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      `
+
+      function clean_text(text) {
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+      }
+
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed} minutes ago`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed} hours ago`;
+          } else {
+              return `${daysPassed} days ago`;
+          }
+      }
+      
+      function formatDate(date) {
+        date = new Date(date)
+        const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+        const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+        const month = date.toLocaleString('en-US', { month: 'long' });
+        const day = date.getDate();
+        const year = date.getFullYear();
+
+        return `${hours}:${minutes} ${ampm}, ${month} ${day}, ${year}`;
+      }
+      
+      function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+      }
+
+
+      async function load_vocabulary_packages(){
+        spinner(true)
+
+        main.innerHTML = add_package_div
+
+        let request = await fetch('/api/my-dictionary/packages/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+
+          let training = ""
+          if (response[i].count >= 50){
+            training = `
+            <button class="btn btn-light w-100" onclick="start_vp_training(${response[i].id})">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-ui-radios-grid" viewBox="0 0 16 16">
+                <path d="M3.5 15a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5m9-9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5m0 9a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5M16 3.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-9 9a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m5.5 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-9-11a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m0 2a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"></path>
+              </svg>
+              Training
+            </button>
+            `
+          }
+          main.innerHTML += `
+            <div class="mb-2">
+              <div class="card bg-dark text-light">
+                <div class="card-body pb-0">
+                  <hp class="card-title fs-5 pb-0">${clean_text(response[i].title)}</p>
+                </div>
+                <div class="card-footer text-secondary">
+                  <span class="badge rounded-pill text-bg-light">${response[i].count} vocabularies</span>
+                </div>
+                <div class="card-footer text-secondary">
+                  <small>${formatDate(response[i].date_created)}</small>
+                </div>
+                <div class="card-footer text-secondary d-flex gap-1">
+                  <a href="packages/${response[i].id}/" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                    View
+                  </a>
+                  ${training}
+                </div>
+              </div>
+            </div>
+          `
+        }
+
+        spinner(false)
+      }
+      load_vocabulary_packages()
+
+
+      async function add_vocabulary_package(){
+        let package_title = document.getElementById('package_title')
+
+        if (package_title.value.length < 3){
+          notification('Package name must be at least 3 characters long. (Max 100 chars)', "orange")
+          package_title.focus()
+        } else {
+          spinner(true)
+          add_package_button.disabled = true
+
+          try {
+            let request = await fetch(
+              '/api/my-dictionary/packages/',
+              {
+                method: 'POST',
+                body: new FormData(add_package_form)
+              }
+            )
+            let response = await request.json()
+
+            if (response.message == 'success'){
+              package_title.value = ''
+              load_vocabulary_packages()
+            } else {
+
+              for (let i = 0; i < response.errors.length; i++){
+                switch (response.errors[i]){
+                  case 'length':
+                    notification("Package name must be at least 3 characters long. (Max 100 chars)", "orange")
+                    break
+
+                  case 'permission':
+                    notification("You are not authorized to change the dictionary", "orange")
+                    break
+                }
+              }
+            }
+          } catch {
+            notification("Check your internet connection and try again.")
+          }
+          
+
+          add_package_button.disabled = false          
+          spinner(false)
+        }
+
+      }
+
+
+      async function start_vp_training(package_id){
+        
+        spinner(true)
+
+        let form_data = new FormData()
+        form_data.append("duration", "60")
+        form_data.append("package", package_id)
+        form_data.append("csrfmiddlewaretoken", "{{ csrf_token }}")
+
+        try {
+          let request = await fetch(
+            '/api/dictionary/training/',
+            {
+              method: 'POST',
+              body: form_data
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+
+            location.href = `/dictionary/exams/${response.exam_id}/`
+            
+          } else {
+            console.log(response.errors)
+            for (let i = 0; i < response.errors.length; i++){
+              switch (response.errors[i]){
+                              
+                case 'duration':
+                  notification("Exam duration seems to be invalid. Please change it.", "orange")
+                  break
+                
+                case 'package':
+                  notification("Exam package seems to be invalid. Please change it.", "orange")
+                  break
+                
+                case 'ongoing':
+                  force_redirect(response.errors[1])
+                  break
+              }
+            }
+          }
+        } catch {
+          notification("Check your internet connection and try again.")
+        }
+
+        spinner(false)
+
+      }
+
+
+      let reading_title = document.getElementById('reading_title')
+      let reading_level = document.getElementById('reading_level')
+      let start_reading_button = document.getElementById('start_reading_button')
+
+      start_reading_button.addEventListener('click', async function(){
+        if (reading_title.value.length < 5){
+          notification('Please enter a longer topic', "orange")
+        } else if (reading_level.value == ''){
+          notification('Choose level', "orange")
+        }
+        
+        else {
+          spinner(true)
+          start_reading_button.disabled = true
+
+          try {
+            let request = await fetch(
+              '/api/reading/texts/',
+              {
+                method: 'POST',
+                body: new FormData(form_start_reading)
+              }
+            )
+            let response = await request.json()
+
+            if (response.message == 'success'){
+              
+              location.href = `/reading/texts/${response.rt}/`
+
+            } else {
+              for (let i = 0; i < response.errors.length; i++){
+                switch (response.errors[i]){
+                                
+                  case 'length':
+                    notification("Topic length should be 15-50 characters.", "orange")
+                    break
+                  
+                  case 'level':
+                    notification("Choose level", "orange")
+                    break
+                  
+                  case 'system':
+                    notification("Too many attempts. Please try again later.", "orange")
+                    break
+                }
+              }
+            }
+          } catch {
+            notification("Check your internet connection and try again.")
+          }
+          
+
+          start_reading_button.disabled = false          
+          spinner(false)
+        }
+
+      })
+
+
+      let is_last_read = false
+    
+      async function get_last_read(package_id){
+        
+        if (is_last_read){
+          return
+        }
+        spinner(true)
+
+        try {
+          let request = await fetch(
+            '/api/reading/texts/last/',
+            {
+              method: 'GET',
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+
+            let last_read_div = document.getElementById("last_read_div")
+            let last_read_date = document.getElementById("last_read_date")
+            let last_read_title = document.getElementById("last_read_title")
+            let last_read_btn = document.getElementById("last_read_btn")
+            
+            last_read_date.innerText = calculateTimePassed(response.rt.date_created)
+            last_read_title.innerText = response.rt.title
+            last_read_btn.addEventListener("click", function(){
+              location.href = `/reading/texts/${response.rt.id}/`
+            })
+            last_read_div.classList.remove("d-none")
+
+          }
+          is_last_read = true
+        } catch {
+          notification("Check your internet connection and try again.")
+        }
+
+        spinner(false)
+
+      }
+
+      
+      let is_recent_rts = false
+
+      async function get_recent_rts(package_id){
+        
+        if (is_recent_rts){
+          return
+        }
+        spinner(true)
+
+        try {
+          let request = await fetch(
+            '/api/reading/texts/',
+            {
+              method: 'GET',
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+            let recent_rts_main = document.getElementById("recent_rts_main")
+
+            for (let i = 0; i < response.data.length; i++){
+              let rt = response.data[i]
+
+              recent_rts_main.innerHTML += `
+              <div class="list-group mt-2">
+                <a class="list-group-item list-group-item-action bg-dark" aria-current="true">
+                  <div class="d-flex w-100 justify-content-between">
+                    <small class="text-light">${rt.level} level</small>
+                    <small class="text-light">${calculateTimePassed(rt.date_created)}</small>
+                  </div>
+                  <h5 class="mb-1 text-light" id="last_read_title">
+                    ${rt.title}
+                  </h5>
+                  <p class="mb-1 btn btn-sm fw-bold btn-light mt-2" onclick="location.href = '/reading/texts/${rt.id}/'">
+                    Read
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16" style="vertical-align: text-bottom;">
+                      <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+                      <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+                    </svg>
+                  </p>
+                </a>
+              </div>
+              `
+            }
+
+          }
+          is_recent_rts = true
+        } catch {
+          notification("Check your internet connection and try again.")
+        }
+
+        spinner(false)
+
+      }
+
+
+      async function force_redirect(exam) {
+        
+        let redirect_modal = document.getElementById("redirect_modal")
+        document.getElementById("force_redirect_a").href = `/dictionary/exams/${exam.id}/`
+        document.getElementById("force_redirect_btn").innerText = `(${exam.title})`
+        let modal = bootstrap.Modal.getOrCreateInstance(redirect_modal)
+        modal.show()
+
+      }
+
+      let current_tab = 'info_tab'
+      
+      let info_tab_button = document.getElementById('info_tab_button')
+      let edit_tab_button = document.getElementById('edit_tab_button')
+      let settings_tab_button = document.getElementById('settings_tab_button')
+      let info_tab = document.getElementById('info_tab')
+      let edit_tab = document.getElementById('edit_tab')
+      let settings_tab = document.getElementById('settings_tab')
+
+      const tabs = [info_tab, edit_tab, settings_tab]
+      const tab_buttons = [info_tab_button, edit_tab_button, settings_tab_button]
+
+      function change_tab(chosen_tab){
+
+        for (let i = 0; i < tabs.length; i++){
+          let tab = tabs[i]
+          let tab_button = tab_buttons[i]
+
+          tab_button.classList.remove('btn-light')
+
+          tab_button.classList.remove('text-dark')
+          tab_button.classList.add('text-light')
+
+          tab.classList.add('d-none')
+        }
+
+        let tab = document.getElementById(chosen_tab)
+        let tab_button = document.getElementById(`${chosen_tab}_button`)
+
+        tab_button.classList.add('btn-light')
+
+        tab_button.classList.add('text-dark')
+        tab_button.classList.remove('text-light')
+
+        tab.classList.remove('d-none')
+
+        if (chosen_tab == "edit_tab"){
+          get_last_read()
+        } else if (chosen_tab == "settings_tab"){
+          get_recent_rts()
+        }
+
+      
+      }
+    
+    </script>
+</body>
+</html>

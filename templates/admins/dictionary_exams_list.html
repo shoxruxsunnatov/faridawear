@@ -1,0 +1,527 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary exams</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: "Montserrat",  sans-serif;
+          color: white;
+          font-size: x-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+
+    <div class="container-sm">
+        <section class="vh-100">
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <h3 class="page-name">
+                  Dictionary exams
+                </h3>
+                <div class="col-md-9 col-lg-6 col-xl-6" style="height: 100%;">
+                  <!-- 1 -->
+                  <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="width: 100%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                    Schedule exam
+                  </a>
+                  <div class="collapse" id="collapseExample">
+                    <form id="form_register" method="post" onsubmit="return false">
+                      <ul class="list-group">
+                        
+                        <li class="list-group-item justify-content-between align-items-start contact bg-transparent p-0" data-bs-theme="dark">
+                          <div class="row g-2">
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="text" class="form-control text-light  border-0" id="title" name="title" placeholder="0"  style="background: black;" onclick="this.select()" value="Dictionary Exam">
+                                <label for="days-input">Title</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row g-2 mt-1">
+                            <p class="m-0 mt-1">Start time</p>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <select class="form-select text-light border-0" id="start_hour" name="start_hour" style="background: black;">
+                                  <option value="">Choose hour</option>
+                                  <option value="0">00</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                                  <option value="14">14</option>
+                                  <option value="15">15</option>
+                                  <option value="16">16</option>
+                                  <option value="17">17</option>
+                                  <option value="18">18</option>
+                                  <option value="19">19</option>
+                                  <option value="20">20</option>
+                                  <option value="21">21</option>
+                                  <option value="22">22</option>
+                                  <option value="23">23</option>
+                                </select>
+                                <label for="hours-input">Hour</label>
+                              </div>
+                              <p class="m-0 ms-1 text-primary" onclick="set_current_time()">Set now</p>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <select class="form-select text-light border-0" id="start_minute" name="start_minute" style="background: black;">
+                                  <option value="">Choose minute</option>
+                                  <option value="0">00</option>
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                  <option value="9">9</option>
+                                  <option value="10">10</option>
+                                  <option value="11">11</option>
+                                  <option value="12">12</option>
+                                  <option value="13">13</option>
+                                  <option value="14">14</option>
+                                  <option value="15">15</option>
+                                  <option value="16">16</option>
+                                  <option value="17">17</option>
+                                  <option value="18">18</option>
+                                  <option value="19">19</option>
+                                  <option value="20">20</option>
+                                  <option value="21">21</option>
+                                  <option value="22">22</option>
+                                  <option value="23">23</option>
+                                  <option value="24">24</option>
+                                  <option value="25">25</option>
+                                  <option value="26">26</option>
+                                  <option value="27">27</option>
+                                  <option value="28">28</option>
+                                  <option value="29">29</option>
+                                  <option value="30">30</option>
+                                  <option value="31">31</option>
+                                  <option value="32">32</option>
+                                  <option value="33">33</option>
+                                  <option value="34">34</option>
+                                  <option value="35">35</option>
+                                  <option value="36">36</option>
+                                  <option value="37">37</option>
+                                  <option value="38">38</option>
+                                  <option value="39">39</option>
+                                  <option value="40">40</option>
+                                  <option value="41">41</option>
+                                  <option value="42">42</option>
+                                  <option value="43">43</option>
+                                  <option value="44">44</option>
+                                  <option value="45">45</option>
+                                  <option value="46">46</option>
+                                  <option value="47">47</option>
+                                  <option value="48">48</option>
+                                  <option value="49">49</option>
+                                  <option value="50">50</option>
+                                  <option value="51">51</option>
+                                  <option value="52">52</option>
+                                  <option value="53">53</option>
+                                  <option value="54">54</option>
+                                  <option value="55">55</option>
+                                  <option value="56">56</option>
+                                  <option value="57">57</option>
+                                  <option value="58">58</option>
+                                  <option value="59">59</option>
+                                </select>
+                                <label for="minutes-input">Minute</label>
+                              </div>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <select class="form-select text-light border-0" id="duration" name="duration" style="background: black;">
+                                  <option value="">Choose duration</option>
+                                  <option value="10">10 minutes</option>
+                                  <option value="20">20 minutes</option>
+                                  <option value="30">30 minutes</option>
+                                  <option value="40">40 minutes</option>
+                                  <option value="50">50 minutes</option>
+                                  <option value="60" selected>60 minutes</option>
+                                  <option value="70">70 minutes</option>
+                                  <option value="80">80 minutes</option>
+                                  <option value="90">90 minutes</option>
+                                  <option value="100">100 minutes</option>
+                                  <option value="110">110 minutes</option>
+                                  <option value="120">120 minutes</option>
+                                </select>
+                                <label for="hours-input">Duration</label>
+                              </div>
+                            </div>
+                            <div class="col-md">
+                              <div class="form-floating bg-dark">
+                                <input  type="number" class="form-control text-light border-0" id="max_sessions" name="max_sessions" placeholder="0"  style="background: black;" value="1">
+                                <label for="days-input">Max participants</label>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row g-2 mt-1" id="topic_field">
+                            <div class="form-floating">
+                              <select class="form-select text-light border-0" id="package" name="package" style="background: black;">
+                                <option value="">Choose package</option>
+                                <option value="optional_student">Optional (from students' vocabulary)</option>
+                                <option value="optional_supervisor">Optional (from platform's dictionary)</option>
+                                
+                              </select>
+                              <label for="hours-input">Vocabulary package</label>
+                            </div>
+                          </div>
+                        </li>
+                        <li class="list-group-item justify-content-between align-items-start contact bg-transparent">
+                          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button id="savebutton" class="btn btn-light" type="save" style="width: 160px;margin: auto;">Save</button>
+                          </div>
+                        </li>
+                      </ul>
+                    </form>
+                    <br>
+                  </div>
+
+                  <div id="main"class="accordion accordion-flush mt-1">
+                    <!-- Don't touch -->
+                  </div>
+                </div>
+
+                
+
+              </div>
+            </div>
+            
+          </section>
+              
+    </div>
+
+    <!-- Modal -->
+    <button id="trigger_modal_topic" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit topic</h1>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            <form method="post" id="modal_topic_form">
+              <li class="list-group-item justify-content-between align-items-start" data-bs-theme="dark">
+                <div class="row g-2">
+
+
+                  <div class="col-md">
+                    <div class="form-floating bg-dark">
+                      <input type="hidden" id="modal_topic_id">
+                      <input type="text" class="form-control text-light" id="modal_topic_title" name="title" onclick="this.select()" placeholder="0" style="background: black;">
+                      <label for="days-input">Name</label>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-floating bg-dark">
+                      <input type="number" class="form-control text-light" id="modal_topic_index" name="index" onclick="this.select()" placeholder="0" style="background: black;">
+                      <label for="days-input">Index</label>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button id="modal_topic_savebutton" type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+      <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+        <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+   
+    <script>
+      let savebutton = document.getElementById('savebutton')
+      let title = document.getElementById('title')
+      let start_hour = document.getElementById('start_hour')
+      let start_minute = document.getElementById('start_minute')
+      let duration = document.getElementById('duration')
+      let max_sessions = document.getElementById('max_sessions')
+      let package = document.getElementById('package')
+
+      let main = document.getElementById('main')
+
+      let packages = {}
+      function clean_text(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+      
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+      function calculateTimePassed(startDate) {
+          // Calculate the time difference in milliseconds
+          const currentDate = new Date()
+          startDate = new Date(startDate)
+          const timeDifference = currentDate.getTime() - startDate.getTime();
+          
+          // Convert milliseconds to minutes, hours, and days
+          const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+          const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+          const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+          
+          // Check which unit to use for the result
+          if (minutesPassed < 60) {
+              return `${minutesPassed}m`;
+          } else if (hoursPassed < 24) {
+              return `${hoursPassed}h`;
+          } else {
+              return `${daysPassed}d`;
+          }
+      }
+      
+
+      async function load_packages(){
+        spinner(true)
+
+
+        let request = await fetch('/api/dictionary/packages/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+          packages[response[i].id] = response[i]
+          package.innerHTML += `
+            <option value="${response[i].id}">${response[i].title}</option>
+          `
+        }
+
+        spinner(false)
+      }
+      load_packages()
+
+      async function load_exams(){
+        spinner(true)
+
+        main.innerHTML = ''
+
+        let request = await fetch('/api/dictionary/exams/')
+        let response = await request.json()
+
+        for (let i = 0; i < response.length; i++){
+          main.innerHTML += `
+            <div id="student${response[i].id}" class="accordion-item bg-dark text-light rounded-4 border-dark">
+              <h2 class="accordion-header" id="i${response[i].id}">
+                <button class="accordion-button collapsed text-light rounded-4" style="background: black;" type="button" data-bs-toggle="collapse" onclick="location.href = '${response[i].id}/'">
+                  <span class="me-2 badge text-bg-secondary">${i + 1}</span>
+                  ${clean_text(response[i].title)}
+                  <span class="time-passed">${calculateTimePassed(response[i].date_created)} ago</span>
+                </button>
+              </h2>
+            </div>
+          `
+        }
+        title.value = `Dictionary Exam ${response.length + 1}`
+
+        spinner(false)
+      }
+      load_exams()
+
+      savebutton.addEventListener('click', async function(){
+        if (title.value.length < 3){
+          notification('Exam title must be at least 3 characters long.', "orange")
+        } else if (start_hour.value == ''){
+          notification('Choose starting hour', "orange")
+        } else if (start_minute.value == ''){
+          notification('Choose starting minute', "orange")
+        } else if (duration.value == ''){
+          notification('Choose duration', "orange")
+        } else if (max_sessions.value == ''){
+          notification('Enter max participants', "orange")
+        } else if (package.value == ''){
+          notification('Choose package', "orange")
+        }
+        
+        else {
+          spinner(true)
+          savebutton.disabled = true
+
+          let request = await fetch(
+            '/api/dictionary/exams/',
+            {
+              method: 'POST',
+              body: new FormData(form_register)
+            }
+          )
+          let response = await request.json()
+
+          if (response.message == 'success'){
+            title.value = ''
+            start_hour.value = ''
+            start_minute.value = ''
+            package.value = ''         
+            load_exams()
+          } else {
+            for (let i = 0; i < response.errors.length; i++){
+              switch (response.errors[i]){
+                case 'title':
+                  notification("Title must be at least 5 characters long. (Max 200 chars)", "orange")
+                  break
+                
+                case 'start_hour':
+                  notification("Starting hour seems to be invalid. Please change it.", "orange")
+                  break
+                
+                case 'start_minute':
+                  notification("Starting minute seems to be invalid. Please change it.", "orange")
+                  break
+                
+                case 'start_date':
+                  notification("Exam cannot be scheduled in the past. Please change it.", "orange")
+                  break
+                
+                case 'duration':
+                  notification("Exam duration seems to be invalid. Please change it.", "orange")
+                  break
+                
+                case 'max_sessions':
+                  notification("Max participants should be in between 1 and 1000. Please change it.", "orange")
+                  break
+                
+                case 'package':
+                  notification("Vocabulary package you chose seems to be invalid. Please change it.", "orange")
+                  break
+              }
+            }
+          }
+          
+
+          savebutton.disabled = false          
+          spinner(false)
+        }
+
+      })
+
+      function set_current_time() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + 1);
+
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+
+        start_hour.value = hours
+        start_minute.value = minutes
+      }
+    </script>
+</body>
+</html>

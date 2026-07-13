@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite School</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: sans-serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        .main-paragraph {
+          font-style: italic;
+          font-size: medium;
+        }
+        .pp {
+          font-style: normal;
+        }
+        .register-button {
+          width: 200px;
+          display: block;
+          margin: auto;
+        }
+        a {
+          text-decoration: none;
+        }
+        iframe {
+          margin: 50px auto 0 auto;
+        }
+        @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap');
+
+        button:focus,
+        input:focus{
+          outline: none;
+          box-shadow: none;
+        }
+        a,
+        a:hover{
+          text-decoration: none;
+        }
+
+        body{
+          font-family: 'Roboto', sans-serif;
+        }
+
+        /*------------------  */
+        .otp-form-group{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .otp-inputbar{
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            text-align: center;
+            margin-right: 10px;
+            font-size: 25px;
+            color: #333;
+            text-transform: uppercase;
+            font-family: monospace;
+            font-weight: bold;
+
+        }
+        #errmsg
+        {
+        color: red;
+        }
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="logo navbar-brand" href="/">ELITESCHOOL</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+            <div class="offcanvas-header">
+              <h5 class="logo offcanvas-title" id="offcanvasDarkNavbarLabel">ELITESCHOOL</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" aria-current="page" href="{% url 'main:about' %}">About</a>
+                </li>
+              </ul>
+              
+              
+            </div>
+          </div>
+        </div>
+    </nav>
+
+    
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-12 mt-5">
+          <div class="form-group text-center">
+            <h3 class="text-light text-center">Enter your access code</3>
+            <div class="form-group-input otp-form-group p-5">
+              <input type="number" minlength="1" maxlength="1" class="form-control otp-inputbar">
+              <input type="number" minlength="1" maxlength="1" class="form-control otp-inputbar">
+              <input type="number" minlength="1" maxlength="1" class="form-control otp-inputbar">
+              <input type="number" minlength="1" maxlength="1" class="form-control otp-inputbar">
+              <input type="number" minlength="1" maxlength="1" class="form-control otp-inputbar">
+              <input type="number" minlength="1" maxlength="1" class="form-control otp-inputbar">
+            </div>
+            <h6 class="text-center mb-5" style="font-family: monospace; color: lightgray;">Your access code will be provided by your teacher or administrator.</h6>
+            <a href="{% url 'main:login' %}" class="mt-5">
+              <button type="button" class="btn btn-light" style="margin: auto;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                  <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+                </svg>
+                Back to Login
+              </button>
+            </a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <form method="post" class="d-none" id="form">
+      <input type="hidden" name="access_code" id="access_code">
+    </form>
+
+    <div id="errmsg" class="text-center"></div>
+
+        <!-- Spinner -->
+        <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+          <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        
+        <!-- Button trigger modal -->
+        <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+          Launch demo modal
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+          <div class="modal-dialog ">
+            <div class="modal-content">
+              <div class="modal-header" style="border: 0;">
+                <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+    <script>
+      let inputs = document.getElementsByClassName('otp-inputbar')
+      let form = document.getElementById('form')
+
+      let access_code = document.getElementById('access_code')
+      function get_access_code(){
+        access_code.value = ''
+        for (let i = 0; i < inputs.length; i++){
+          access_code.value += inputs[i].value
+        }
+      }
+
+      function clear_inputs(){
+        for (let i = 0; i < inputs.length; i++){
+          inputs[i].value = ''
+        }
+      }
+      // Handle navigation between input fields
+      document.querySelectorAll('.otp-inputbar').forEach(function(input) {
+          input.addEventListener('keydown', function(e) {
+              var keyID = e.keyCode;
+              // Move to the next input if there's a value
+              if (this.value && keyID !== 8 && keyID !== 46) {
+                  var nextInput = this.nextElementSibling;
+                  if (nextInput && nextInput.classList.contains('otp-inputbar')) {
+                      nextInput.focus();
+                  }
+              }
+
+              // Handle backspace or delete to clear and move to the previous input
+              if (keyID === 8 || keyID === 46) { // Backspace or Delete
+                  this.value = "";  // Clear current input
+                  var prevInput = this.previousElementSibling;
+                  if (prevInput && prevInput.classList.contains('otp-inputbar')) {
+                      prevInput.focus();
+                  }
+              }
+          });
+      });
+
+      let pending = false
+
+      setInterval(async function(){
+        if (!pending){
+          get_access_code()
+          if (access_code.value.length == 6){
+            pending = true
+            spinner(true)
+
+            let request = await fetch(`/api/otp-login/`, {
+              method: 'POST',
+              body: new FormData(form)
+            })
+            let response = await request.json()
+
+            if (response.message == 'success'){
+              location.href = '/profile/'
+            } else {
+              clear_inputs()
+              spinner(false)
+              notification("Access code is not found", "red")
+              pending = false
+            }
+
+          }
+        }
+      }, 500)
+      
+      function spinner(display){
+        let spinner_element = document.getElementById('spinner')
+        switch (display){
+          case true:
+            spinner_element.setAttribute('style', 'display: block')
+            break
+          case false:
+            spinner_element.setAttribute('style', 'display: none!important')
+            break
+        }
+      }
+      
+      function notification(message, color){
+        let modal_trigger = document.getElementById('modal-trigger')
+        let modal_text = document.getElementById('modal-text')
+
+        modal_text.style.color = color
+        modal_text.innerText = message
+        modal_trigger.click()
+      }
+
+
+    </script>
+
+    <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+</body>
+</html>

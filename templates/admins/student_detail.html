@@ -1,0 +1,636 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ student.get_full_name }}</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: Garamond, serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+    </style>
+</head>
+<body>
+  {% include 'teachers/navbar.html' %}
+
+  <section style="background-color: #eee;">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center p-2">
+              <img src="{% static 'assets/img/profile.png' %}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+              <h5 class="my-3">{{ student.first_name }} {{ student.last_name }}</h5>
+              <p class="text-muted mb-1">{{ student.username }}</p>
+              <p class="text-muted mb-4">{{ student.role }}</p>
+
+              <div class="d-flex justify-content-center mb-0">
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary mb-0">{{ student.get_grammar_level_display }}</button>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+              <ul class="list-group list-group-flush rounded-3">
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                  <a href="{% url 'teachers:student_results' student.id %}" style="width: 100%;">
+                    <button type="button" class="btn btn-dark" style="width: 100%;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16" style="vertical-align: middle;">
+                        <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
+                      </svg>
+                      Results
+                    </button>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8" id="info_field">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <button class="nav-link fw-bold active text-dark" id="info_tab_button" onclick="change_tab('info')" disabled>Information</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link text-dark fw-bold" id="edit_tab_button" onclick="change_tab('edit')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square me-1" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                </svg>
+                Edit
+              </button>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'payment:teacher_student_payment' student.id %}" class="text-decoration-none">
+                <button class="nav-link text-white fw-bold bg-dark">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card-fill me-1" viewBox="0 0 16 16">
+                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1H0zm0 3v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7zm3 2h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1"/>
+                  </svg>
+                  Payment
+              </button>
+              </a>
+            </li>
+          </ul>
+          <div class="card mb-4" id="info_tab">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Full name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="mb-0">{{ student.get_full_name }}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Phone 1</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class=" mb-0">{{ student.phone1 }}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Phone 2</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class=" mb-0">{{ student.phone2 }}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Details</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class=" mb-0">{{ student.details }}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Organization</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="mb-0">{{ student.organization.title }}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Group</p>
+                </div>
+                <div class="col-sm-9">
+                  <a href="/teacher/groups/{{ student.group.id }}/" class="badge text-bg-primary text-decoration-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" wdith="20" height="20" fill="currentColor" class="bi bi-people-fill me-1" viewBox="0 0 16 16">
+                      <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"></path>
+                    </svg>
+                    {{ student.group.title }}
+                  </a>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Login</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class=" mb-0">{{ student.username }}</p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Date joined</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="mb-0">{{ student.date_joined|date }}</p>
+                </div>
+              </div>
+                
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary float-end" onclick="show_access_modal()">                    
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link-45deg" viewBox="0 0 16 16">
+                        <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/>
+                        <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/>
+                    </svg>
+                    Access
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="card mb-4 d-none" id="edit_tab">
+            <div class="card-body">
+              <div class="row mb-1">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Last name</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control text-light bg-dark" id="last_name" name="last_name" onclick="this.select()" value="{{ student.last_name }}">
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">First name</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control text-light bg-dark" id="first_name" name="last_name" onclick="this.select()" value="{{ student.first_name }}">
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Phone 1</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control text-light bg-dark" id="phone1" name="last_name" onclick="this.select()" value="{{ student.phone1 }}">
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Phone 2</p>
+                </div>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control text-light bg-dark" id="phone2" name="last_name" onclick="this.select()" value="{{ student.phone2 }}">
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-sm-3">
+                  <p class="text-muted mb-0">Details</p>
+                </div>
+                <div class="col-sm-9">
+                  <textarea rows="5" class="form-control text-light bg-dark" id="details" name="last_name" onclick="this.select()">{{ student.details }}</textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button id="save_button" type="button" class="btn btn-primary me-1" onclick="save_edit()">Save</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row d-none">
+            <div class="col-md-6">
+              <div class="card mb-4 mb-md-0">
+                <div class="card-body">
+                  <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
+                  </p>
+                  <p class="mb-1" style="font-size: .77rem;">Web Design</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
+                  <div class="progress rounded mb-2" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card mb-4 mb-md-0">
+                <div class="card-body">
+                  <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
+                  </p>
+                  <p class="mb-1" style="font-size: .77rem;">Web Design</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
+                  <div class="progress rounded" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
+                  <div class="progress rounded mb-2" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
+                      aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="access_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Access codes</h1>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+              <form method="post" id="modal_topic_form">
+              <li class="list-group-item justify-content-between align-items-start" data-bs-theme="dark">
+                  <div class="row g-2">
+  
+  
+                  <div class="col-md">
+                      <div class="form-floating bg-dark">
+                      <input type="text" class="form-control text-light" id="access_code_input" name="title" disabled placeholder="0" style="background: black;font-family: monospace;text-align: center;font-size: x-large;">
+                      <label for="days-input">This code only lasts 30 minutes</label>
+                      </div>
+                  </div>
+                  </div>
+              </li>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          </div>
+      </div>
+    </div>
+        
+    
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+    <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+    Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+  </section>
+
+
+  <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <script>
+    let savebutton = document.getElementById('savebutton')
+    let main = document.getElementById('main')
+    let level = document.getElementById('level')
+    let topic_title = document.getElementById('topic_title')
+
+    let first_name = document.getElementById('first_name')
+    let last_name = document.getElementById('last_name')
+    let phone1 = document.getElementById('phone1')
+    let phone2 = document.getElementById('phone2')
+    let details = document.getElementById('details')
+
+
+    let topics = {}
+    const student_id = location.pathname.split('/')[2]
+    let access_code_input = document.getElementById('access_code_input')
+
+    
+    function spinner(display){
+      let spinner_element = document.getElementById('spinner')
+      switch (display){
+        case true:
+          spinner_element.setAttribute('style', 'display: block')
+          break
+        case false:
+          spinner_element.setAttribute('style', 'display: none!important')
+          break
+      }
+    }
+    
+    function notification(message, color){
+      let modal_trigger = document.getElementById('modal-trigger')
+      let modal_text = document.getElementById('modal-text')
+
+      modal_text.style.color = color
+      modal_text.innerText = message
+      modal_trigger.click()
+    }
+
+    function clean_text(text) {
+      return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+    
+    async function load_access_code(){
+      let request = await fetch(`/api/students/${student_id}/access-code/`)
+      let response = await request.json()
+
+      access_code_input.value = response.code
+
+    }
+
+    // savebutton.addEventListener('click', async function(){
+    //   if (level.value.length == ''){
+    //     notification('Choose the level to generate tests.', "orange")
+    //     level.focus()
+    //   } else {
+    //     spinner(true)
+    //     savebutton.disabled = true
+
+    //     let request = await fetch(
+    //       `/api/teacher/topics/${topic_id}/`,
+    //       {
+    //         method: 'POST',
+    //         body: new FormData(form_register)
+    //       }
+    //     )
+    //     let response = await request.json()
+
+    //     if (response.message == 'success'){
+    //       level.value = ''
+    //       load_tests(response.tests)
+          
+    //     } else {
+    //       console.log(response.errors)
+    //       for (let i = 0; i < response.errors.length; i++){
+    //         switch (response.errors[i]){
+    //           case 'level':
+    //             notification("Choose the level to generate tests.", "orange")
+    //             break
+              
+    //         }
+    //       }
+    //     }
+        
+
+    //     savebutton.disabled = false          
+    //     spinner(false)
+    //   }
+
+    // })
+
+
+    let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('access_modal'))
+    function show_access_modal(){
+        if (access_code_input.value == ''){
+            spinner(true)
+            load_access_code()
+            spinner(false)
+        }
+        modal.show()
+    }
+
+    // document.getElementById('modal_topic_savebutton').addEventListener('click', async function(){
+
+    //   let id = parseInt(document.getElementById('modal_topic_id').value)
+    //   let title = document.getElementById('modal_topic_title')
+    //   let index = document.getElementById('modal_topic_index')
+    //   let form = document.getElementById('modal_topic_form')
+
+    //   if (title.value.length < 5){
+    //     notification('Topic must be at least 5 characters long.', "orange")
+        
+    //     title.focus()
+    //   } else {
+    //     spinner(true)
+
+    //     let request = await fetch(
+    //       `/api/teacher/topics/${id}/`,
+    //       {
+    //         method: 'POST',
+    //         body: new FormData(form)
+    //       }
+    //     )
+    //     let response = await request.json()
+
+    //     if (response.message == 'success'){
+    //       modal.hide()
+    //       load_topics()
+    //     } else {
+
+    //       for (let i = 0; i < response.errors.length; i++){
+    //         switch (response.errors[i]){
+    //           case 'title':
+    //             notification("Topic must be at least 5 characters long. (Max 200 chars)", "orange")
+    //             break
+              
+    //           case 'index':
+    //             notification("Index must be a number.", "orange")
+    //             break
+    //         }
+    //       }
+    //     }
+        
+    //     spinner(false)
+    //   }
+
+    // })
+    
+    let current_tab = 'groups'
+    let info_tab_button = document.getElementById('info_tab_button')
+    let edit_tab_button = document.getElementById('edit_tab_button')
+    let info_tab = document.getElementById('info_tab')
+    let edit_tab = document.getElementById('edit_tab')
+
+    function change_tab(tab){
+        switch (tab){
+          case "edit":
+            info_tab_button.classList.remove('active')
+            info_tab_button.disabled = false
+
+            edit_tab_button.classList.add('active')
+            edit_tab_button.disabled = true
+
+            edit_tab.classList.remove('d-none')
+            edit_tab.classList.add('d-block')
+            info_tab.classList.remove('d-block')
+            info_tab.classList.add('d-none')
+
+            current_tab = 'edit'
+            break
+
+          case "info":
+            edit_tab_button.classList.remove('active')
+            edit_tab_button.disabled = false
+
+            info_tab_button.classList.add('active')
+            info_tab_button.disabled = true
+
+            info_tab.classList.remove('d-none')
+            info_tab.classList.add('d-block')
+            edit_tab.classList.remove('d-block')
+            edit_tab.classList.add('d-none')
+
+            current_tab = 'info'
+            break
+        }
+      }
+    
+    
+    async function save_edit(){
+      spinner(true)
+
+      try {
+        let form_data = new FormData()
+        form_data.append('first_name', first_name.value)
+        form_data.append('last_name', last_name.value)
+        form_data.append('phone1', phone1.value)
+        form_data.append('phone2', phone2.value)
+        form_data.append('details', details.value)
+
+        let request = await fetch(`/api/students/${student_id}/edit/`,
+          {
+            method: "POST",
+            body: form_data
+          }
+        )
+        let response = await request.json()
+
+        if (response.message == 'success'){
+          notification("Successfully changed.", "green")
+          location.href = ''
+        } else {
+          for (let i = 0; i < response.errors.length; i++){
+            switch (response.errors[i]){
+              case "first_name":
+                notification("First name should be at least 2 characters long. 2-50", "orange")
+                break
+
+              case "last_name":
+                notification("Last name should be at least 2 characters long. 2-50", "orange")
+                break
+
+              case "phone1":
+                notification("phone1 should be max 50 characters long. 2-50", "orange")
+                break
+
+              case "phone2":
+                notification("phone2 should be max 50 characters long. 2-50", "orange")
+                break
+
+              case "details":
+                notification("Details should be max 300 characters long. 2-300", "orange")
+                break
+            }
+          }
+        }
+      } catch {
+        notification("No internet connection.")
+      }
+
+      spinner(false)
+    }
+  </script>
+</body>
+</html>

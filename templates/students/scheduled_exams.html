@@ -1,0 +1,526 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduled exams</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        .logo {
+            font-family: "Montserrat",  sans-serif;
+            font-size: 24px;
+        }
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+            .h-custom {
+            height: calc(100% - 73px);
+        }
+            @media (max-width: 450px) {
+            .h-custom {
+            height: 100%;
+            }
+        }
+        body {
+          background: rgb(44, 46, 49);
+        }
+        .contact {
+          background: black;
+          color: white;
+          border: 2px solid rgb(44, 46, 49);
+        }
+        .page-name {
+          font-family: Garamond, serif;
+          color: white;
+          font-size: xx-large;
+          text-align: center;
+          margin-top: 10px;
+        }
+        select {
+          flex: 1;
+        }
+        .a-contact {
+          margin: 0;
+        }
+        .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+    </style>
+</head>
+<body>
+  {% include 'students/navbar.html' %}
+
+  <section>
+    <div class="container pt-1">
+      <h1 class="text-body-emphasis text-light text-center" id="page_name">Scheduled exams</h1>
+      
+  
+      <div class="row">
+        <div class="col-lg-4 mb-2">
+          <a class="btn btn-secondary btn-sm" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample" style="width: 100%;border-radius: 5px 5px 0 0!important;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+              <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"></path>
+            </svg>
+            Info
+          </a>
+          <div class="collapse show" id="collapseExample">
+              <ul class="list-group rounded-top" style="border-radius: 0 0 5px 5px!important">
+                
+                <li class="list-group-item justify-content-between align-items-start contact" data-bs-theme="dark">
+                  <div class="row">
+                      <p class="text-light mb-0 fw-bold">
+                        Provided seats
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        <span class="text-muted">
+                          - Students will be provided with devices in the exam room.
+                        </span>
+                      </p>
+                  </div>
+                  <hr>
+                  <div class="row">
+                      <p class="text-light mb-0 fw-bold">
+                        Standard seats
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                        </svg>
+                        <span class="text-muted">
+                          - Students should bring their own devices to participate in an exam. Devices will not be provided by the exam center.
+                        </span>
+                      </p>
+                  </div>
+                </li>
+              </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          
+
+            <div id="main"class="accordion accordion-flush mt-0">
+                <!-- Don't touch -->
+
+            </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="access_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete exam</h1>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ps-1 pe-1">
+            
+            <p class="text-warning text-center m-3 fs-4">
+              Are you sure you want to delete this exam and all results of this exam?
+            </p>
+              
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" onclick="delete_exam()">Delete</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+          </div>
+      </div>
+    </div>
+    
+
+    <!-- Spinner -->
+    <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+    <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+    
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+    Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+        <div class="modal-header" style="border: 0;">
+            <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <a href="" id="view_results" style="display: none;">
+        <button class="btn btn-success btn-lg w-100" style="position: fixed;top: 0;">View results</button>
+    </a>
+  </section>
+
+
+  <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  <script>
+    let main = document.getElementById('main')
+
+    let exam_topic = document.getElementById('exam_topic')
+    let exam_start_date = document.getElementById('exam_start_date')
+    let exam_end_date = document.getElementById('exam_end_date')
+    let exam_author = document.getElementById('exam_author')
+    let exam_date_created = document.getElementById('exam_date_created')
+
+    let page_name = document.getElementById('page_name')
+    let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('access_modal'))
+    let exam_details = document.getElementById('exam_details')
+    let view_results_btn = document.getElementById('view_results')
+
+    let exam = {}
+    const exam_id = location.pathname.split('/')[3]
+
+    function clean_text(text) {
+      return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
+    function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        // Generate a random index from 0 to i
+        const j = Math.floor(Math.random() * (i + 1));
+        
+        // Swap elements at indices i and j
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+    }
+
+    function formatDateTime(date) {
+      date = new Date(date)
+      const hours = (date.getHours() % 12 || 12).toString().padStart(2, '0'); // Convert to 12-hour format
+      const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two-digit minutes
+      const ampm = date.getHours() >= 12 ? 'PM' : 'AM';        
+
+      return `${hours}:${minutes} ${ampm}`;
+
+    }
+
+    function formatDateWeekday(date) {
+      date = new Date(date)
+      const month = date.toLocaleString('en-US', { month: 'long' });
+      const day = date.getDate();
+      const year = date.getFullYear();
+      let weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+      let weekday = date.getDay()
+
+      return `${weekdays[weekday]}, ${month} ${day}`;
+    }
+
+
+    function spinner(display){
+    let spinner_element = document.getElementById('spinner')
+    switch (display){
+    case true:
+        spinner_element.setAttribute('style', 'display: block')
+        break
+    case false:
+        spinner_element.setAttribute('style', 'display: none!important')
+        break
+    }
+    }
+
+    function notification(message, color){
+    let modal_trigger = document.getElementById('modal-trigger')
+    let modal_text = document.getElementById('modal-text')
+
+    modal_text.style.color = color
+    modal_text.innerText = message
+    modal_trigger.click()
+    }
+
+
+    async function load_exam(){
+        spinner(true)
+
+        let request = await fetch(`/api/dictionary/exams/${exam_id}/`)
+        let response = await request.json()
+        exam = response
+
+        page_name.innerText = clean_text(response.title)
+        exam_start_date.innerText = formatDate(response.start_date)
+        exam_end_date.innerText = formatDate(response.end_date)
+        exam_author.innerText = clean_text(response.author)
+        exam_date_created.innerText = formatDate(response.date_created)
+
+
+        if (response.package){
+        exam_topic.innerText = clean_text(response.package)
+
+        } else {
+            exam_topic.innerText = 'Optional'
+        }
+
+        if (response.participated){
+            form_register.remove()
+            notification("You have already participated in this exam.", "orange")
+
+            if (response.exam_session.is_successful){
+                exam_details.innerHTML += `
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-muted mb-0">Points</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-success mb-0 fw-bold">(${response.exam_session.points}/30)</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-success mb-0 fw-bold">Successful</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="mb-0 fw-bold"">${clean_text(response.exam_session.topic)} (${response.exam_session.level} level)</p>
+                    </div>
+                </div>
+                `
+            } else {
+                let reminders = [
+                    "Make an effort not to be such a disappointment next time.",
+                    "Try harder not to be such a failure next time.",
+                    "Do everyone a favor and avoid being such a complete embarrassment next time.",
+                    "Next time, at least try not to be such a waste of space.",
+                    "Maybe you could aim to be less of a total disaster next time.",
+                    "Why not put in a tiny bit of effort next time, instead of being complete disappointment?",
+                    "You should really work on not being such a disappointment to everyone around you.",
+                    "Next time, try not to be such a complete waste of everyone's time.",
+                    "Why even bother if you're just going to be such a colossal failure every time?",
+                    "Do us a favor and avoid showing up next time if you're going to be this useless.",
+                    "If you were aiming to be the worst, congratulations—you've succeeded spectacularly.",
+                    "It's astounding how consistently you manage to disappoint everyone around you.",
+                    "Why even bother if you're just going to be such a colossal failure every time?",
+                    "If you die one day because of your idiocy, it will be counted as natural selection."
+                ]
+                let randomReminder = reminders[Math.floor(Math.random() * reminders.length)];
+
+                exam_details.innerHTML += `
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-muted mb-0">Points</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-danger mb-0 fw-bold">(${response.exam_session.points}/30)</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="text-danger mb-0 fw-bold">Failed</p>
+
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="mb-0 fw-bold"">${response.exam_session.topic} (${response.exam_session.level} level)</p>
+                    </div>
+                </div>
+                <hr>
+                <p class="text-danger text-center fw-bold">${randomReminder}</p>
+
+                `
+            }
+        }
+
+        spinner(false)
+        force_redirect()
+    }
+    // load_exam()
+
+    async function load_room_sessions(){
+        spinner(true)
+
+        let request = await fetch(`/api/schedule/`)
+        let response = await request.json()
+        
+        for (let i = 0; i < response.length; i++){
+
+            let date = response[i]
+            let sessions = ''
+
+            for (let j = 0; j < date.sessions.length; j++){
+              session = date.sessions[j]
+
+              sessions += `
+              <a href="${session.start_time}/" style="text-decoration: none">
+                
+                <h5 class="text-secondary mb-0 fw-bold">At ${formatDateTime(session.start_time)}</h5>
+
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="text-light mb-0 fw-bold">
+                      Provided
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                      </svg>
+                    </p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-info mb-0 fw-bold">${session.provided_seats - session.provided_sessions} seats available</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="text-light mb-0 fw-bold">
+                      Standard
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                      </svg>
+                    </p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-info mb-0 fw-bold">${session.standard_seats - session.standard_sessions} seats available</p>
+                  </div>
+                </div>
+              </a>
+              <hr>
+              `
+            }
+
+            if (date.sessions.length == 0){
+              sessions = `
+              <p class="text-light mb-0 fw-bold text-center">No exam sessions for this date.</p>
+              `
+            }
+
+            main.innerHTML += `
+            <div id="student$1" class="accordion-item bg-dark text-light rounded-3 border-dark">
+                <h2 class="accordion-header" id="i${i}">
+                    <button class="accordion-button collapsed text-light rounded-3 fw-bold" style="background: black;" type="button" data-bs-toggle="collapse" data-bs-target="#body${i}" aria-expanded="false" aria-controls="body${i}">
+                    
+                    ${formatDateWeekday(date.date)}
+                    </button>
+                </h2>
+                <div id="body${i}" class="accordion-collapse collapse rounded-4" aria-labelledby="i${i}" data-bs-parent="#main">
+                    <div class="accordion-body pt-1">
+                      <div class="card-body mt-3">
+                          
+                          ${sessions}
+                        
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            `
+        }
+
+        spinner(false)
+    }
+    load_room_sessions()
+
+
+    function show_access_modal(){
+        modal.show()
+    }
+
+    async function delete_exam(){
+      modal.hide()
+      spinner(true)
+
+      let request = await fetch(`/api/dictionary/exams/${exam_id}/`, {
+        method: 'DELETE'
+      })
+      let response = await request.json()
+
+      if (response.message == 'success'){
+        location.href = '/dictionary/exams/'
+      } else {
+
+        for (let i = 0; i < response.errors.length; i++){
+          switch (response.errors[i]){
+            case "permission":
+              notification("You are not authorized to delete this exam.", "orange")
+              break
+          }
+        }
+      }
+
+      spinner(false)
+    }
+
+
+    async function force_redirect() {
+        
+        let request = await fetch('/api/dictionary/exams/ongoing/')
+        let response = await request.json()
+        if (response.exam){
+            if (response.exam.id == exam_id){
+                exam_topic.innerText = `${response.exam.package}`
+                form_register.remove()
+                load_tests()
+            } else {
+                document.body.innerHTML += `
+                <!-- Force redirect modal -->
+                <div class="modal fade" id="redirect_modal" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 text-warning" id="staticBackdropLabel">Warning</h1>
+                        </div>
+                        <div class="modal-body ps-1 pe-1">
+                        <h6 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-alarm-fill" viewBox="0 0 16 16">
+                                <path d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5m2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.04 8.04 0 0 0 .86 5.387M11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.04 8.04 0 0 0-3.527-3.527"/>
+                            </svg>
+                            You're already participating in an exam. Please, finish your ongoing exam before starting another one.
+                        </h6>
+                        
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/exams/${response.exam.id}/">                            
+                                <button class="btn btn-primary">Continue exam <b>(${response.exam.title})</b></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                `
+                let modal_element = document.getElementById('redirect_modal')
+                let modal = bootstrap.Modal.getOrCreateInstance(modal_element)
+
+                modal.show()
+
+                setInterval(function(){
+                    modal.show()
+                }, 5000)
+                
+            }
+        }
+    }
+
+  </script>
+</body>
+</html>
