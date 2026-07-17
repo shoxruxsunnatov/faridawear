@@ -334,6 +334,7 @@
                   <th>Nomi</th>
                   <th>Sotish narxi</th>
                   <th>Olish narxi</th>
+                  <th>Ustama</th>
                   <th>Zaxira</th>
                 </tr>
               </thead>
@@ -342,10 +343,11 @@
               <thead>
                 <tr>
                   <th class="text-center"></th>
-                  <th class="text-white">O'rtacha marja</th>
+                  <th class="text-white"></th>
                   <th class="text-white">Potensial foyda</th>
                   <th class="text-white">Jami (Sotish narxida)</th>
                   <th class="text-white">Jami (Olish narxida)</th>
+                  <th class="text-white">O'rtacha ustama</th>
                   <th class="text-white">Jami zaxira</th>
                 </tr>
               </thead>
@@ -355,14 +357,18 @@
           </div>
           <div class="d-flex justify-content-center mt-2">
             <div class="btn-group w-100" style="max-width: 400px;" role="group">
-                <button type="button" class="btn btn-dark fw-bold" onclick="page_action('prev')">
+                <button type="button" class="btn btn-dark fw-bold" onclick="page_action('prev')" id="prev_button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill me-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
                       <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
                     </svg>
                     <span style="vertical-align: text-bottom;">Oldingi</span>
                 </button>
 
-                <button type="button" class="btn btn-dark fw-bold" onclick="page_action('next')">
+                <button type="button" class="btn btn-light fw-bold" onclick="page_action('show_all')">
+                    <span style="vertical-align: text-bottom;">Ko'proq ko'rish</span>
+                </button>
+
+                <button type="button" class="btn btn-dark fw-bold" onclick="page_action('next')" id="next_button">
                     <span style="vertical-align: text-bottom;">Keyingi</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill ms-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
                       <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
@@ -474,6 +480,8 @@
     let stock = document.getElementById("stock")
     let serial = document.getElementById("serial")
     let add_button = document.getElementById("add_button")
+    let prev_button = document.getElementById("prev_button")
+    let next_button = document.getElementById("next_button")
 
     let delete_vocabulary_modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('delete_vocabulary_modal'))
     let edit_vocabulary_modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('edit_vocabulary_modal'))
@@ -557,14 +565,16 @@
       return decPart !== null ? `${sign}${withSpaces}.${decPart}` : `${sign}${withSpaces}`;
     }
 
+    const DEFAULT_PER = 30
 
     let response
     let page_number = 1
+    let per = DEFAULT_PER
 
     async function load_products() {
       spinner(true)
 
-      let request = await fetch(`/api/products/?search=${query}&page=${page_number}`)
+      let request = await fetch(`/api/products/?search=${query}&page=${page_number}&per=${per}`)
       response = await request.json()
       page_number = response.page
 
@@ -588,13 +598,22 @@
             `
         }
 
+        let product_margin = 0
+        if (product.sale_price > 0 && product.base_price > 0){
+          product_margin = (product.sale_price - product.base_price) / (product.base_price / 100)
+          margin += product_margin
+        } else {
+          invalid_products ++
+        }
+
         main.innerHTML += `
-          <tr>
+          <tr id="product${product.id}"">
             <th scope="row" class="text-center">${product.serial}</th>
             <th class="text-center">${image}</th>
             <td>${clean_text(product.title)}</td>
             <td class="text-success fw-bold">${formatNumber(product.sale_price)}</td>
             <td class="text-primary fw-bold">${formatNumber(product.base_price)}</td>
+            <td class="text-info fw-bold">${product_margin.toFixed(2)}%</td>
             <td class="fw-bold">${product.stock}</td>
           </tr>
           `
@@ -604,11 +623,7 @@
         sum_base_price += product.base_price * product.stock
         sum_stock += product.stock
 
-        if (product.sale_price > 0 && product.base_price > 0){
-          margin += (product.sale_price - product.base_price) / (product.base_price / 100)
-        } else {
-          invalid_products ++
-        }
+        
       }
 
       let images = document.getElementsByTagName('img')
@@ -626,24 +641,50 @@
       }
 
       main_summary.innerHTML += `
-        <tr>
-          <th scope="row" class="text-center"></th>
-          <th class="text-info fw-bold text-center">${(margin / (response.data.length - invalid_products)).toFixed(2)}%</th>
-          <td class="text-info fw-bold">${formatNumber(sum_sale_price - sum_base_price)}</td>
-          <td class="text-success fw-bold">${formatNumber(sum_sale_price)}</td>
-          <td class="text-primary fw-bold">${formatNumber(sum_base_price)}</td>
-          <td class="fw-bold">${formatNumber(sum_stock)}</td>
-        </tr>
-        `
+      <tr>
+        <th scope="row" class="text-center"></th>
+        <th class="text-info fw-bold text-center"></th>
+        <td class="text-info fw-bold">${formatNumber(sum_sale_price - sum_base_price)}</td>
+        <td class="text-success fw-bold">${formatNumber(sum_sale_price)}</td>
+        <td class="text-primary fw-bold">${formatNumber(sum_base_price)}</td>
+        <td class="text-info fw-bold">${(margin / (response.data.length - invalid_products)).toFixed(2)}%</td>
+        <td class="fw-bold">${formatNumber(sum_stock)}</td>
+      </tr>
+      `
+
+      if (response.has_previous){
+        prev_button.disabled = false
+      } else {
+        prev_button.disabled = true
+      }
+
+      if (response.has_next){
+        next_button.disabled = false
+      } else {
+        next_button.disabled = true
+      }
 
       spinner(false)
     }
     load_products()
 
+
     function page_action(action){
       switch (action){
         case "prev":
           page_number -= 1
+          load_products()
+          break
+        
+        case "next":
+          page_number ++
+          load_products()
+          break
+        
+        case "show_all":
+          per = 1000
+          load_products()
+          break
 
       }
     }
@@ -707,6 +748,10 @@
               case "negative-value":
                 notification("Manfiy qiymatlar kiritish mumkin emas", "red")
                 break
+
+              case "permission":
+                notification("Sizda mahsulotlarni qo'shish huquqi mavjud emas", "orange")
+                break
                 
             }
           }
@@ -735,12 +780,13 @@
         }
 
         if (counter >= 2 && !already_searched) {
+          page_number = 1
+          per = DEFAULT_PER
           load_products()
           counter = 0
           already_searched = true
         }
 
-        console.log()
       }, 400)
     }
     track_query_change()

@@ -61,7 +61,7 @@ class ProductsListViewAPI(CSRFExempt, AdminRoleRequired, View):
         if Product.objects.filter(organization=req.user.organization, serial=serial).exists():
             data["errors"].append("serial-exists")
         
-        if req.user.role != "admin":
+        if req.user.role not in ("admin", "supervisor"):
             data["errors"].append("permission")
             
 
@@ -100,6 +100,7 @@ class ProductsListViewAPI(CSRFExempt, AdminRoleRequired, View):
 
         query = req.GET.get("search", "").strip().lower()
         page = req.GET.get("page", "1")
+        per = req.GET.get("per", 30)
 
         if query:
             data = Product.objects.annotate(
@@ -113,7 +114,11 @@ class ProductsListViewAPI(CSRFExempt, AdminRoleRequired, View):
                 organization=req.user.organization
             ).order_by("serial")
 
-        paginator = Paginator(data, 200)
+        try:
+            paginator = Paginator(data, int(per))
+        except:
+            paginator = Paginator(data, 30)
+
         page_obj = paginator.get_page(page)
 
         data = [
