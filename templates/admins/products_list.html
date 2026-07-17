@@ -258,7 +258,7 @@
           </div>
 
           <div class="collapse mt-1" id="collapseExample2">
-            <form id="form_register" method="post" onsubmit="return false">
+            <form id="form_register" method="post" onsubmit="return false" enctype="multipart/form-data">
               <ul class="list-group">
 
                 <li class="list-group-item justify-content-between align-items-start contact bg-transparent p-0"
@@ -276,14 +276,14 @@
                   <div class="row mt-1">
                     <div class="col-6 pe-1">
                       <div class="form-floating bg-dark">
-                        <input type="number" class="form-control text-light border-0" id="title" name="title"
+                        <input type="text" class="form-control text-light border-0" id="sale_price" name="sale_price"
                           placeholder="0" style="background: black;" onclick="this.select()">
                         <label for="days-input" class="text-success fw-bold">Sotish narxi</label>
                       </div>
                     </div>
                     <div class="col-6 ps-1">
                       <div class="form-floating bg-dark">
-                        <input type="number" class="form-control text-light border-0" id="title" name="title"
+                        <input type="text" class="form-control text-light border-0" id="base_price" name="base_price"
                           placeholder="0" style="background: black;" onclick="this.select()">
                         <label for="days-input" class="text-primary fw-bold">Olish narxi</label>
                       </div>
@@ -292,14 +292,14 @@
                   <div class="row mt-1">
                     <div class="col-6 pe-1">
                       <div class="form-floating bg-dark">
-                        <input type="number" class="form-control text-light border-0" id="title" name="title"
+                        <input type="number" class="form-control text-light border-0" id="stock" name="stock"
                           placeholder="0" style="background: black;" onclick="this.select()">
                         <label for="days-input" class="fw-bold">Zaxira</label>
                       </div>
                     </div>
                     <div class="col-6 ps-1">
                       <div class="form-floating bg-dark">
-                        <input type="number" class="form-control text-light border-0" id="title" name="title"
+                        <input type="number" class="form-control text-light border-0" id="serial" name="serial"
                           placeholder="0" style="background: black;" onclick="this.select()">
                         <label for="days-input" class="fw-bold">Seriya</label>
                       </div>
@@ -353,6 +353,23 @@
               </tbody>
             </table>
           </div>
+          <div class="d-flex justify-content-center mt-2">
+            <div class="btn-group w-100" style="max-width: 400px;" role="group">
+                <button type="button" class="btn btn-dark fw-bold" onclick="page_action('prev')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill me-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
+                      <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                    </svg>
+                    <span style="vertical-align: text-bottom;">Oldingi</span>
+                </button>
+
+                <button type="button" class="btn btn-dark fw-bold" onclick="page_action('next')">
+                    <span style="vertical-align: text-bottom;">Keyingi</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill ms-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
+                      <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
 
         </div>
       </div>
@@ -407,6 +424,21 @@
       </div>
     </div>
 
+    <!-- Button trigger modal -->
+    <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+      Launch demo modal
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog ">
+          <div class="modal-content">
+          <div class="modal-header" style="border: 0;">
+              <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          </div>
+      </div>
+    </div>
+
     <!-- Spinner -->
     <div id="spinner"
       class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"
@@ -428,13 +460,19 @@
   <script>
 
     // document.getElementById('main').innerHTML = items.map(renderRow).join('');
+    const input = document.getElementById("title");
+
     let page_state = 0
 
     let main = document.getElementById('main')
     let main_summary = document.getElementById('main_summary')
 
     let form_register = document.getElementById("form_register")
-    let text = document.getElementById("text")
+    let title = document.getElementById("title")
+    let sale_price = document.getElementById("sale_price")
+    let base_price = document.getElementById("base_price")
+    let stock = document.getElementById("stock")
+    let serial = document.getElementById("serial")
     let add_button = document.getElementById("add_button")
 
     let delete_vocabulary_modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('delete_vocabulary_modal'))
@@ -443,6 +481,14 @@
     let query_input = document.getElementById('query')
     let query = ""
 
+    sale_price.addEventListener("input", function () {
+        let value = this.value.replace(/\D/g, "");
+        this.value = Number(value).toLocaleString('en-US').replace(/,/g, ' ');
+    });
+    base_price.addEventListener("input", function () {
+        let value = this.value.replace(/\D/g, "");
+        this.value = Number(value).toLocaleString('en-US').replace(/,/g, ' ');
+    });
 
     function clean_text(text) {
       return String(text)
@@ -511,23 +557,28 @@
       return decPart !== null ? `${sign}${withSpaces}.${decPart}` : `${sign}${withSpaces}`;
     }
 
+
+    let response
+    let page_number = 1
+
     async function load_products() {
       spinner(true)
 
-      let request = await fetch(`/api/products/?search=${query}`)
-      let response = await request.json()
+      let request = await fetch(`/api/products/?search=${query}&page=${page_number}`)
+      response = await request.json()
+      page_number = response.page
 
-      products = response
       main.innerHTML = ''
       main_summary.innerHTML = ''
 
       let sum_sale_price = 0
       let sum_base_price = 0
       let sum_stock = 0
+      let margin = 0
 
-      for (let i = 0; i < response.length; i++) {
+      for (let i = 0; i < response.data.length; i++) {
 
-        product = response[i]
+        product = response.data[i]
 
         let image = ""
         if (product.image) {
@@ -546,9 +597,12 @@
             <td class="fw-bold">${product.stock}</td>
           </tr>
           `
-        sum_sale_price += parseFloat(product.sale_price) * product.stock
-        sum_base_price += parseFloat(product.base_price) * product.stock
-        sum_stock += parseFloat(product.stock)
+        product.sale_price = parseInt(product.sale_price)
+        product.base_price = parseInt(product.base_price)
+        sum_sale_price += product.sale_price * product.stock
+        sum_base_price += product.base_price * product.stock
+        sum_stock += product.stock
+        margin += (product.sale_price - product.base_price) / (product.base_price / 100)
       }
 
       let images = document.getElementsByTagName('img')
@@ -568,7 +622,7 @@
       main_summary.innerHTML += `
         <tr>
           <th scope="row" class="text-center"></th>
-          <th class="text-info fw-bold text-center">${(((sum_sale_price - sum_base_price) / sum_base_price) * 100).toFixed(2)}%</th>
+          <th class="text-info fw-bold text-center">${(margin / response.data.length).toFixed(2)}%</th>
           <td class="text-info fw-bold">${formatNumber(sum_sale_price - sum_base_price)}</td>
           <td class="text-success fw-bold">${formatNumber(sum_sale_price)}</td>
           <td class="text-primary fw-bold">${formatNumber(sum_base_price)}</td>
@@ -579,6 +633,86 @@
       spinner(false)
     }
     load_products()
+
+    function page_action(action){
+      switch (action){
+        case "prev":
+          page_number -= 1
+
+      }
+    }
+
+
+    add_button.addEventListener('click', async function(){
+      if (title.value.length > 100){
+        notification('Mahsulot nomi juda uzun', "orange")
+      } else if (sale_price.value.replace(/\s/g, '') < 0 || sale_price.value.replace(/\s/g, '').length == 0){
+        notification('Sotish narxini kiriting', "orange")
+      } else if (base_price.value.replace(/\s/g, '') < 0 || base_price.value.replace(/\s/g, '').length == 0){
+        notification('Olish narxini kiriting', "orange")
+      } else if (stock.value.length <= 0){
+        notification('Zaxirani kiriting', "orange")
+      } else if (serial.value.length <= 0){
+        notification('Seriya raqamini kiriting', "orange")
+      } else {
+        spinner(true)
+        add_button.disabled = true
+
+        let request = await fetch(
+          `/api/products/`,
+          {
+            method: 'POST',
+            body: new FormData(form_register)
+          }
+        )
+        let response = await request.json()
+
+        if (response.message == 'success'){
+          notification(`"(${response.serial}) ${clean_text(response.title)}" mahsuloti qo'shildi.`, "green")
+          form_register.reset()
+        } else {
+
+          for (let i = 0; i < response.errors.length; i++){
+            switch (response.errors[i]){
+              case "title":
+                notification("Mahsulot nomi juda uzun", "orange")
+                break
+              
+              case "sale_price":
+                notification("Sotish narxini to'g'ri kiriting", "orange")
+                break
+              
+              case "base_price":
+                notification("Olish narxini to'g'ri kiriting", "orange")
+                break
+              
+              case "stock":
+                notification("Zaxirani to'g'ri kiriting", "orange")
+                break
+
+              case "serial":
+                notification("Seriya raqamini to'g'ri kiriting", "orange")
+                break
+
+              case "serial-exists":
+                notification("Seriya raqami allaqachon mavjud, iltimos boshqa seriya raqamini kiriting", "red")
+                break
+              
+              case "negative-value":
+                notification("Manfiy qiymatlar kiritish mumkin emas", "red")
+                break
+                
+            }
+          }
+        }
+        
+
+        add_button.disabled = false          
+        spinner(false)
+
+      }
+
+    })
 
     let counter = 0
     let is_searching = false
