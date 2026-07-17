@@ -568,8 +568,8 @@
       main_summary.innerHTML += `
         <tr>
           <th scope="row" class="text-center"></th>
-          <th class="text-info fw-bold text-center">${((sum_sale_price - sum_base_price) / sum_base_price) * 100}%</th>
-          <td class="text-white fw-bold">${formatNumber(sum_sale_price - sum_base_price)}</td>
+          <th class="text-info fw-bold text-center">${(((sum_sale_price - sum_base_price) / sum_base_price) * 100).toFixed(2)}%</th>
+          <td class="text-info fw-bold">${formatNumber(sum_sale_price - sum_base_price)}</td>
           <td class="text-success fw-bold">${formatNumber(sum_sale_price)}</td>
           <td class="text-primary fw-bold">${formatNumber(sum_base_price)}</td>
           <td class="fw-bold">${formatNumber(sum_stock)}</td>
