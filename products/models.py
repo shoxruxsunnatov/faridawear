@@ -44,6 +44,12 @@ class Product(models.Model):
     class Meta:
         verbose_name_plural = 'Products'
         ordering = ["title"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organization", "serial"],
+                name="unique_organization_serial"
+            )
+        ]
 
     def __str__(self):
         return f"{self.title} | {self.author}"
