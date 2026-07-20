@@ -237,7 +237,7 @@
                 <input id="query" type="text" class="form-control text-light" placeholder="0"
                   style="background: black; border: 0;border-radius: 5px 0 0 5px;" onclick="this.select()">
                 <label for="query" class="text-light">
-                  Izlash uchun yozing
+                  Qidirish uchun yozing
                 </label>
               </div>
             </div>
@@ -375,7 +375,7 @@
                     </svg>
                 </button>
             </div>
-        </div>
+          </div>
 
         </div>
       </div>
@@ -693,9 +693,9 @@
     add_button.addEventListener('click', async function(){
       if (title.value.length > 100){
         notification('Mahsulot nomi juda uzun', "orange")
-      } else if (sale_price.value.replace(/\s/g, '') < 0 || sale_price.value.replace(/\s/g, '').length == 0){
+      } else if (sale_price.value.replace(/\s/g, '') <= 0 || sale_price.value.replace(/\s/g, '').length == 0){
         notification('Sotish narxini kiriting', "orange")
-      } else if (base_price.value.replace(/\s/g, '') < 0 || base_price.value.replace(/\s/g, '').length == 0){
+      } else if (base_price.value.replace(/\s/g, '') <= 0 || base_price.value.replace(/\s/g, '').length == 0){
         notification('Olish narxini kiriting', "orange")
       } else if (stock.value.length <= 0){
         notification('Zaxirani kiriting', "orange")
@@ -745,8 +745,8 @@
                 notification("Seriya raqami allaqachon mavjud, iltimos boshqa seriya raqamini kiriting", "red")
                 break
               
-              case "negative-value":
-                notification("Manfiy qiymatlar kiritish mumkin emas", "red")
+              case "incorrect-value":
+                notification("Sotish narxi va Olish narxini yozish majburiy.\nZaxira va seriya raqami musbat raqamlar bo'lishi kerak", "orange")
                 break
 
               case "permission":
@@ -787,7 +787,7 @@
           already_searched = true
         }
 
-      }, 400)
+      }, 300)
     }
     track_query_change()
 

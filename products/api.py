@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.db.models import Q, CharField
 from django.db.models.functions import Cast
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from account.security import (
     CSRFExempt,
@@ -67,8 +68,8 @@ class ProductsListViewAPI(CSRFExempt, AdminRoleRequired, View):
 
         if not data["errors"]:
 
-            if sale_price < 0 or base_price < 0 or stock < 0 or serial < 0:
-                data["errors"].append("negative-value")
+            if sale_price <= 0 or base_price <= 0 or stock < 0 or serial < 0:
+                data["errors"].append("incorrect-value")
 
                 return JsonResponse(data, safe=False)
 
@@ -145,3 +146,54 @@ class ProductsListViewAPI(CSRFExempt, AdminRoleRequired, View):
             },
             safe=False
         )
+
+
+class ProductsPOSListViewAPI(CSRFExempt, LoginRequiredMixin, View):
+    
+    def get(self, req, *args, **kwargs):
+
+        query = req.GET.get("search", "").strip().lower()
+        page = req.GET.get("page", "1")
+        per = req.GET.get("per", 10)
+
+        if query:
+            data = Product.objects.annotate(
+                serial_str=Cast("serial", CharField())
+            ).filter(
+                Q(serial_str__icontains=query) | Q(title__icontains=query),
+                organization=req.user.organization
+            ).only("id", "serial", "title", "image", "sale_price", "stock").order_by("serial")
+        else:
+            data = Product.objects.filter(
+                organization=req.user.organization
+            ).only("id", "serial", "title", "image", "sale_price", "stock").order_by("serial")
+
+        try:
+            paginator = Paginator(data, int(per))
+        except:
+            paginator = Paginator(data, 10)
+
+        page_obj = paginator.get_page(page)
+
+        data = [
+            {
+                "id": product.id,
+                "serial": product.serial,
+                "title": product.title,
+                "image": product.image.url if product.image else None,
+                "sale_price": product.sale_price,
+                "stock": product.stock,
+            }
+            for product in page_obj
+        ]
+
+        return JsonResponse(
+            {
+                "data": data,
+                "page": page_obj.number,
+                "has_next": page_obj.has_next(),
+                "has_previous": page_obj.has_previous(),
+            },
+            safe=False
+        )
+

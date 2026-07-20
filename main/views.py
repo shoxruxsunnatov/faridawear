@@ -1,12 +1,8 @@
 from django.contrib.auth.views import LogoutView
 from django.views.generic import TemplateView, View
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
-from django.shortcuts import redirect
-from django.conf import settings
-from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -15,7 +11,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class DashboardView(LoginRequiredMixin, View):
     def get(self, req, *args, **kwargs):
-        return redirect("products:products_list")
+
+        if req.user.role in ("admin", "supervisor"):
+            return render(req, "sales/pos.html")
+
+        elif req.user.role == "sales":
+            return render(req, "sales/pos.html")
 
 class CustomLogoutView(LogoutView):
     next_page = 'main:login'

@@ -4,10 +4,10 @@
 USER_ROLES = (
     ('supervisor', 'Supervisor'),
     ('admin', 'Admin'),
+    ('sales', 'Sales'),
 )
 
-TRANSACTION_TYPE_CHOICE = (
-    ('deposit', 'Deposit'),
-    ('charge-tuition', 'Monthly tuition charge'),
-    ('bonus-dictionary', 'Dictionary bonus')
+PAYMENTS_TYPE_CHOICE = (
+    ('cash', 'Cash'),
+    ('card', 'Card'),
 )

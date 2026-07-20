@@ -1,0 +1,1056 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Savdo - faridawear</title>
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+      .logo {
+          font-family: "Montserrat",  sans-serif;
+          font-size: 24px;
+      }
+      .divider:after,
+      .divider:before {
+          content: "";
+          flex: 1;
+          height: 1px;
+          background: #eee;
+      }
+      .h-custom {
+          height: calc(100% - 73px);
+      }
+      @media (max-width: 450px) {
+          .h-custom {
+          height: 100%;
+          }
+      }
+      body {
+        background: rgb(44, 46, 49);
+      }
+      .contact {
+        background: black;
+        color: white;
+        border: 2px solid rgb(44, 46, 49);
+      }
+      .page-name {
+        font-family: "Montserrat",  sans-serif;
+        color: white;
+        font-size: xx-large;
+        text-align: center;
+        margin-top: 10px;
+      }
+      select {
+        flex: 1;
+      }
+      .a-contact {
+        margin: 0;
+      }
+      .time-passed {
+        color: lightgray;
+        font-size: smaller;
+        position: absolute;
+        right: 45px;
+      }
+      .accordion-item {
+        margin-bottom: 2px;
+      }
+      .accordion-collapse {
+        color: lightgray;
+      }
+
+      .fullscreen-image {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw !important;
+        height: 100vh;
+        object-fit: contain;
+        z-index: 9999;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .img-mini {
+        width: 35px;
+      }
+
+      .img-mini-cart {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .stock-table-wrap {
+        overflow: auto;
+        background: #16181d;
+        border: 1px solid #24272e;
+        border-radius: 0 0 12px 12px;
+      }
+
+      .stock-table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #e6e6e6;
+        font-family: -apple-system, "Segoe UI", sans-serif;
+      }
+
+      .stock-table thead th {
+        text-align: left;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #8a8f98;
+        font-weight: 500;
+        padding: 14px 16px;
+        border-bottom: 1px solid #24272e;
+      }
+
+      .stock-table tbody td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #1e2127;
+        vertical-align: middle;
+      }
+
+      .stock-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      .stock-table tbody tr {
+        transition: background 0.15s ease;
+      }
+
+      .stock-table tbody tr:hover {
+        background: #1c1f26;
+      }
+
+      .stock-table .row-index {
+        color: #6b7078;
+        font-variant-numeric: tabular-nums;
+        width: 36px;
+      }
+
+      .stock-table .product-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        object-fit: cover;
+        border: 1px solid #2a2d34;
+        background: #0e0f12;
+      }
+
+      .stock-table .product-name {
+        font-weight: 500;
+        color: #f2f2f2;
+      }
+
+      .stock-table .price {
+        font-family: "SF Mono", "Cascadia Code", ui-monospace, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stock-table .price-sell {
+        color: #4ade80;
+      }
+
+      .stock-table .price-cost {
+        color: #8a8f98;
+      }
+
+      .product-row {
+          min-height: 40px;
+          align-items: flex-start;
+      }
+
+      .product-id {
+          width: 40px;
+          min-height: 40px;
+          font-size: 16px;
+          text-align: center;
+          background: #000;
+          border-radius: 4px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          white-space: normal;
+          word-break: break-word;
+          overflow-wrap: break-word;
+      }
+
+      .product-title {
+          min-height: 40px;
+          padding: 6px 8px;
+          font-size: 16px;
+          background: #000;
+          border-radius: 4px;
+
+          white-space: normal;
+          word-break: break-word;
+          overflow-wrap: break-word;
+      }
+
+      .product-image {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+          border-radius: 4px;
+          align-self: flex-start;
+      }
+      .cart-item {
+          clear: both;
+          overflow: hidden;
+      }
+    </style>
+</head>
+<body>
+  {% if user.role == "admin" or user.role == "supervisor" %}
+    {% include 'admins/navbar.html' %}
+  {% else %}
+    {% include 'sales/navbar.html' %}
+  {% endif %}
+
+  <div class="container-sm">
+    <section>
+      <div class="container-fluid h-custom p-0">
+
+        <div class="col-lg-8 m-auto mt-1" id="info_field">
+          <div class="nav nav-tabs d-flex">
+            <button class="btn btn-sm btn-light fw-bold text-dark" id="info_tab_button" onclick="change_tab('info_tab')" style="flex: 1;border-radius: 5px 5px 0 0;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-fill me-1" viewBox="0 0 16 16" style="vertical-align: middle;margin-right: 5px">
+                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z"/>
+              </svg>
+              Savat
+            </button>
+            <button class="btn btn-sm text-light fw-bold" id="edit_tab_button" onclick="change_tab('edit_tab');query_input.focus()" style="flex: 1;border-radius: 5px 5px 0 0;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+              </svg>
+              Qidirish
+            </button>
+            <button class="btn btn-sm text-light fw-bold" id="settings_tab_button" onclick="change_tab('settings_tab');load_recent()" style="flex: 1;border-radius: 5px 5px 0 0;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history me-1" viewBox="0 0 16 16">
+                  <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"></path>
+                  <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"></path>
+                  <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"></path>
+              </svg>
+              Oxirgilar
+            </button>
+          </div>
+
+          <div class="mb-4" id="info_tab">
+            <form id="form_register" method="post" onsubmit="return false" enctype="multipart/form-data">
+              <ul class="list-group" id="cart_main">
+
+                <li class="list-group-item contact bg-transparent" style="margin-top: 25%;margin-bottom:5%">
+                  <div class=" justify-content-md-end">
+                    <p class="text-light fw-bold mb-1 d-block text-center">Savat bo'sh. Mahsulotlarni qo'shish uchun</p>
+                    <button class="btn btn-light fw-bold btn-sm m-auto d-block"
+                      style="width: 160px;margin: auto;"
+                      onclick="edit_tab_button.click();query_input.focus()"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1 fw-bold" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                      </svg>
+                      Qidiring</button>
+                  </div>
+                </li>
+              </ul>
+            </form>
+            <div class="card bg-dark">
+              <h5 class="card-header text-light">Jami</h5>
+              <div class="card-body text-light">
+                <h3 class="card-title"><span id="total_sum">0</span> UZS</h3>
+
+                <div class="row mt-1">
+                  <div class="col-6 pe-0">
+                    <div class="form-floating bg-dark">
+                      <input type="text" class="form-control text-light border-0 fw-bold" id="cash_transaction" name="cash_transaction"
+                        placeholder="0" style="background: black;" onclick="this.select()">
+                      <label for="days-input" class="fw-bold">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash-coin me-1" viewBox="0 0 16 16" style="vertical-align: middle;">
+                          <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8m5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0"/>
+                          <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195z"/>
+                          <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083q.088-.517.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1z"/>
+                          <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 6 6 0 0 1 3.13-1.567"/>
+                        </svg>
+                        Naqd pul orqali
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-6 ps-1">
+                    <div class="form-floating bg-dark">
+                      <input type="text" class="form-control text-light border-0 fw-bold" id="card_transaction" name="card_transaction"
+                        placeholder="0" style="background: black;" onclick="this.select()">
+                      <label for="days-input" class="text-light fw-bold">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-credit-card me-1" viewBox="0 0 16 16" style="vertical-align: middle;">
+                          <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+                          <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>
+                        </svg>
+                        Karta orqali
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <button id="add_button" class="btn btn-light fw-bold d-block m-auto mt-3 d-none" type="save">
+                  Savdoni saqlash
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                    <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+                    <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4 d-none bg-transparent border-0" id="edit_tab">
+            
+            <div class="form-floating bg-dark">
+              <input id="query" type="text" class="form-control text-light" placeholder="0"
+                style="background: black; border: 0;border-radius: 5px 0 0 5px;" onclick="this.select()">
+              <label for="query" class="text-light">
+                Nomi yoki seriya raqimini yozing
+              </label>
+            </div>
+
+            <div class="stock-table-wrap mt-0">
+              <table class="stock-table">
+                <thead>
+                  <tr>
+                    <th class="text-center">#</th>
+                    <th class="text-center">Rasm</th>
+                    <th>Nomi</th>
+                    <th>Narxi</th>
+                    <th>Zaxira</th>
+                  </tr>
+                </thead>
+                <tbody id="search_main">
+                </tbody>
+              </table>
+            </div>
+            <div class="d-flex justify-content-center mt-2">
+              <div class="btn-group w-100" style="max-width: 400px;" role="group">
+                  <button type="button" class="btn btn-dark fw-bold" onclick="page_action('prev')" id="prev_button">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill me-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
+                        <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                      </svg>
+                      <span style="vertical-align: text-bottom;">Oldingi</span>
+                  </button>
+                  <button type="button" class="btn btn-dark fw-bold" onclick="page_action('next')" id="next_button">
+                      <span style="vertical-align: text-bottom;">Keyingi</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill ms-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
+                        <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                      </svg>
+                  </button>
+              </div>
+            </div>
+            
+          </div>
+          
+          <div class="mb-4 d-none bg-transparent" id="settings_tab">
+            <div class="row">
+              <div class="col-md-4">
+                  <div class="card bg-dark">
+                      <h5 class="card-header text-light">Jami</h5>
+                      <div class="card-body text-light">
+                          <h5 class="card-title">
+                              <span id="total_payment_sum">0</span> UZS
+                          </h5>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-md-4">
+                  <div class="card bg-dark">
+                      <h5 class="card-header text-light">Karta</h5>
+                      <div class="card-body text-light">
+                          <h5 class="card-title">
+                              <span id="total_payment_card">0</span> UZS
+                          </h5>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-md-4">
+                  <div class="card bg-dark">
+                      <h5 class="card-header text-light">Naqd</h5>
+                      <div class="card-body text-light">
+                          <h5 class="card-title">
+                              <span id="total_payment_cash">0</span> UZS
+                          </h5>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="list-group mt-1" id="recent_sales_main">
+            <!-- Don't touch -->
+          </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </div>
+  <div id="spinner" class="d-flex justify-content-center align-items-center position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" style="display: none!important;">
+    <div class="spinner-grow text-light" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Button trigger modal -->
+  <button id="modal-trigger" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: none;">
+    Launch demo modal
+  </button>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header" style="border: 0;">
+          <h6 class="modal-title" id="modal-text" style="color: orange;">Please, enter your number correctly.</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'bootstrap/popper.min.js' %}" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+  <script src="{% static 'bootstrap/bootstrap.min.js' %}" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+  
+  <script>
+
+    let search_main = document.getElementById('search_main')
+    let cart_main = document.getElementById('cart_main')
+    let recent_sales_main = document.getElementById('recent_sales_main')
+
+    let form_register = document.getElementById('form_register')
+    let total_sum = document.getElementById('total_sum')
+    let add_button = document.getElementById('add_button')
+    let card_transaction = document.getElementById('card_transaction')
+    let cash_transaction = document.getElementById('cash_transaction')
+
+
+    let cart = {}
+    let cart_total_sum = 0
+    let query_input = document.getElementById('query')
+    let query = ""
+
+    function clean_text(text) {
+      return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
+    function spinner(display){
+      let spinner_element = document.getElementById('spinner')
+      switch (display){
+        case true:
+          spinner_element.setAttribute('style', 'display: block')
+          break
+        case false:
+          spinner_element.setAttribute('style', 'display: none!important')
+          break
+      }
+    }
+    
+    function notification(message, color){
+      let modal_trigger = document.getElementById('modal-trigger')
+      let modal_text = document.getElementById('modal-text')
+
+      modal_text.style.color = color
+      modal_text.innerText = message
+      modal_trigger.click()
+    }
+
+    function calculateTimePassed(startDate) {
+        // Calculate the time difference in milliseconds
+        const currentDate = new Date()
+        startDate = new Date(startDate)
+        const timeDifference = currentDate.getTime() - startDate.getTime();
+        
+        // Convert milliseconds to minutes, hours, and days
+        const minutesPassed = Math.floor(timeDifference / (1000 * 60));
+        const hoursPassed = Math.floor(timeDifference / (1000 * 60 * 60));
+        const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        
+        // Check which unit to use for the result
+        if (minutesPassed < 60) {
+            return `${minutesPassed}m`;
+        } else if (hoursPassed < 24) {
+            return `${hoursPassed}h`;
+        } else {
+            return `${daysPassed}d`;
+        }
+    }
+    
+    function formatDate(date) {
+      date = new Date(date);
+
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+
+      const months = [
+          "Yanvar",
+          "Fevral",
+          "Mart",
+          "Aprel",
+          "May",
+          "Iyun",
+          "Iyul",
+          "Avgust",
+          "Sentabr",
+          "Oktabr",
+          "Noyabr",
+          "Dekabr"
+      ];
+
+      const month = months[date.getMonth()];
+      const day = date.getDate();
+      const year = date.getFullYear();
+
+      return `${hours}:${minutes}, ${day}-${month}, ${year}`;
+  }
+    
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
+    }
+    
+    let transaction_categories = {
+      "deposit": "Deposit",
+      "charge-tuition": "Monthly tuition charge",
+      "bonus-dictionary": "Dictionary bonus"
+    }
+
+    const DEFAULT_PER = 10
+
+    let response
+    let products = {}
+    let page_number = 1
+    let per = DEFAULT_PER
+
+    async function load_products() {
+      spinner(true)
+
+      let request = await fetch(`/api/pos/products/?search=${query}&page=${page_number}&per=${per}`)
+      response = await request.json()
+      page_number = response.page
+
+      search_main.innerHTML = ''
+
+      for (let i = 0; i < response.data.length; i++) {
+
+        product = response.data[i]
+        products[product.id] = {
+          "id": product.id,
+          "serial": product.serial,
+          "image": product.image,
+          "title": product.title,
+          "sale_price": product.sale_price,
+          "stock": product.stock
+        }
+
+        let image = ""
+        if (product.image) {
+          image = `              
+            <img class="img-mini d-inline m-auto rounded" src="${product.image}">
+            `
+        }
+
+        search_main.innerHTML += `
+          <tr id="product${product.id}"">
+            <th scope="row" class="text-center">${product.serial}</th>
+            <th class="text-center">${image}</th>
+            <td onclick="add_to_cart(${product.id})">${clean_text(product.title)}</td>
+            <td class="text-success fw-bold">${formatNumber(product.sale_price)}</td>
+            <td class="fw-bold">${product.stock}</td>
+          </tr>
+          `
+      }
+
+      let images = document.getElementsByTagName('img')
+      for (let i = 0; i < images.length; i++) {
+        let image = images[i]
+        image.addEventListener('click', () => {
+          if (image.classList.contains('img-mini')) {
+            image.classList.remove('img-mini')
+            image.classList.add('fullscreen-image')
+          } else {
+            image.classList.add('img-mini')
+            image.classList.remove('fullscreen-image')
+          }
+        })
+      }
+
+      if (response.has_previous){
+        prev_button.disabled = false
+      } else {
+        prev_button.disabled = true
+      }
+
+      if (response.has_next){
+        next_button.disabled = false
+      } else {
+        next_button.disabled = true
+      }
+
+      spinner(false)
+    }
+
+
+    add_button.addEventListener('click', async function(){
+
+      if (toggle_add_button() < cart_total_sum){
+        notification("To'lov usullarini qayta ko'rib chiqing, mablag' yetarli emas", "orange")
+        return
+      }
+
+      if (Object.keys(cart).length == 0){
+        notification("Savat bo'sh. Mahsulotlarni qo'shish uchun qidiring", "orange")
+        return
+      }
+
+      let data = []
+
+      for (let i in cart){
+        if (cart[i].quantity <= 0 || cart[i].sale_price <= 0){
+          notification(`Ushbu mahsulotning sotish narxi yoki soni xato: "(${cart[i].serial}) ${cart[i].title}"`, "red")
+          return
+          break
+        }
+        data.push(
+          {
+            "id": cart[i].id,
+            "serial": cart[i].serial,
+            "title": cart[i].title,
+            "sale_price": cart[i].sale_price,
+            "quantity": cart[i].quantity
+          }
+        )
+      }
+      
+      spinner(true)
+      add_button.disabled = true
+
+
+      let request = await fetch(
+        `/api/sales/`,
+        {
+          method: 'POST',
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(
+            {
+              "cart": data,
+              "total": cart_total_sum,
+              "card_payment": card_transaction.value,
+              "cash_payment": cash_transaction.value,
+            }
+          )
+        }
+      )
+      let response = await request.json()
+
+      if (response.message == 'success'){
+        notification(`Savdo saqlandi`, "green")
+        cart = {}
+        load_cart()
+      } else {
+
+        for (let i = 0; i < response.errors.length; i++){
+          switch (response.errors[i]){
+            case "corrupt-data":
+              notification("Ma'lumotlar noto'g'ri uzatilgan", "red")
+              break
+            
+            case "product-not-found":
+              notification(`Mahsulot topilmadi: ${response.title}`, "orange")
+              break
+            
+            case "funds":
+              notification("To'lov usullarini qayta ko'rib chiqing, mablag' yetarli emas", "orange")
+              break
+            
+            case "product-stock":
+              notification(`Mahsulot zaxirada yetarli emas: ${response.title}`, "orange")
+              break
+            
+            case "payment-amount":
+              notification(`To'lov qilinayotgan mablag' keragidan ortiq`, "red")
+              break
+              
+          }
+        }
+      }
+      
+
+      add_button.disabled = false          
+      spinner(false)
+
+
+    })
+
+
+    function page_action(action){
+      switch (action){
+        case "prev":
+          page_number -= 1
+          load_products()
+          break
+        
+        case "next":
+          page_number ++
+          load_products()
+          break
+        
+        case "show_all":
+          per = 1000
+          load_products()
+          break
+
+      }
+    }
+
+
+    let counter = 0
+    let is_searching = false
+    let already_searched = true
+
+    function track_query_change() {
+      let interval = setInterval(function () {
+        if (!is_searching && query_input.value.trim() != query && query_input.value.trim().length > 0) {
+          query = query_input.value.trim()
+          already_searched = false
+          counter = 0
+        } else if (!is_searching && query_input.value.trim() == query) {
+          counter++
+        }
+
+        if (counter >= 2 && !already_searched) {
+          page_number = 1
+          per = DEFAULT_PER
+          load_products()
+          counter = 0
+          already_searched = true
+        }
+
+      }, 300)
+    }
+    track_query_change()
+    
+
+    function calculate_cart_sum(){
+      let total = 0
+      for (let i in cart){
+        total += cart[i].sale_price * cart[i].quantity
+      }
+      total_sum.innerText = formatNumber(String(total))
+      cart_total_sum = total
+
+      toggle_add_button()
+
+      return total
+    }
+
+
+    function load_cart(){
+
+      calculate_cart_sum()
+
+      cart_main.innerHTML = ""
+
+      for (let i in cart){
+
+        let product = cart[i]
+
+        cart_main.innerHTML += `
+        <li class="list-group-item contact bg-transparent p-0 mb-2" data-bs-theme="dark">
+          <div class="cart-item">
+            <div class="row g-1 product-row mt-1">
+              <div class="col-auto">
+                  <div class="product-id fw-bold">${product.serial}</div>
+              </div>
+              <div class="col">
+                  <div class="product-title fw-bold">
+                      ${product.title}
+                  </div>
+              </div>
+              <div class="col-auto">
+                  <img
+                      class="product-image"
+                      src="${product.image ? product.image : '/static/assets/img/default-product-image.jpg'}"
+                  >
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col-8 pe-0">
+                <div class="form-floating bg-dark">
+                  <input type="text" class="form-control text-light border-0 fw-bold formatted-input calculation-trigger" id="sale_price-${product.id}" name="sale_price"
+                    placeholder="0" style="background: black;" value="${parseInt(product.sale_price)}" onclick="this.select();">
+                  <label for="days-input" class="text-success fw-bold">Sotish narxi</label>
+                </div>
+              </div>
+              <div class="d-flex col-4 ps-1">
+                <div style="flex: 9;">
+                  <div class="form-floating bg-dark">
+                    <input type="number" class="form-control text-light border-0 fw-bold calculation-trigger" id="quantity-${product.id}" name="stock"
+                      placeholder="0" style="background: black;" onclick="this.select()" value="${product.quantity}">
+                    <label for="days-input" class="fw-bold">Soni</label>
+                  </div>
+                </div>
+                <div style="flex: 1;">
+                  <button class="btn btn-danger h-100 d-flex align-items-center justify-content-center" onclick="remove_from_cart(${product.id})" style="width: 100%;border-radius: 0 5px 5px 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        `
+
+      }
+
+      card_transaction.value = ""
+      cash_transaction.value = ""
+
+      let inputs = document.getElementsByClassName("formatted-input")
+      for (let i = 0; i < inputs.length; i++){
+        let sale_price = inputs[i]
+        sale_price.value = sale_price.value.replace(/\D/g, "");
+        sale_price.value = Number(sale_price.value).toLocaleString('en-US').replace(/,/g, ' ');
+
+        sale_price.addEventListener("input", function () {
+          let value = this.value.replace(/\D/g, "");
+          this.value = Number(value).toLocaleString('en-US').replace(/,/g, ' ');
+        });
+      }
+
+      let images = document.getElementsByClassName('product-image')
+      for (let i = 0; i < images.length; i++) {
+        let image = images[i]
+        image.addEventListener('click', () => {
+          if (image.classList.contains('product-image')) {
+            image.classList.remove('product-image')
+            image.classList.add('fullscreen-image')
+          } else {
+            image.classList.add('product-image')
+            image.classList.remove('fullscreen-image')
+          }
+        })
+      }
+
+      inputs = document.getElementsByClassName('calculation-trigger')
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('input', () => {
+          let id = inputs[i].id.split("-")
+          cart[id[1]][id[0]] = Number(inputs[i].value.replace(/\s/g, ""))
+
+          calculate_cart_sum()
+        })
+      }
+
+      if (Object.keys(cart).length == 0){
+        cart_main.innerHTML += `
+        <li class="list-group-item contact bg-transparent" style="margin-top:25%;margin-bottom:5%">
+          <div class=" justify-content-md-end">
+            <p class="text-light fw-bold mb-1 d-block text-center">Savat bo'sh. Mahsulotlarni qo'shish uchun</p>
+            <button class="btn btn-light fw-bold btn-sm m-auto d-block"
+              style="width: 160px;margin: auto;"
+              onclick="edit_tab_button.click()"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1 fw-bold" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+              </svg>
+              Qidiring</button>
+          </div>
+        </li>
+        `
+      }
+      
+    }
+
+
+    function add_to_cart(product_id){
+
+      product = structuredClone(products[product_id])
+
+      if (product.stock <= 0){
+        notification("Mahsulot zaxirada qolmagan", "orange")
+        return
+      }
+
+      if (product.sale_price <= 0){
+        notification("Mahsulot narxi kiritilmagan", "red")
+        return
+      }
+        
+      if (product_id in cart){
+        cart[product_id].quantity ++
+      } else {
+        product.quantity = 1
+        cart[product_id] = product
+      }
+
+      info_tab_button.click()
+      load_cart()
+
+      search_main.innerHTML = ""
+      query_input.value = ""
+      query = ""
+
+      
+    }
+
+
+    function remove_from_cart(product_id){
+      delete cart[product_id]
+      load_cart()
+      toggle_add_button()
+    }
+
+
+    const PAYMENT_METHODS = {
+      "card": "Karta",
+      "cash": "Naqd pul",
+    }
+
+    async function load_recent() {
+      spinner(true)
+
+      let request = await fetch(`/api/sales/recent/`)
+      response = await request.json()
+
+      recent_sales_main.innerHTML = ''
+
+      let up_sign = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-up-right-circle-fill" viewBox="0 0 16 16">
+        <path d="M0 8a8 8 0 1 0 16 0A8 8 0 0 0 0 8m5.904 2.803a.5.5 0 1 1-.707-.707L9.293 6H6.525a.5.5 0 1 1 0-1H10.5a.5.5 0 0 1 .5.5v3.975a.5.5 0 0 1-1 0V6.707z"/>
+      </svg> `
+      let down_sign = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-arrow-down-left-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-5.904-2.803a.5.5 0 1 1 .707.707L6.707 10h2.768a.5.5 0 0 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.525a.5.5 0 0 1 1 0v2.768z"/>
+      </svg> +`
+
+      total_payments = {
+        "card": 0,
+        "cash": 0
+      }
+      
+      for (let i = 0; i < response.length; i++) {
+        let sale = response[i]
+
+        let payments = ""
+        for (let j = 0; j < sale.payments.length; j++){
+          payments += `
+          <span class="badge text-bg-primary text-decoration-none">
+            ${formatNumber(sale.payments[j].amount)} UZS ${PAYMENT_METHODS[sale.payments[j].method]} orqali
+          </span>
+          `
+          total_payments[sale.payments[j].method] += parseInt(sale.payments[j].amount)
+        }
+
+        recent_sales_main.innerHTML += `
+        <a class="list-group-item list-group-item-action mb-1">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-2 fw-bold">
+              ${sale.sale_total > 0 ? down_sign : up_sign}${formatNumber(sale.sale_total)} UZS
+            </h5>
+            <small class="text-body-secondary fw-bold">${sale.debt} UZS qarz</small>
+          </div>
+          ${payments}
+
+          <p class="mb-1">${formatDate(sale.date_created)}</p>
+          <small class="text-body-secondary">${clean_text(sale.author)} tomonidan</small>
+        </a>
+        `
+      }
+
+      document.getElementById("total_payment_sum").innerText = formatNumber(total_payments["card"] + total_payments["cash"])
+      console.log(total_payments["card"] + total_payments["cash"])
+      document.getElementById("total_payment_card").innerText = formatNumber(total_payments["card"])
+      document.getElementById("total_payment_cash").innerText = formatNumber(total_payments["cash"])
+
+      spinner(false)
+    }
+
+
+    function toggle_add_button(){
+      let payment_methods_sum = Number(card_transaction.value.replace(/\s/g, "")) 
+        + Number(cash_transaction.value.replace(/\s/g, ""))
+
+      if (cart_total_sum > 0 && payment_methods_sum == cart_total_sum){
+        add_button.classList.remove("d-none")
+        add_button.classList.add("d-block")
+      } else {
+        add_button.classList.remove("d-block")
+        add_button.classList.add("d-none")
+      }
+
+      return payment_methods_sum
+    }
+
+
+    card_transaction.addEventListener("input", function () {
+      let value = this.value.replace(/\D/g, "");
+      this.value = Number(value).toLocaleString('en-US').replace(/,/g, ' ');
+
+      toggle_add_button()
+    });
+    cash_transaction.addEventListener("input", function () {
+      let value = this.value.replace(/\D/g, "");
+      this.value = Number(value).toLocaleString('en-US').replace(/,/g, ' ');
+
+      toggle_add_button()
+    });
+
+    let current_tab = 'groups'
+    
+    let info_tab_button = document.getElementById('info_tab_button')
+    let edit_tab_button = document.getElementById('edit_tab_button')
+    let settings_tab_button = document.getElementById('settings_tab_button')
+    let info_tab = document.getElementById('info_tab')
+    let edit_tab = document.getElementById('edit_tab')
+    let settings_tab = document.getElementById('settings_tab')
+
+    const tabs = [info_tab, edit_tab, settings_tab]
+    const tab_buttons = [info_tab_button, edit_tab_button, settings_tab_button]
+
+    function change_tab(chosen_tab){
+
+      for (let i = 0; i < tabs.length; i++){
+        let tab = tabs[i]
+        let tab_button = tab_buttons[i]
+
+        tab_button.classList.remove('btn-light')
+
+        tab_button.classList.remove('text-dark')
+        tab_button.classList.add('text-light')
+
+        tab.classList.remove('d-block')
+        tab.classList.add('d-none')
+      }
+
+      let tab = document.getElementById(chosen_tab)
+      let tab_button = document.getElementById(`${chosen_tab}_button`)
+
+      tab_button.classList.add('btn-light')
+
+      tab_button.classList.add('text-dark')
+      tab_button.classList.remove('text-light')
+
+      tab.classList.add('d-block')
+      tab.classList.remove('d-none')
+    
+    }
+  
+  </script>
+</body>
+</html>

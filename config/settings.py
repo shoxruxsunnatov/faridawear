@@ -47,7 +47,8 @@ INSTALLED_APPS = [
 
     'main',
     'account',
-    'products.apps.ProductsConfig'
+    'products.apps.ProductsConfig',
+    'sales'
     # 'dictionary.apps.DictionaryConfig',
     # 'api',
 ]
