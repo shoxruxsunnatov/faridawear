@@ -817,7 +817,7 @@
                 <div class="form-floating bg-dark">
                   <input type="text" class="form-control text-light border-0 fw-bold formatted-input calculation-trigger" id="sale_price-${product.id}" name="sale_price"
                     placeholder="0" style="background: black;" value="${parseInt(product.sale_price)}" onclick="this.select();">
-                  <label for="days-input" class="text-success fw-bold">Sotish narxi (min ${formatNumber(parseInt(products[product.id].sale_price))})</label>
+                  <label for="days-input" class="text-success fw-bold">Sotish narxi (<span id="sale_price_label${product.id}">min ${formatNumber(parseInt(products[product.id].sale_price))}</span>)</label>
                 </div>
               </div>
               <div class="d-flex col-4 ps-1">
@@ -856,6 +856,14 @@
           let value = this.value.replace(/\D/g, "");
           this.value = Number(value).toLocaleString('en-US').replace(/,/g, ' ');
         });
+
+        let id = inputs[i].id.split("-")
+
+        if (cart[id[1]].sale_price < products[id[1]].sale_price){
+          document.getElementById(`sale_price_label${id[1]}`).classList.add("text-danger")
+        } else {
+          document.getElementById(`sale_price_label${id[1]}`).classList.remove("text-danger")
+        }
       }
 
       let images = document.getElementsByClassName('product-image')
@@ -879,7 +887,14 @@
           cart[id[1]][id[0]] = Number(inputs[i].value.replace(/\s/g, ""))
 
           calculate_cart_sum()
+
+          if (cart[id[1]].sale_price < products[id[1]].sale_price){
+            document.getElementById(`sale_price_label${id[1]}`).classList.add("text-danger")
+          } else {
+            document.getElementById(`sale_price_label${id[1]}`).classList.remove("text-danger")
+          }
         })
+        
       }
 
       if (Object.keys(cart).length == 0){
