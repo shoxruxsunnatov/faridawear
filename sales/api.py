@@ -174,7 +174,7 @@ class SalesListViewAPI(CSRFExempt, LoginRequiredMixin, View):
                 "id": sale.id,
                 "author": (
                     sale.author.get_full_name()
-                    if sale.author else None
+                    if sale.author else "O'chirilgan hisob"
                 ),
                 "sale_total": sale.sale_total,
                 "debt": sale.debt,
