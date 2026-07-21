@@ -574,8 +574,14 @@
     async function load_products() {
       spinner(true)
 
-      let request = await fetch(`/api/products/?search=${query}&page=${page_number}&per=${per}`)
-      response = await request.json()
+      try {
+        let request = await fetch(`/api/products/?search=${query}&page=${page_number}&per=${per}`)
+        response = await request.json()
+      } catch {
+        notification("Internet aloqasini tekshirib, qayta urinib ko'ring")
+        spinner(false)
+        return
+      }
       page_number = response.page
 
       main.innerHTML = ''
@@ -705,14 +711,21 @@
         spinner(true)
         add_button.disabled = true
 
-        let request = await fetch(
-          `/api/products/`,
-          {
-            method: 'POST',
-            body: new FormData(form_register)
-          }
-        )
-        let response = await request.json()
+        try{
+          let request = await fetch(
+            `/api/products/`,
+            {
+              method: 'POST',
+              body: new FormData(form_register)
+            }
+          )
+          response = await request.json()
+        } catch {
+          notification("Internet aloqasini tekshirib, qayta urinib ko'ring")
+          spinner(false)
+          add_button.disabled = false
+          return
+        }
 
         if (response.message == 'success'){
           notification(`"(${response.serial}) ${clean_text(response.title)}" mahsuloti qo'shildi.`, "green")

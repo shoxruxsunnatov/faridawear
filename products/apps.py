@@ -6,4 +6,4 @@ class ProductsConfig(AppConfig):
 
 
     def ready(self):
-        from products.signals import delete_product_image_file
+        from products.signals import delete_product_image_file, delete_old_product_image

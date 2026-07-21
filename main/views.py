@@ -18,6 +18,7 @@ class DashboardView(LoginRequiredMixin, View):
         elif req.user.role == "sales":
             return render(req, "sales/pos.html")
 
+
 class CustomLogoutView(LogoutView):
     next_page = 'main:login'
  
@@ -78,6 +79,13 @@ class RegisterView(TemplateView):
 class AboutView(TemplateView):
     template_name = 'about.html'
 
-class LoginView(TemplateView):
-    template_name = 'login.html'
+
+class LoginView(View):
+    
+    def get(self, req, *args, **kwargs):
+
+        if req.user.is_authenticated:
+            return redirect("/")
+        else:
+            return render(req, "login.html")
 
