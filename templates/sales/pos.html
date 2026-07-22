@@ -350,7 +350,7 @@
             
           </div>
           
-          <div class="mb-4 d-none bg-transparent" id="settings_tab">
+          <div class="mb-1 d-none bg-transparent" id="settings_tab">
             <div class="row g-1">
 
               <div class="col-md-4">
@@ -380,6 +380,7 @@
                       </div>
                   </div>
               </div>
+
               <div class="col-md-4">
                   <div class="p-3 pt-2 pb-2 bg-dark text-white" style="border-radius: 0 0 10px 10px!important;">
                       <div class="d-flex justify-content-between">
@@ -394,11 +395,95 @@
                   </div>
               </div>
 
+            </div>
 
+            <div class="row g-2 mt-1">
+              <div class="col">
+                  <button
+                      class="btn btn-sm btn-light w-100 fw-bold"
+                      onclick="setToday()"
+                  >
+                      Bugun
+                  </button>
+              </div>
+
+              <div class="col">
+                  <button
+                      class="btn btn-sm btn-light w-100 fw-bold"
+                      onclick="setYesterday()"
+                  >
+                      Kecha
+                  </button>
+              </div>
+
+              <div class="col">
+                  <button
+                      class="btn btn-sm btn-light w-100 fw-bold"
+                      onclick="setThisWeek()"
+                  >
+                      Shu hafta
+                  </button>
+              </div>
+
+              <div class="col">
+                  <button
+                      class="btn btn-sm btn-light w-100 fw-bold"
+                      onclick="setThisMonth()"
+                  >
+                      Shu oy
+                  </button>
+              </div>
+            </div>
+            <div class="row g-1 align-items-end mt-1">
+              <div class="col-5">
+                  <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      id="startDate"
+                      name="start_date"
+                      required
+                  >
+              </div>
+
+              <div class="col-5">
+                  <input
+                      type="date"
+                      class="form-control form-control-sm"
+                      id="endDate"
+                      name="end_date"
+                      required
+                  >
+              </div>
+
+              <button class="btn btn-sm btn-primary col-2" onclick="load_recent()">
+                  Ko'rish
+              </button>
           </div>
 
-            <div class="list-group mt-2" id="recent_sales_main">
+            <div class="list-group mt-1" id="recent_sales_main">
               <!-- Don't touch -->
+            </div>
+
+            <div class="d-flex justify-content-center mt-2">
+              <div class="btn-group w-100" style="max-width: 400px;" role="group">
+                  <button type="button" class="btn btn-dark fw-bold" onclick="page_action_payment('prev')" id="prev_button_payment">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill me-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
+                        <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                      </svg>
+                      <span style="vertical-align: text-bottom;">Oldingi</span>
+                  </button>
+
+                  <button type="button" class="btn btn-light fw-bold" onclick="page_action_payment('show_all')">
+                    <span style="vertical-align: text-bottom;">Ko'proq ko'rish</span>
+                  </button>
+
+                  <button type="button" class="btn btn-dark fw-bold" onclick="page_action_payment('next')" id="next_button_payment">
+                      <span style="vertical-align: text-bottom;">Keyingi</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-square-fill ms-1" viewBox="0 0 16 16" style="vertical-align: baseline;">
+                        <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                      </svg>
+                  </button>
+              </div>
             </div>
 
           </div>
@@ -442,6 +527,9 @@
     let add_button = document.getElementById('add_button')
     let card_transaction = document.getElementById('card_transaction')
     let cash_transaction = document.getElementById('cash_transaction')
+
+    let start_date = document.getElementById("startDate")
+    let end_date = document.getElementById("endDate")
 
 
     let cart = {}
@@ -538,18 +626,16 @@
       "bonus-dictionary": "Dictionary bonus"
     }
 
-    const DEFAULT_PER = 10
 
     let response
     let products = {}
     let page_number = 1
-    let per = DEFAULT_PER
 
     async function load_products() {
       spinner(true)
 
       try {
-        let request = await fetch(`/api/pos/products/?search=${query}&page=${page_number}&per=${per}`)
+        let request = await fetch(`/api/pos/products/?search=${query}&page=${page_number}&per=10`)
         response = await request.json()
       } catch {
         notification("Internet aloqasini tekshirib, qayta urinib ko'ring")
@@ -736,6 +822,32 @@
         case "show_all":
           per = 1000
           load_products()
+          break
+
+      }
+    }
+
+
+    let sales
+    let page_number_payment = 1
+    const DEFAULT_PER = 30
+    let per = DEFAULT_PER
+
+    function page_action_payment(action){
+      switch (action){
+        case "prev":
+          page_number_payment -= 1
+          load_recent()
+          break
+        
+        case "next":
+          page_number_payment ++
+          load_recent()
+          break
+        
+        case "show_all":
+          per = 100
+          load_recent()
           break
 
       }
@@ -962,11 +1074,16 @@
       "cash": "naqd pul",
     }
 
+    const today = new Date().toISOString().split("T")[0];
+
+    start_date.value = today;
+    end_date.value = today;
+
     async function load_recent() {
       spinner(true)
 
       try {
-        let request = await fetch(`/api/sales/recent/`)
+        let request = await fetch(`/api/sales/recent/?page=${page_number_payment}&per=${per}&start=${start_date.value}&end=${end_date.value}`)
         response = await request.json()
       } catch {
         notification("Internet aloqasini tekshirib, qayta urinib ko'ring")
@@ -990,8 +1107,8 @@
         "cash": 0
       }
       
-      for (let i = 0; i < response.length; i++) {
-        let sale = response[i]
+      for (let i = 0; i < response.data.length; i++) {
+        let sale = response.data[i]
 
         let payments = ""
         for (let j = 0; j < sale.payments.length; j++){
@@ -1000,7 +1117,6 @@
             ${formatNumber(sale.payments[j].amount)} UZS ${PAYMENT_METHODS[sale.payments[j].method]} orqali
           </span>
           `
-          total_payments[sale.payments[j].method] += parseInt(sale.payments[j].amount)
         }
 
         recent_sales_main.innerHTML += `
@@ -1019,11 +1135,81 @@
         `
       }
 
-      document.getElementById("total_payment_sum").innerText = formatNumber(total_payments["card"] + total_payments["cash"])
-      document.getElementById("total_payment_card").innerText = formatNumber(total_payments["card"])
-      document.getElementById("total_payment_cash").innerText = formatNumber(total_payments["cash"])
+      document.getElementById("total_payment_sum").innerText = formatNumber(parseInt(response.total))
+      document.getElementById("total_payment_card").innerText = formatNumber(parseInt(response.card))
+      document.getElementById("total_payment_cash").innerText = formatNumber(parseInt(response.cash))
+
+      if (response.has_previous){
+        prev_button_payment.disabled = false
+      } else {
+        prev_button_payment.disabled = true
+      }
+
+      if (response.has_next){
+        next_button_payment.disabled = false
+      } else {
+        next_button_payment.disabled = true
+      }
 
       spinner(false)
+    }
+
+
+    function setDates(start, end) {
+        start_date.value = start.toISOString().split("T")[0];
+        end_date.value = end.toISOString().split("T")[0];
+
+    }
+
+
+    function setToday() {
+        const today = new Date();
+
+        setDates(today, today);
+        load_recent()
+    }
+
+
+    function setYesterday() {
+        const yesterday = new Date();
+
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        setDates(yesterday, yesterday);
+        load_recent()
+    }
+
+
+    function setThisWeek() {
+        const today = new Date();
+
+        const start = new Date(today);
+        const end = new Date(today);
+
+        let day = start.getDay();
+
+        if (day === 0) {
+            day = 7;
+        }
+
+        start.setDate(start.getDate() - day + 1);
+
+        setDates(start, end);
+        load_recent()
+    }
+
+
+    function setThisMonth() {
+        const today = new Date();
+
+        const start = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            1
+        );
+
+        setDates(start, today);
+        load_recent()
     }
 
 

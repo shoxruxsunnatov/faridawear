@@ -1,11 +1,14 @@
 import json
+from datetime import datetime, time, date
 
 from django.views import View
 from django.http import JsonResponse
-from django.db.models import Prefetch, F
+from django.db.models import Prefetch, F, Q, Sum
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
+from django.utils import timezone
+from django.utils.dateparse import parse_date
 
 from account.security import (
     CSRFExempt,
@@ -145,10 +148,58 @@ class SalesListViewAPI(CSRFExempt, LoginRequiredMixin, View):
 
     def get(self, req, *args, **kwargs):
 
+        page = req.GET.get("page", "1")
+        per = req.GET.get("per", 30)
+
+        start_date = parse_date(req.GET.get("start", ""))
+        end_date = parse_date(req.GET.get("end", ""))
+
+        if (
+            not start_date
+            or not end_date
+            or start_date > end_date
+        ):
+            today = date.today()
+            
+            start_date = today
+            end_date = today
+
+        start_datetime = timezone.make_aware(
+            datetime.combine(start_date, time.min)
+        )
+
+        end_datetime = timezone.make_aware(
+            datetime.combine(end_date, time.max)
+        )
+
+        sales_queryset = Sale.objects.filter(
+            organization=req.user.organization,
+            date_created__gte=start_datetime,
+            date_created__lte=end_datetime,
+        )
+
+        # Statistics
+        sale_statistics = sales_queryset.aggregate(
+            total=Sum("sale_total"),
+        )
+
+        payment_statistics = Payment.objects.filter(
+            sale__organization=req.user.organization,
+            sale__date_created__gte=start_datetime,
+            sale__date_created__lte=end_datetime,
+        ).aggregate(
+            cash=Sum(
+                "amount",
+                filter=Q(method="cash"),
+            ),
+            card=Sum(
+                "amount",
+                filter=Q(method="card"),
+            ),
+        )
+
         sales = (
-            Sale.objects.filter(
-                organization=req.user.organization
-            )
+            sales_queryset
             .only(
                 "id",
                 "author",
@@ -164,11 +215,21 @@ class SalesListViewAPI(CSRFExempt, LoginRequiredMixin, View):
                         "amount",
                         "method",
                         "sale_id",
+                        "author__first_name",
+                        "author__last_name",
                     )
                 )
             )
             .order_by("-date_created")
         )
+
+        try:
+            paginator = Paginator(sales, int(per))
+        except:
+            paginator = Paginator(sales, 30)
+
+        page_obj = paginator.get_page(page)
+
         data = [
             {
                 "id": sale.id,
@@ -189,11 +250,21 @@ class SalesListViewAPI(CSRFExempt, LoginRequiredMixin, View):
                     for payment in sale.payments.all()
                 ]
             }
-            for sale in sales
+            for sale in page_obj
         ]
 
         return JsonResponse(
-            data,
+            {
+                "data": data,
+
+                "total": sale_statistics["total"] or 0,
+                "cash": payment_statistics["cash"] or 0,
+                "card": payment_statistics["card"] or 0,
+
+                "page": page_obj.number,
+                "has_next": page_obj.has_next(),
+                "has_previous": page_obj.has_previous(),
+            },
             safe=False
         )
 
